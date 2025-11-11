@@ -1,0 +1,779 @@
+/*_____________________________________________ENCABEZADO_____________________________________________*/
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+.topheader {
+  background-color:#FF0000;
+  width: 100%;     /* Asegura que ocupe todo el ancho */
+  height: 100px;   /* Altura del header */
+  position: fixed; /* Mantiene el header fijo en la parte superior */
+  top: 0; /* Posiciona el header en la parte superior */
+  justify-content: space-around;
+  align-items: center;
+  display: flex;
+}
+
+.topheader-container {
+  margin-left: 6.5%;
+  margin-right: 6.5%;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  display: flex;
+}
+
+.menu-horizontal {
+  list-style: none;
+  width: 100%;
+  font-size: 18px;
+  margin: 0%;
+  justify-content: end;
+  display: flex;
+}
+
+.Contenedor-menu-horizontal {
+  width: 100%;
+  display: flex;
+}
+
+.menu-horizontal li a {
+  display: block;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-decoration: none;
+  list-style: none;
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.menu-vertical {
+  position: absolute;
+  background-color: #cacaca;
+  box-shadow: 0 10px 10px #00000080;
+  border: none;
+  border-radius: 10px;
+  padding: 0px;
+  margin-top: 0px;
+  list-style: none;
+  display: none;
+}
+
+.menu-horizontal .menu-vertical {
+  margin-left: 20px;
+}
+
+.menu-horizontal .menu-vertical li a {
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.menu-horizontal li:hover .menu-vertical {
+  display: block;
+}
+
+.menu-vertical li a:hover {
+  background-color: #0033A0;
+  color:#ffffff;
+}
+
+.Btn-IniciarSesion{
+  margin-left: 80px;
+  justify-content: end;
+}
+
+.Btn-IconoMensaje {
+  background-color: #0033A0;
+  height: 54px;
+  width: 255px;
+  border: none;
+  border-radius: 75.5px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+}
+
+.Btn-IconoMensaje span{
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #ffffff;
+  margin-right: 20px;
+}
+
+.Btn-IconoMensaje i{
+  font-family: "Font Awesome 5 Free";
+  font-size: 30px;
+  font-weight: 2;
+  color: #ffffff;
+  color: none;
+  font-style: none;
+}
+
+.Btn-IniciarSesion  li a {
+  display: block;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #000000;
+  padding-right: 95px;
+  text-decoration: none;
+  list-style: none;
+  cursor: pointer;
+}
+
+.Btn-IniciarSesion:hover .menu-vertical {
+  display: block;
+}
+
+.topheader-container img {
+  cursor: pointer;
+}
+
+/*_____________________________________________SECCIONES_____________________________________________*/
+.PrimeraSeccion {
+  /*Imagen de fondo de obra*/
+  background: url("/assets/images/Imagen-Portada.jpeg") no-repeat;
+  background-position: center;
+  background-size:cover;
+  height: 447px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-top: 0px;
+}
+
+.presentacion{
+  display: block;
+  background-color: #cacacad1;
+  border: none;
+  width: 883px;
+  height: auto;
+}
+
+.presentacion h1 {
+  font-family: "Lexend", sans-serif;
+  font-size: 35px;
+  color: #000000;
+  text-align: center;
+  padding: 10px 30px 0px 30px;
+}
+
+.presentacion p {
+  font-family: sans-serif;
+  font-size: 20px;
+  color:#000000;
+  text-align: center;
+  padding: 0px 30px 0px 30px;
+}
+
+/*Espacios del rectangulo blanco con el plomo*/
+.buscador {
+  text-align: center;
+  padding: 10px 30px 40px 30px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+/*Restangulo blanco*/
+.buscador input[type="text"]{
+  background-color: #ffffff;
+  border: none;
+  border-radius: 12px 0px 0px 12px;
+  width: 496px;
+  height: 60px;
+  font-family: sans-serif;
+  font-size: 22px;
+  color: #8C8C8C;
+  padding: 0px 20px;
+}
+
+.buscador input::placeholder {
+  font-family: sans-serif;
+  font-size: 22px;
+  color: #8c8c8c;
+  padding: 0px 0px;
+}
+
+.Btn-Lupa {
+  height: 60px;
+  width: 60px;
+  border: none;
+  border-radius: 0px 12px 12px 0px;
+  background-color: #ffffff;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+}
+
+.Btn-Lupa i {
+  font-family: "Font Awesome 5 Free";
+  font-size: 40px;
+  color: #000000;
+}
+
+.info-contenedor{
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+  margin: 40px 100px 25px 100px;
+  justify-content: center;
+}
+
+.info-contenedor2 {
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+  margin: 25px 100px 40px 100px;
+  justify-content: center;
+}
+
+.info-contenedor h1 {
+  font-family: "Lexend", sans-serif;
+  text-decoration: underline;
+  text-align: center;
+  font-size: 28px;
+  margin: 0px;
+  padding: 20px 0px;
+}
+
+.info-contenedor2 h1 {
+  font-family: "Lexend", sans-serif;
+  text-decoration: underline;
+  text-align: center;
+  font-size: 28px;
+  margin: 0px;
+  padding: 20px 0px;
+}
+
+.info-contenedor p {
+  font-family: sans-serif;
+  text-align: justify;
+  font-size: 20px;
+  margin: 0px;
+  padding: 0px 40px 25px 40px;
+}
+
+.info-contenedor2 p {
+  font-family: sans-serif;
+  text-align: justify;
+  font-size: 20px;
+  margin: 0px;
+  padding: 0px 40px 25px 40px;
+}
+
+.Btn-obras {
+  text-align: end;
+  margin-top: -15px;
+  padding: 0px 40px 25px 40px;
+}
+
+.info-contenedor2 input[type="button"] {
+  background-color: #0033A0;
+  border: none;
+  border-radius: 10px;
+  font-family: "Lexend", sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 12px 15px;
+  cursor: pointer;
+  border: 3px solid #0033A0;
+}
+
+.Btn-obras input[type="button"]:hover {
+  color: #0033A0;
+  border: 4px solid #0033A0;
+  background-color: #FFFFFF;
+  padding: 10.2px 15px;
+}
+
+/*----------------------------------------------------------------------------------------------------------------------------*/
+
+.TerceraSeccion {
+  background: url("/assets/images/Imagen-Fondo2.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: auto;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-top: 60px;
+  margin-bottom: 40px;
+}
+
+.TerceraSeccion p {
+  font-family: "Lexend", sans-serif;
+  font-size: 40px;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 15px 100px 15px 100px;
+  text-align: center;
+}
+
+/*_____________________________________________FORMULARIO_____________________________________________*/
+/*espaciado de la seccion formulario del resto del documento*/
+.Formulario-OjoCiudadano {
+  padding-top: 0px;
+  padding-bottom: 50px;
+}
+
+.Formulario-OjoCiudadano{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Formulario {
+  padding-top: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 10px 30px #00000080;
+  width: 890px;
+  height: 450px;
+  border: none;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+
+form legend {
+  font-size: 25px;
+  font-weight: bold;
+  font-family: "Lexend", sans-serif;
+  text-align: center;
+  margin-bottom: 5px;
+  padding-top: 5px;
+}
+
+form fieldset {
+  border: none;
+}
+
+/*Espaciado entre cuadrados del mismo formulario*/
+.Espacio-Formulario {
+  padding-bottom:16px;
+  cursor: pointer;
+}
+
+form input::placeholder {
+  font-size: 15px;
+  color:#8C8C8C;
+  font-family: sans-serif;
+}
+
+.Items-Formulario {
+  display:flex;
+  justify-content:flex-start;
+  align-items: flex-start;
+}
+
+.Apellidos {
+  display:flex;
+  justify-content:flex-start;
+  align-items: flex-start;
+}
+
+form .Apellidos input[name="fapepat"] {
+  width: 188.75px;
+}
+
+form .Apellidos input[name="fapemat"] {
+  width: 188.75px;
+  margin-left: 15px;
+}
+
+form input[type=text], [type=tel], [type=email] {
+  font-size: 15px;
+  color: #8C8C8C;
+  font-family: sans-serif;
+  padding-left: 12px; /*Cuanto espacio colocar entre el borde izquierdo y el contenido del selector*/
+  background-color: #D9D9D9;
+  width: 406.15px;
+  height: 39.86px;
+  border: none;
+}
+
+textarea::placeholder {
+  font-size: 15px;
+  color:#8C8C8C;
+  font-family: sans-serif;
+}
+
+/*Ajustar el botoncito de checkbox*/
+.Formulario-Checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/*Ajustar el tecto al lado del checkbox*/
+.Formulario-Checkbox label {
+  margin-left: 5px;
+  font-size: 15px;
+  font-family: sans-serif;
+  color: #000000;
+}
+
+form textarea[name="fmessage"] {
+  font-size: 15px;
+  color: #8C8C8C;
+  font-family: sans-serif;
+  padding-left: 12px;
+  background-color: #D9D9D9;
+  width: 406.15px;
+  height: 261px;
+  border: none;
+  padding-top:14px;
+  margin-left: 15px;
+}
+
+form input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: #D9D9D9;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline:none;
+}
+
+form input[type="checkbox"]:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content:"\f00c";
+  font-size: 15px;
+  color: #FFFFFF;
+  display:none;
+}
+
+form input[type="checkbox"]:checked {
+  background-color: #0033A0;
+}
+
+form input[type="checkbox"]:checked:after {
+  display: block;
+}
+
+form input[type="submit"] {
+  background-color: #0033A0;
+  border: none;
+  width: 855px;
+  height: 39.86px;
+  color: #FFFFFF;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Lexend", sans-serif;
+  cursor: pointer;
+}
+
+form input[type="submit"]:hover {
+  color: #0033A0;
+  border: 2px solid #0033A0;
+  background-color: #FFFFFF;
+}
+
+/*_____________________________________________PIE DE PAGINA_____________________________________________*/
+.piepagina{
+  background: url("/assets/images/Imagen-Fondo.png") no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: auto;
+  width: 100%;
+}
+
+.Contenedor-piepagina{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Opciones{
+  margin-top: 10px;
+  margin-left: 6.5%;
+  margin-bottom: 40px;
+}
+
+.RedesSociales{
+  margin-top: 20px;
+  margin-right: 6.5%;
+  margin-bottom: 40px;
+}
+
+.Opciones a {
+  text-decoration: none;
+}
+
+.Opciones h1 {
+  font-family: "Lexend", sans-serif;
+  letter-spacing: -1px;
+  font-size: 30px;
+  color: #000000;
+}
+
+.Opciones p {
+  font-family: sans-serif;
+  font-size:15px;
+  color: #000000;
+  margin-bottom: -5px;
+  cursor: pointer;
+}
+
+.Opciones p:hover{
+  text-decoration: underline;
+  color:#FF0000;
+}
+
+.RedesSociales p{
+  font-family: "Lexend", sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.Icons-RedesSociales img {
+  padding-right: 5px;
+}
+
+.IconX {
+  margin: 0px -10px 0px -10px;
+}
+
+.RedesSociales img:hover{
+  cursor: pointer;
+}
+
+/*_________________________________________________RESPONSIVE_________________________________________________*/
+.open-menu {
+  border: none;
+  background-color: #FF0000;
+  display: none;
+  margin-left: 20px;
+}
+
+.open-menu i{
+  font-family: "Font Awesome 5 Free";
+  font-size: 50px;
+  color: #ffffff;
+}
+
+.close-menu {
+  border: none;
+  background-color: #cacaca;
+  display: none;
+  padding: 0%;
+  margin: -6px 22px 0px 0px;
+}
+
+.close-menu i{
+  font-family: "Font Awesome 5 Free";
+  font-size: 50px;
+  color: #000000;
+}
+
+/*_________________________________________________RESPONSIVE_________________________________________________*/
+/*CONFIGURACION RESPONSIVE*/
+@media (max-width: 768px) {
+  /*MENU*/
+  .open-menu, .close-menu{
+    display: block;
+    cursor: pointer;
+  }
+
+  .Contenedor-menu-horizontal {
+    opacity: 0;
+    visibility: hidden;
+    width: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 1px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cacaca;
+    padding: 2rem 46px 0rem 0rem;
+    box-shadow: 0 0 0 100vmax #0000006a;
+    transition: all .5s;
+    transform: translateX(100%);
+  }
+
+  .Contenedor-menu-horizontal.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0%);
+  }
+
+  .menu-horizontal{
+    display: block;
+    flex-direction: column;
+    align-items: end;
+  }
+
+  .menu-horizontal .menu-vertical{
+    display: block;
+    flex-direction: column;
+    align-items: end;
+
+    position: relative;
+    box-shadow: none;
+    margin: 0%;
+    padding: 0%;
+
+    color: #000000;
+    background-color: #8c8c8c;
+    border-right: 5px solid transparent;
+    border-radius: 0%;
+    width: 111.7%;
+
+    overflow: hidden;
+    height: 0;
+    transition: all .5s;
+    transform: translateX(0%);
+  }
+
+  .menu-horizontal li a{
+    display: block;
+    color: #000000;
+    border-right: 5px solid transparent;
+    border-radius: 0%;
+    width: 100%;
+  }
+
+  .menu-horizontal.activado .menu-vertical{
+    overflow: visible;
+    transform: translateX(100%);
+    height: auto;
+  }
+
+  .Btn-IconoMensaje {
+    width: auto;
+    padding: 20px;
+    border-radius: 100px;
+    margin: 0%;
+  }
+
+  .Btn-IniciarSesion {
+    padding-left: 22%;
+  }
+
+  .Btn-IniciarSesion span {
+    display: none;
+    padding: 0%;
+  }
+
+  .Btn-IniciarSesion .menu-vertical{
+    width: 185px;
+    margin-left: -120px;
+  }
+
+  .Btn-IniciarSesion .menu-vertical li a{
+    padding-right: 20px;
+    text-align: right;
+  }
+
+  .menu-horizontal li :hover {
+    border-right: 5px solid #FF0000;
+    border-radius: 0%;
+    background: #8C8C8C;
+    width: 100%;
+  }
+
+  .menu-horizontal .menu-vertical li a:hover{
+    background-color: #0033A0;
+    color: #ffffff;
+    width: 100%;
+    padding-right: 15px;
+  }
+
+
+  .presentacion {
+    width: 85%;
+  }
+
+  .presentacion h1 {
+    font-size: 30px; /*35*/
+  }
+
+  .presentacion p {
+    font-size: 18px; /*20*/
+    line-height: 24px;
+  }
+
+  .buscador input[type="text"] {
+    width: 50%;
+  }
+
+  .info-contenedor h1 {
+    font-size: 25px;
+  }
+
+  .info-contenedor2 h1 {
+    font-size: 25px;
+  }
+
+  .info-contenedor p {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  .info-contenedor2 p {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  .info-contenedor2 input[type="button"] {
+    font-size: 18px;
+    padding: 10px 13px;
+  }
+
+  .info-contenedor2 input[type="button"]:hover {
+    font-size: 18px;
+    padding: 8.2px 13px;
+  }
+
+  .TerceraSeccion p {
+    font-size: 35px;
+  }
+
+  .Formulario {
+    width: auto;
+    height: auto;
+  }
+
+  .Items-Formulario {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form textarea[name="fmessage"] {
+    margin-left: 0px;
+  }
+
+  form input[type="submit"] {
+    align-content: center;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .Opciones {
+    width: 45%;
+  }
+
+  .RedesSociales {
+    width: 35%;
+  }
+}
