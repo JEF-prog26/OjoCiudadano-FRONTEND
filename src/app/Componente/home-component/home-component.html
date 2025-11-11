@@ -1,0 +1,160 @@
+<!--______________________________________ENCABEZADO______________________________________-->
+<nav class="topheader">
+  <div class="topheader-container">
+    <a routerLink="/"><img width="200" height="57" src="assets/images/Logotipo-OjoCiudadanoBlanco.png" alt="Logotipo OjoCiudadano"></a>
+
+    <nav class="Contenedor-menu-horizontal" id="Contenedor-menu-horizontal">
+      <button class="close-menu" id="close-menu">
+        <i class="fas fa-times"></i>
+      </button>
+      <ul class="menu-horizontal" id="menu-horizontal">
+        <li>
+          <a class="opcion" id="opcion">Conócenos ▼</a>
+          <ul class="menu-vertical">
+            <li><a routerLink="/sobre-nosotros">Sobre nosotros</a></li>
+            <li><a routerLink="/que-es">¿Qué es OjoCiudadano?</a></li>
+          </ul>
+        </li>
+        <li><a href="https://elpais.com/noticias/obras-publicas/" target="_blank">Noticias</a></li>
+        <li><a href="#Menj-Formu">Ayuda</a></li>
+      </ul>
+    </nav>
+
+    <div class="Btn-IniciarSesion">
+      <a routerLink="/login">
+        <button class="Btn-IconoMensaje">
+          <span>Iniciar Sesión</span>
+          <i class="far fa-user"></i>
+        </button>
+      </a>
+      <!--<ul class="menu-vertical">
+        <li><a routerLink="/perfil">Ver perfil</a></li>
+        <li><a (click)="logout()">Cerrar sesión</a></li>
+      </ul>-->
+    </div>
+
+    <button class="open-menu" id="open-menu">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+</nav>
+
+<!--______________________________________SECCIONES______________________________________-->
+<section class="PrimeraSeccion">
+  <div class="presentacion">
+    <h1>¡Bienvenido a OjoCiudadano!</h1>
+    <p>
+      Esta es una plataforma digital diseñada para facilitar el acceso a la información referente sobre los proyectos que se están realizando en el Perú, como por ejemplo conocer el avance, presupuesto y cronograma.
+    </p>
+    <div class="buscador">
+      <input type="text" placeholder="¿Qué buscaremos hoy?">
+      <button class="Btn-Lupa">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="SegundaSeccion">
+  <div class="info-contenedor">
+    <h1>Estado peruano</h1>
+    <p>
+      El Estado peruano es responsable de la planificación, ejecución y supervisión de obras públicas para mejorar la infraestructura del país. Su gestión busca garantizar el desarrollo económico y social, aunque enfrenta desafíos en transparencia y eficiencia en la ejecución de proyectos. La participación ciudadana es clave para asegurar un adecuado seguimiento de estas iniciativas.
+    </p>
+  </div>
+  <div class="info-contenedor2">
+    <h1>Gobiernos regionales</h1>
+    <p>
+      Se encargan de administrar los departamentos del Perú. Entre sus funciones podemos encontrar que son los encargados de permitir a las municipalidades ejecutar proyectos de infraestructura y desarrollo local.
+    </p>
+    <!-- <div class="Btn-obras">
+      <a routerLink="/gobiernos-regionales">
+        <input type="button" class="btn-verobras" value="Ver obras">
+      </a>
+    </div> -->
+  </div>
+</section>
+
+<section class="TerceraSeccion" id="Menj-Formu">
+  <div class="mensaje">
+    <p>¡Sé parte del cambio y únete a esta hermosa familia!</p>
+  </div>
+</section>
+
+<!--______________________________________FORMULARIO______________________________________-->
+<section class="Formulario-OjoCiudadano">
+  <div class="Formulario">
+    <form name="Formulario" method="get" action="">
+      <fieldset id="form">
+        <legend>Contáctanos</legend>
+        <div class="Items-Formulario">
+          <div class="Formulario-DatosPersonales">
+            <div class="Espacio-Formulario">
+              <input type="text" name="fname" placeholder="Nombres*">
+            </div>
+            <div class="Apellidos">
+              <div class="Espacio-Formulario">
+                <input type="text" name="fapepat" placeholder="Apellido Paterno*">
+              </div>
+              <div class="Espacio-Formulario">
+                <input type="text" name="fapemat" placeholder="Apellido Materno*">
+              </div>
+            </div>
+            <div class="Espacio-Formulario">
+              <input type="text" name="fdni" placeholder="DNI">
+            </div>
+            <div class="Espacio-Formulario">
+              <input type="text" name="fphone" placeholder="Celular">
+            </div>
+            <div class="Espacio-Formulario">
+              <input type="email" name="femail" placeholder="Correo Electrónico">
+            </div>
+          </div>
+          <div class="Formulario-EscribeAqui">
+            <div class="Espacio-Formulario">
+              <textarea name="fmessage" placeholder="Escribe tu mensaje aquí*"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="Formulario-Checkbox">
+          <input type="checkbox" name="fautorization">
+          <label>Autorizo el tratamiento de mis datos personales.</label>
+        </div>
+        <input type="submit" class="fbuttonsend" value="Enviar">
+      </fieldset>
+    </form>
+  </div>
+</section>
+
+<!--______________________________________PIE DE PÁGINA______________________________________-->
+<footer class="piepagina">
+  <div class="Contenedor-piepagina">
+    <div class="Opciones">
+      <h1>Sobre OjoCiudadano</h1>
+      <a routerLink="/que-es"><p>¿Qué es OjoCiudadano?</p></a>
+      <a href="https://www.gob.pe/institucion/pcm/informes-publicaciones/698037-politica-de-privacidad-de-gob-pe" target="_blank"><p>Política de privacidad</p></a>
+      <a href="https://reclamos.servicios.gob.pe/?institution_id=108" target="_blank"><p>Libro de reclamaciones</p></a>
+      <a href="https://www.whatsapp.com/?lang=es_LA" target="_blank"><p>Centro de ayuda</p></a>
+    </div>
+    <div class="RedesSociales">
+      <div class="Siguenos">
+        <p>Síguenos:</p>
+        <div class="Icons-RedesSociales">
+          <a href="https://www.facebook.com/" target="_blank"><img height="35" src="assets/images/Icono-Facebook.png" alt="Icono Facebook"></a>
+          <a href="https://x.com/" target="_blank"><img height="35" src="assets/images/Icono-X.png" alt="Icono X"></a>
+          <a href="https://www.youtube.com/" target="_blank"><img height="35" src="assets/images/Icono-YouTube.png" alt="Icono YouTube"></a>
+          <a href="https://www.instagram.com/" target="_blank"><img height="35" src="assets/images/Icono-Instagram.png" alt="Icono Instagram"></a>
+          <a href="https://www.linkedin.com/" target="_blank"><img height="35" src="assets/images/Icono-Linkedin.png" alt="Icono LinkedIn"></a>
+        </div>
+      </div>
+      <div class="App">
+        <p>Instala nuestra app:</p>
+        <div class="Icons-AppStores">
+          <a href="https://play.google.com/" target="_blank"><img height="35" src="assets/images/Icono-GooglePlay.png" alt="Icono GooglePlay"></a>
+          <a href="https://www.apple.com/la/app-store/" target="_blank"><img height="35" src="assets/images/Icono-AppStore.png" alt="Icono AppStore"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+

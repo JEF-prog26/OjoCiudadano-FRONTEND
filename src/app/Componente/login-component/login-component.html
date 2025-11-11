@@ -1,0 +1,46 @@
+<nav class="topheader">
+  <div class="topheader-container">
+    <a routerLink="/"><img width="200px" height="57px" src="assets/images/Logotipo-OjoCiudadanoBlanco.png" alt="LogotipoOjoCiudadano"></a>
+    <div class="Btn-IniciarSesion">
+      <a routerLink="/"><button class="Btn-IconoMensaje">
+        <i class="fas fa-chevron-left"></i>
+        <span>Volver a la página principal</span>
+      </button></a>
+    </div>
+  </div>
+</nav>
+
+<div class="login-wrapper"> <div class="login-container">
+  <div class="login-box">
+    <h2>Inicia Sesión</h2>
+    <form>
+      <div class="input-group">
+        <label for="username">
+          <img src="assets/images/Icono-Usuario.png" alt="icon-user">
+          <input type="text" id="username" placeholder="Usuario" required>
+        </label>
+      </div>
+      <div class="input-group">
+        <label for="password">
+          <img src="assets/images/Icono-Contraseña.png" alt="icon-lock">
+          <input type="password" id="password" placeholder="Contraseña" required>
+        </label>
+      </div>
+      <button type="submit" class="btn-primary">Iniciar Sesión</button>
+      <p>O inicie sesión con:</p>
+      <button type="button" class="btn-google">
+        <img src="assets/images/Icono-Google.png" alt="Google"> <p class="social-text">Continuar con Google</p>
+      </button>
+      <button type="button" class="btn-facebook">
+        <img src="assets/images/Icono-Facebook2.png" alt="Facebook"> <p class="social-text">Continuar con Facebook</p>
+      </button>
+      <div class="links">
+        <p class="link-label">¿Olvidaste tu contraseña?</p>
+        <a routerLink="/recuperar-contrasena">Haz click aquí</a>
+        <p class="link-label">¿No tienes cuenta?</p>
+        <a routerLink="/crear-cuenta">Registrate aquí</a>
+      </div>
+    </form>
+  </div>
+</div>
+</div>

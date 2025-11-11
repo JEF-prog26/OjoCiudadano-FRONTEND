@@ -1,1 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+  margin: 0;
+  padding: 0;
+  /* Esto asegura que el contenido ocupe toda la altura visible */
+  height: 100%;
+  width: 100%;
+  /* Opcional: Asegúrate de usar border-box en todos lados */
+  box-sizing: border-box;
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
