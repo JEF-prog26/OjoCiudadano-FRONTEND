@@ -1,0 +1,282 @@
+:root {
+  --color-primary-dark: #003399; /* Azul oscuro para botones */
+  --color-primary-light: #007bff; /* Azul más claro */
+  --color-accent: #ff0000; /* Rojo para el banner */
+  --color-background: #f0f0f0; /* Fondo general, aunque el mockup tiene un patrón */
+  --color-panel-bg: #ffffff; /* Fondo blanco del panel */
+  --color-text-dark: #333;
+  --color-table-header: #999; /* Gris oscuro para el encabezado de tabla */
+  --color-table-cell: #ccc; /* Gris claro para las celdas de tabla */
+  --border-radius: 15px;
+}
+
+/* Estilos Globales y Fondo */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background);
+  /* Intentamos replicar el patrón de fondo del mockup, aunque es complejo solo con CSS */
+  background-image: repeating-linear-gradient(45deg, rgba(128, 128, 128, 0.1) 0, rgba(128, 128, 128, 0.1) 1px, transparent 1px, transparent 10px);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Encabezado Rojo Superior */
+.header-banner {
+  background-color: var(--color-accent);
+  color: white;
+  padding: 10px 20px;
+  height: 60px; /* Ajuste para el espacio del banner */
+  display: flex;
+  justify-content: flex-end; /* Alinear a la derecha */
+  align-items: center;
+  border-bottom: 5px solid #a00; /* Borde interior rojo oscuro */
+}
+
+.back-link {
+  /* Color de fondo: CAMBIADO A AZUL */
+  background-color: var(--color-primary-dark);
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 10px 15px; /* Aumentamos el padding para hacerlo más grande */
+  border: 2px solid white; /* Aumentamos el grosor del borde */
+  border-radius: 8px; /* Redondeamos las esquinas */
+  transition: background-color 0.2s;
+}
+
+.back-link:hover {
+  background-color: var(--color-primary-light); /* Un efecto de hover al pasar el ratón */
+}
+
+/* Contenedor Principal del Panel */
+.evidence-panel-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  flex-grow: 1; /* Para centrar verticalmente en la pantalla si el contenido es pequeño */
+}
+
+.evidence-panel {
+  background-color: var(--color-panel-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 90%;
+  max-width: 1200px;
+  display: flex; /* Añadimos flex para organizar título y controles */
+  flex-direction: column; /* Apilamos verticalmente título y el resto */
+}
+
+.evidence-panel h1 {
+  color: var(--color-text-dark);
+  margin-top: 0;
+  margin-bottom: 30px; /* Espacio debajo del título */
+}
+
+/* Maquetación de Botones y Área de Datos */
+.controls-layout {
+  display: flex;
+  gap: 40px; /* Espacio entre la columna de botones y el área de datos */
+  align-items: flex-start; /* Alinea los elementos al inicio de su contenedor flex */
+  flex-grow: 1; /* Permite que ocupe el espacio restante */
+}
+
+/* Columna de Botones */
+.button-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espacio entre botones */
+}
+
+.action-button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: left; /* Alineación del texto del botón */
+  width: 220px; /* Ancho fijo para botones, similar al mockup */
+  transition: background-color 0.2s;
+}
+
+.primary-button {
+  background-color: var(--color-primary-dark);
+  color: white;
+}
+
+.primary-button:hover {
+  background-color: var(--color-primary-light);
+}
+
+/* Área de Datos (Inputs y Tabla) */
+.data-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0; /* Permite que el contenido se encoja si es necesario */
+}
+
+/* Fila de Inputs (Nombre, Documento UR, Tipo) */
+.input-row {
+  display: flex;
+  gap: 10px;
+  /* margin-bottom: 10px; */ /* Quitamos este margen, el gap del data-area lo maneja */
+}
+
+.data-input {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  flex-grow: 1;
+  font-size: 14px;
+  background-color: #e0e0e0; /* Gris claro para simular el estado de entrada */
+  color: #666;
+  height: 20px; /* Ajustar altura para que se vea más estilizado */
+}
+
+/* Grupo de Input ID (IdEvidencia) */
+.id-input-group {
+  display: flex;
+  width: 150px; /* Ancho del input */
+  align-self: flex-start; /* Se alinea a la izquierda dentro de data-area */
+  margin-left: 20px; /* Pequeño margen para separarlo del borde izquierdo del data-area */
+}
+
+.id-input {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #e0e0e0; /* Gris claro */
+  width: 100%;
+  color: #666;
+  height: 20px; /* Ajustar altura */
+}
+
+/* Contenedor de la Tabla */
+.evidence-table-container {
+  background-color: var(--color-panel-bg);
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  overflow: hidden; /* Para el borde redondeado */
+  max-height: 400px; /* Altura máxima para la barra vertical */
+  overflow-y: auto; /* Para la barra de desplazamiento vertical */
+  overflow-x: auto; /* Para la barra de desplazamiento horizontal */
+  flex-grow: 1; /* Permite que la tabla ocupe el espacio restante */
+  margin-top: 10px; /* Espacio entre los inputs y la tabla */
+}
+
+/* Encabezado de la Tabla */
+.table-header {
+  display: flex;
+  background-color: var(--color-table-header);
+  color: white;
+  font-weight: bold;
+  padding: 15px 10px;
+  /* Los bordes redondeados se manejarán por el overflow hidden del contenedor */
+  position: sticky; /* Fija el encabezado al hacer scroll */
+  top: 0;
+  min-width: 500px; /* Asegura un ancho mínimo para que aparezca la barra horizontal */
+}
+
+.table-header > div {
+  flex: 1;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 5px 0; /* Padding vertical para centrar el texto */
+}
+.table-header > div:last-child {
+  border-right: none;
+}
+
+/* Cuerpo de la Tabla (Filas) */
+.table-body {
+  /* Simula el color gris de las celdas, pero las filas individuales tendrán su propio color */
+}
+
+.table-row {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid #b0b0b0;
+  background-color: var(--color-table-cell); /* Fondo de fila por defecto */
+  min-width: 500px; /* Asegura que las filas tengan el mismo ancho mínimo que el encabezado */
+}
+
+.table-row:nth-child(even) {
+  background-color: #ddd; /* Un gris ligeramente diferente para las filas pares (opcional) */
+}
+
+.table-row > div {
+  flex: 1;
+  text-align: center;
+  color: var(--color-text-dark);
+  padding: 5px 0; /* Padding vertical para centrar el texto */
+}
+
+/* Estilos para el scrollbar */
+.evidence-table-container::-webkit-scrollbar {
+  width: 10px; /* Ancho de la barra vertical */
+  height: 10px; /* Alto de la barra horizontal */
+}
+
+.evidence-table-container::-webkit-scrollbar-track {
+  background: #ccc;
+  border-radius: 10px; /* Bordes redondeados para el track */
+}
+
+.evidence-table-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px; /* Bordes redondeados para el thumb */
+}
+
+.evidence-table-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+/* Clases para manejar visibilidad con TypeScript */
+.hidden {
+  display: none !important;
+}
+
+.visible {
+  display: flex !important; /* Para inputs y id-input-group */
+}
+
+.visible-block {
+  display: block !important; /* Para la tabla */
+}
+/* Estilos Globales y Fondo */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background); /* Color sólido de fondo */
+  /* ELIMINAMOS el background-image: repeating-linear-gradient... */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+/* Contenedor Principal del Panel */
+.evidence-panel-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  flex-grow: 1;
+
+  /* --- ESTILOS DE FONDO APLICADOS AQUÍ --- */
+  background-image: url('https://us.123rf.com/450wm/trompinex/trompinex1606/trompinex160600030/58398485-decorative-checkered-pattern-vector-black-white-seamless-patterns-abstract-stylish-background.jpg');
+  background-repeat: repeat; /* Para que el patrón se repita y cubra toda el área */
+  background-size: 150px; /* Ajusta el tamaño si quieres que el patrón sea más grande o más pequeño */
+  /* --- FIN ESTILOS DE FONDO --- */
+}
+
+.evidence-panel {
+  /* ... otros estilos del panel ... */
+  background-color: var(--color-panel-bg); /* Es crucial que el panel tenga un fondo blanco sólido para que los elementos internos se vean bien */
+  /* ... */
+}

@@ -1,1 +1,56 @@
-<p>panel-notificacion-component works!</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Notificaciones - Ojo Ciudadano UPC</title>
+  <link rel="stylesheet" href="css/notificacion-styles.css">
+</head>
+<body>
+
+<div class="header-banner">
+  <a href="#" class="back-link">Volver a la página anterior</a>
+</div>
+
+<div class="notification-panel-container">
+  <div class="notification-panel">
+    <h1>Panel de Notificaciones</h1>
+
+    <div class="controls-layout">
+      <div class="button-column">
+        <button class="action-button primary-button" id="btn-registrar">Registrar Notificacion</button>
+        <button class="action-button primary-button" id="btn-listar">Listar Notificacion</button>
+        <button class="action-button primary-button" id="btn-buscar">Buscar Notificacion por ID</button>
+        <button class="action-button primary-button" id="btn-actualizar">Actualizar datos Notificacion</button>
+        <button class="action-button primary-button" id="btn-eliminar">Eliminar Notificacion</button>
+      </div>
+
+      <div class="data-area">
+        <div class="input-row hidden" id="main-inputs">
+          <input type="text" class="data-input" placeholder="Nombre" id="input-nombre">
+          <input type="text" class="data-input" placeholder="Documento UR" id="input-documentour">
+          <input type="date" class="data-input" placeholder="Fecha de envío" id="input-fechaenvio">
+        </div>
+
+        <div class="id-notificacion-input-group hidden" id="id-input-group">
+          <input type="text" class="id-input" placeholder="IdNotificacion" id="input-id">
+        </div>
+
+        <div class="notification-table-container visible-block" id="notification-table-container">
+          <div class="table-header">
+            <div style="flex: 0.5;">ID</div>
+            <div>Nombre</div>
+            <div>Documento UR</div>
+            <div>Fecha de envío</div>
+            <div style="flex: 0.5;">Acciones</div> </div>
+          <div class="table-body" id="table-body">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/notificacion.js" defer></script>
+</body>
+</html>
