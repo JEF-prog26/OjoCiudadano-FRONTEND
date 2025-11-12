@@ -1,1 +1,85 @@
-<p>panel-denuncia-component works!</p>
+<!-- panel-denuncia-component.html -->
+<div class="page-wrapper">
+  <header class="top-bar">
+    <button class="back-button">
+      &lt; Volver a la página anterior
+    </button>
+  </header>
+
+  <div class="panel-wrapper">
+    <div class="panel-card">
+      <h2 class="panel-title">Panel de Gestión de Denuncias</h2>
+
+      <div class="panel-content">
+        <!-- BOTONES LATERALES -->
+        <aside class="sidebar-actions">
+          <button class="action-btn action-primary">Registrar Denuncia</button>
+          <button class="action-btn">Listar Denuncias</button>
+          <button class="action-btn">Buscar Denuncia</button>
+          <button class="action-btn action-secondary">
+            Actualizar datos de Denuncia
+          </button>
+          <button class="action-btn action-danger">Eliminar Denuncia</button>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <section class="panel-main">
+          <div class="field-row">
+            <span class="field-chip">Descripción</span>
+            <span class="field-chip">Fecha Denuncia</span>
+            <span class="field-chip">Estado</span>
+            <span class="field-chip">Obra Pública</span>
+          </div>
+
+          <div class="field-row">
+            <span class="field-chip">Título</span>
+            <span class="field-chip">IdDenuncia</span>
+          </div>
+
+          <!-- TABLA / GRID -->
+          <div class="table-card">
+            <div class="table-header">
+              <span>ID</span>
+              <span>Título</span>
+              <span>Descripción</span>
+              <span>Fecha Denuncia</span>
+              <span>Estado</span>
+            </div>
+
+            <div class="table-body">
+              <!-- Filas de ejemplo (puedes reemplazar por *ngFor luego) -->
+              <div class="table-row">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="table-row">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="table-row">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+
+            <!-- Scrollbars decorativos -->
+            <div class="scrollbar-horizontal"></div>
+            <div class="scrollbar-vertical"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bottom-bar"></footer>
+</div>
+
