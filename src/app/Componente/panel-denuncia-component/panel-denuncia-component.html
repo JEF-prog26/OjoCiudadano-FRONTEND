@@ -1,42 +1,40 @@
-<!-- panel-denuncia-component.html -->
 <div class="page-wrapper">
   <header class="top-bar">
-    <button class="back-button">
+    <button class="back-button" (click)="goBack()">
       &lt; Volver a la página anterior
     </button>
   </header>
 
   <div class="panel-wrapper">
     <div class="panel-card">
-      <h2 class="panel-title">Panel de Gestión de Denuncias</h2>
 
-      <div class="panel-content">
-        <!-- BOTONES LATERALES -->
-        <aside class="sidebar-actions">
-          <button class="action-btn action-primary">Registrar Denuncia</button>
-          <button class="action-btn">Listar Denuncias</button>
-          <button class="action-btn">Buscar Denuncia</button>
-          <button class="action-btn action-secondary">
-            Actualizar datos de Denuncia
+      <!-- 🔹 CABECERA CON TÍTULO, BOTÓN Y BUSCADOR -->
+      <div class="panel-header">
+        <h2 class="panel-title">Panel de Gestión de Denuncias</h2>
+
+        <div class="header-actions">
+          <button class="action-btn action-primary" (click)="onRegistrarClick()">
+            Registrar Denuncia
           </button>
-          <button class="action-btn action-danger">Eliminar Denuncia</button>
-        </aside>
 
-        <!-- CONTENIDO PRINCIPAL -->
-        <section class="panel-main">
-          <div class="field-row">
-            <span class="field-chip">Descripción</span>
-            <span class="field-chip">Fecha Denuncia</span>
-            <span class="field-chip">Estado</span>
-            <span class="field-chip">Obra Pública</span>
+          <div class="search-box">
+            <input
+              type="number"
+              class="search-input"
+              placeholder="Buscar por ID..."
+              [(ngModel)]="searchId"
+            />
+            <button class="search-btn" (click)="buscarPorId()">Buscar</button>
+            <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
           </div>
+        </div>
+      </div>
 
-          <div class="field-row">
-            <span class="field-chip">Título</span>
-            <span class="field-chip">IdDenuncia</span>
-          </div>
+      <!-- 🔹 CONTENIDO PRINCIPAL -->
+      <section class="panel-main">
 
-          <!-- TABLA / GRID -->
+        <!-- LISTA / TABLA -->
+        <ng-container *ngIf="!showForm; else formularioRegistro">
           <div class="table-card">
             <div class="table-header">
               <span>ID</span>
@@ -44,42 +42,78 @@
               <span>Descripción</span>
               <span>Fecha Denuncia</span>
               <span>Estado</span>
+              <span>Acciones</span>
             </div>
 
             <div class="table-body">
-              <!-- Filas de ejemplo (puedes reemplazar por *ngFor luego) -->
-              <div class="table-row">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="table-row">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="table-row">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+              <div class="table-row" *ngFor="let d of denunciasFiltradas">
+                <span>{{ d.id }}</span>
+                <span>{{ d.titulo }}</span>
+                <span>{{ d.descripcion }}</span>
+                <span>{{ d.fechaDenuncia }}</span>
+                <span>{{ d.estado }}</span>
+                <span class="cell-actions">
+                  <button class="icon-btn edit" (click)="editarDenuncia(d)">✏️</button>
+                  <button class="icon-btn delete" (click)="eliminarDenuncia(d)">🗑</button>
+                </span>
               </div>
             </div>
 
-            <!-- Scrollbars decorativos -->
             <div class="scrollbar-horizontal"></div>
             <div class="scrollbar-vertical"></div>
           </div>
-        </section>
-      </div>
+        </ng-container>
+
+        <!-- FORMULARIO (CREAR / EDITAR) -->
+        <ng-template #formularioRegistro>
+          <div class="form-card">
+            <h3>{{ editingId ? 'Editar denuncia' : 'Registrar nueva denuncia' }}</h3>
+
+            <div class="form-row">
+              <label class="form-label">ID</label>
+              <input
+                class="form-input"
+                type="number"
+                [(ngModel)]="denunciaForm.id"
+                [readonly]="editingId !== null"
+              />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Título</label>
+              <input class="form-input" type="text" [(ngModel)]="denunciaForm.titulo" />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Descripción</label>
+              <textarea
+                class="form-input"
+                rows="3"
+                [(ngModel)]="denunciaForm.descripcion">
+              </textarea>
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Fecha de Denuncia</label>
+              <input class="form-input" type="date" [(ngModel)]="denunciaForm.fechaDenuncia" />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Estado</label>
+              <input class="form-input" type="text" [(ngModel)]="denunciaForm.estado" />
+            </div>
+
+            <div class="form-actions">
+              <button class="form-btn-secondary" (click)="cancelarForm()">Cancelar</button>
+              <button class="form-btn-primary" (click)="guardarDenuncia()">
+                {{ editingId ? 'Guardar cambios' : 'Registrar' }}
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </section>
     </div>
   </div>
 
   <footer class="bottom-bar"></footer>
 </div>
-
