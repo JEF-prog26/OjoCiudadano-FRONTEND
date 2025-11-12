@@ -1,6 +1,80 @@
-// main.ts
+import { Component, OnInit } from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-document.addEventListener('DOMContentLoaded', () => {
+@Component({
+  selector: 'app-panel-evidencia', // Nombre del selector
+  templateUrl: './panel-evidencia-component.html',
+  styleUrls: ['./panel-evidencia-component.css'],
+  imports: [CommonModule]
+})
+export class PanelEvidenciaComponent implements OnInit { // <-- CLASE EXPORTADA Y CONFIGURADA
+
+  // --- Propiedades para controlar la visibilidad ---
+  // Estas propiedades controlarán las clases CSS en el HTML usando [ngClass] o *ngIf
+  showInputs: boolean = false;
+  showId: boolean = false;
+  showTable: boolean = true; // Mostrar la tabla por defecto
+
+  // AÑADIR: Propiedad para simular los datos de la tabla
+  evidenciasData: any[] = [
+    { id: 1, nombre: 'Foto Incidente', documentoUr: 'ABC1234', tipo: 'Imagen' },
+    { id: 2, nombre: 'Video Prueba', documentoUr: 'DEF5678', tipo: 'Video' },
+    { id: 3, nombre: 'Audio Testigo', documentoUr: 'GHI9012', tipo: 'Audio' },
+  ];
+
+  constructor() { }
+
+  ngOnInit(): void {
+    // Aquí iría la lógica de inicialización si fuera necesaria.
+    // El estado inicial ya se maneja en la declaración de las propiedades de arriba.
+    console.log('Componente de Panel de Evidencias inicializado.');
+  }
+
+  // --- Funciones de Utilidad (Adaptadas de tu JS) ---
+
+  /**
+   * Actualiza las propiedades de visibilidad basadas en el modo.
+   */
+  updateVisibility(showInputs: boolean, showId: boolean, showTable: boolean): void {
+    this.showInputs = showInputs;
+    this.showId = showId;
+    this.showTable = showTable;
+  }
+
+  // --- Manejadores de Eventos de los Botones (Adaptados de tu JS) ---
+
+  onRegisterClick(): void {
+    console.log('Modo: Registrar Evidencia');
+    this.updateVisibility(true, false, false);
+  }
+
+  onListClick(): void {
+    console.log('Modo: Listar Evidencia');
+    this.updateVisibility(false, false, true);
+    // Aquí iría la llamada a la API para cargar la lista de evidencias
+    // this.loadAllEvidences();
+  }
+
+  onSearchClick(): void {
+    console.log('Modo: Buscar Evidencia por ID');
+    this.updateVisibility(false, true, true);
+  }
+
+  onUpdateClick(): void {
+    console.log('Modo: Actualizar datos evidencia');
+    this.updateVisibility(true, true, true);
+  }
+
+  onDeleteClick(): void {
+    console.log('Modo: Eliminar evidencia');
+    this.updateVisibility(false, true, true);
+  }
+
+  // Si tenías más métodos como loadAllEvidences, deben ser métodos de clase aquí.
+}
+
+
+/*document.addEventListener('DOMContentLoaded', () => {
   // --- Referencias a los elementos del DOM ---
   const registerBtn = document.getElementById('register-btn');
   const listBtn = document.getElementById('list-btn');
@@ -19,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * @param showInputs Muestra los inputs de Nombre, Documento, Tipo.
    * @param showId Muestra el input de IdEvidencia.
    * @param showTable Muestra la tabla.
-   */
+
   const updateVisibility = (showInputs: boolean, showId: boolean, showTable: boolean) => {
     // Manejar la fila de inputs (Nombre, Documento UR, Tipo)
     if (showInputs) {
@@ -81,4 +155,4 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Estado Inicial ---
   // Según el nuevo mockup, inicialmente solo se ve la tabla de listado.
   updateVisibility(false, false, true); // Oculta inputs e ID, muestra la tabla por defecto
-});
+});*/

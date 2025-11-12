@@ -1,4 +1,54 @@
-<!DOCTYPE html>
+<main class="evidence-panel-container">
+  <div class="evidence-panel">
+    <h1>Panel de Evidencias</h1>
+
+    <div class="controls-layout">
+      <div class="button-column">
+        <button class="action-button primary-button" (click)="onRegisterClick()">Registrar Evidencia</button>
+        <button class="action-button primary-button" (click)="onListClick()">Listar Evidencia</button>
+        <button class="action-button primary-button" (click)="onSearchClick()">Buscar Evidencia por ID</button>
+        <button class="action-button primary-button" (click)="onUpdateClick()">Actualizar datos evidencia</button>
+        <button class="action-button primary-button" (click)="onDeleteClick()">Eliminar evidencia</button>
+      </div>
+
+      <div class="data-area">
+
+        <div class="input-row" *ngIf="showInputs">
+          <input type="text" placeholder="Nombre" class="data-input">
+          <input type="text" placeholder="Documento UR" class="data-input">
+          <input type="text" placeholder="Tipo" class="data-input">
+        </div>
+
+        <div class="id-input-group" *ngIf="showId">
+          <input type="text" placeholder="IdEvidencia" class="id-input">
+        </div>
+
+        <div class="evidence-table-container" *ngIf="showTable">
+          <div class="table-header">
+            <div>ID</div>
+            <div>Nombre</div>
+            <div>Documento UR</div>
+            <div>Tipo</div>
+          </div>
+          <div class="table-body">
+            <div class="table-row" *ngFor="let evidencia of evidenciasData">
+              <div>{{ evidencia.id }}</div>
+              <div>{{ evidencia.nombre }}</div>
+              <div>{{ evidencia.documentoUr }}</div>
+              <div>{{ evidencia.tipo }}</div>
+            </div>
+            <div class="table-row" *ngIf="evidenciasData.length === 0">
+              <div style="flex: 4; text-align: center; color: #666;">No hay evidencias para mostrar.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<!--<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -55,4 +105,4 @@
 
 <script type="module" src="main.ts"></script>
 </body>
-</html>
+</html>-->

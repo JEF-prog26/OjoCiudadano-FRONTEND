@@ -7,15 +7,24 @@
   background-size: cover;
   width: 100%;
   min-height: calc(100vh - 100px);
-  /*height: auto;
-  margin-top: 140px;*/
+  /*height: auto;*/
+  margin-top: 0px;
   justify-content: center; /* Centrar Horizontalmente*/
   align-items: center; /* Centrar Verticalmente*/
   /* Padding para separación del header fijo*/
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 140px;
+  padding-bottom: 0px;
 }
-.login-container {margin: 0;}
+.login-container {
+  margin: 0;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 360px;
+  height: auto;
+  text-align: center;
+}
 
 .topheader {
   background-color:#FF0000;
