@@ -7,7 +7,6 @@ import {RouterLink} from '@angular/router';
   selector: 'app-home-component',
   templateUrl: './home-component.html',
   imports: [
-    NgClass,
     CommonModule,
     RouterLink
   ],
