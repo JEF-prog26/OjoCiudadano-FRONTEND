@@ -1,14 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+/* ===== Estados tipados ===== */
+type Estado =
+  | 'Registrada'
+  | 'En revisión (preliminar)'
+  | 'En investigación (fiscal o policial)'
+  | 'En evaluación judicial / etapa intermedia'
+  | 'En juicio'
+  | 'Con sentencia'
+  | 'Archivada / Concluida';
+
+const ESTADOS: Estado[] = [
+  'Registrada',
+  'En revisión (preliminar)',
+  'En investigación (fiscal o policial)',
+  'En evaluación judicial / etapa intermedia',
+  'En juicio',
+  'Con sentencia',
+  'Archivada / Concluida',
+];
+
+/* ===== Interfaces ===== */
+interface HistorialEvento {
+  estado: Estado;
+  descripcion?: string;
+  fecha: string; // 'YYYY-MM-DD'
+}
 
 interface Denuncia {
   id: number;
   titulo: string;
   descripcion: string;
   fechaDenuncia: string;
-  estado: string;
+  estado: Estado;
+  historial?: HistorialEvento[];
 }
 
 @Component({
@@ -19,6 +47,8 @@ interface Denuncia {
   styleUrl: './panel-denuncia-component.css',
 })
 export class PanelDenunciaComponent {
+  /* Exponer lista de estados al template (para el <select>) */
+  ESTADOS = ESTADOS;
 
   showForm = false;
   editingId: number | null = null; // null = creando, != null = editando
@@ -29,6 +59,10 @@ export class PanelDenunciaComponent {
 
   // 🔍 valor del buscador por ID
   searchId: number | null = null;
+
+  // 🧩 modal detalle
+  detailOpen = false;
+  detalleSeleccionado: Denuncia | null = null;
 
   constructor(private router: Router) {}
 
@@ -42,7 +76,8 @@ export class PanelDenunciaComponent {
       titulo: '',
       descripcion: '',
       fechaDenuncia: '',
-      estado: '',
+      estado: 'Registrada', // 🔒 default en creación
+      historial: [],
     };
   }
 
@@ -68,19 +103,48 @@ export class PanelDenunciaComponent {
       return;
     }
 
+    // Fecha por defecto si está vacía
+    if (!this.denunciaForm.fechaDenuncia) {
+      this.denunciaForm.fechaDenuncia = new Date().toISOString().slice(0, 10);
+    }
+
     if (this.editingId === null) {
-      // CREAR
-      const existe = this.denuncias.some(d => d.id === this.denunciaForm.id);
+      // 🆕 CREAR: estado forzado a "Registrada"
+      const existe = this.denuncias.some((d) => d.id === this.denunciaForm.id);
       if (existe) {
         alert('Ya existe una denuncia con ese ID.');
         return;
       }
-      this.denuncias.push({ ...this.denunciaForm });
+
+      const nueva: Denuncia = {
+        ...this.denunciaForm,
+        estado: 'Registrada',
+        historial: [
+          {
+            estado: 'Registrada',
+            descripcion: 'Denuncia registrada.',
+            fecha: this.denunciaForm.fechaDenuncia,
+          },
+        ],
+      };
+
+      this.denuncias.push(nueva);
     } else {
-      // EDITAR
-      const idx = this.denuncias.findIndex(d => d.id === this.editingId);
+      // ✏️ EDITAR: permitir cambiar estado y registrar cambio en historial
+      const idx = this.denuncias.findIndex((d) => d.id === this.editingId);
       if (idx > -1) {
-        this.denuncias[idx] = { ...this.denunciaForm };
+        const anterior = this.denuncias[idx];
+        const prevHist = anterior.historial ?? [];
+
+        if (anterior.estado !== this.denunciaForm.estado) {
+          prevHist.push({
+            estado: this.denunciaForm.estado,
+            descripcion: `Estado actualizado de "${anterior.estado}" a "${this.denunciaForm.estado}".`,
+            fecha: new Date().toISOString().slice(0, 10),
+          });
+        }
+
+        this.denuncias[idx] = { ...this.denunciaForm, historial: prevHist };
       }
     }
 
@@ -101,7 +165,7 @@ export class PanelDenunciaComponent {
     }
 
     this.denunciasFiltradas = this.denuncias.filter(
-      d => d.id === this.searchId
+      (d) => d.id === this.searchId
     );
 
     if (this.denunciasFiltradas.length === 0) {
@@ -114,20 +178,69 @@ export class PanelDenunciaComponent {
     this.denunciasFiltradas = [...this.denuncias];
   }
 
-  // EDITAR DESDE LA TABLA
+  // ✏️ EDITAR DESDE LA TABLA
   editarDenuncia(denuncia: Denuncia): void {
     this.showForm = true;
     this.editingId = denuncia.id;
     this.denunciaForm = { ...denuncia };
+    if (!this.denunciaForm.historial) this.denunciaForm.historial = [];
   }
 
-  // ELIMINAR DESDE LA TABLA
+  // 🗑 ELIMINAR DESDE LA TABLA
   eliminarDenuncia(denuncia: Denuncia): void {
-    const ok = confirm(`¿Seguro que deseas eliminar la denuncia con ID ${denuncia.id}?`);
+    const ok = confirm(
+      `¿Seguro que deseas eliminar la denuncia con ID ${denuncia.id}?`
+    );
     if (!ok) return;
 
-    this.denuncias = this.denuncias.filter(d => d.id !== denuncia.id);
+    this.denuncias = this.denuncias.filter((d) => d.id !== denuncia.id);
     this.denunciasFiltradas = [...this.denuncias];
     this.searchId = null;
+
+    if (this.detalleSeleccionado?.id === denuncia.id) {
+      this.cerrarDetalle();
+    }
+  }
+
+  // 👁 VER DETALLE (abre modal)
+  verDetalle(d: Denuncia): void {
+    if (!d.historial || d.historial.length === 0) {
+      d.historial = [
+        {
+          estado: d.estado || 'Registrada',
+          descripcion: 'Denuncia registrada.',
+          fecha: d.fechaDenuncia || new Date().toISOString().slice(0, 10),
+        },
+      ];
+    }
+    this.detalleSeleccionado = d;
+    this.detailOpen = true;
+  }
+
+  cerrarDetalle(): void {
+    this.detailOpen = false;
+    this.detalleSeleccionado = null;
+  }
+
+  // 🎨 Clase CSS por estado (para badges y timeline)
+  estadoClass(estado?: string): string {
+    const e = (estado || '').toLowerCase();
+
+    if (e.startsWith('registrada')) return 'estado-registrada';
+    if (e.startsWith('en revisión')) return 'estado-revision';
+    if (e.startsWith('en investigación')) return 'estado-investigacion';
+    if (e.startsWith('en evaluación')) return 'estado-intermedia';
+    if (e.startsWith('en juicio')) return 'estado-juicio';
+    if (e.startsWith('con sentencia')) return 'estado-sentencia';
+    if (e.startsWith('archivada') || e.startsWith('concluida'))
+      return 'estado-archivada';
+
+    return 'estado-registrada';
+  }
+
+  // Cerrar modal con ESC (opcional)
+  @HostListener('document:keydown.escape')
+  onEsc() {
+    if (this.detailOpen) this.cerrarDetalle();
   }
 }
