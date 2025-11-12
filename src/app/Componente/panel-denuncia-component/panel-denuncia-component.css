@@ -57,8 +57,17 @@
   padding: 24px 32px 32px;
 }
 
+/* TÍTULO + BUSCADOR */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
 .panel-title {
-  margin: 0 0 12px;
+  margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
 }
@@ -75,6 +84,11 @@
   .panel-content {
     grid-template-columns: 1fr;
     row-gap: 24px;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
@@ -103,34 +117,12 @@
   background-color: #0046b8;
 }
 
-.action-secondary {
-  font-size: 0.8rem;
-}
-
-.action-danger {
-  background-color: #e40000;
-}
-
 /* CONTENIDO PRINCIPAL */
 .panel-main {
   display: flex;
   flex-direction: column;
   gap: 14px;
   margin-top: 4px;
-}
-
-.field-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.field-chip {
-  padding: 8px 18px;
-  border-radius: 999px;
-  background-color: #d3d3d3;
-  font-size: 0.8rem;
-  color: #333;
 }
 
 /* TARJETA DE TABLA */
@@ -149,7 +141,7 @@
 /* CABECERA NEGRA */
 .table-header {
   display: grid;
-  grid-template-columns: 70px 1.2fr 2fr 1.4fr 1fr;
+  grid-template-columns: 70px 1.2fr 2fr 1.4fr 1fr 110px;
   background-color: #000000;
   color: #ffffff;
   font-size: 0.8rem;
@@ -167,7 +159,7 @@
 
 .table-row {
   display: grid;
-  grid-template-columns: 70px 1.2fr 2fr 1.4fr 1fr;
+  grid-template-columns: 70px 1.2fr 2fr 1.4fr 1fr 110px;
   column-gap: 8px;
   height: 40px;
 }
@@ -175,6 +167,32 @@
 .table-row span {
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 1px;
+}
+
+/* ACCIONES POR FILA */
+.cell-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: transparent;
+}
+
+.icon-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.icon-btn.edit {
+  background-color: #ffffff;
+}
+
+.icon-btn.delete {
+  background-color: #e40000;
+  color: #fff;
 }
 
 /* SCROLLBARS DECORATIVOS */
@@ -198,7 +216,186 @@
   background-color: #b3b3b3;
 }
 
-/* BARRA INFERIOR ROJA (VISUAL, COMO EN LA IMAGEN) */
+/* FORMULARIO */
+.form-card {
+  margin-top: 8px;
+  background-color: #f3f3f3;
+  border-radius: 18px;
+  padding: 20px 24px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  height: 100%;
+}
+
+.form-card h3 {
+  margin-top: 0;
+  margin-bottom: 14px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.form-input {
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+.form-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.form-btn-primary,
+.form-btn-secondary {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-btn-primary {
+  background-color: #0046b8;
+  color: #fff;
+}
+
+.form-btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+/* BUSCADOR */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-input {
+  min-width: 150px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+}
+
+.search-btn,
+.search-btn-secondary {
+  border-radius: 999px;
+  border: none;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.search-btn {
+  background-color: #0046b8;
+  color: #fff;
+}
+
+.search-btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+/* BARRA INFERIOR ROJA */
 .bottom-bar {
-  height: 0; /* solo usamos el borde ya definido en page-wrapper */
+  height: 0;
+}
+/* === NUEVO BLOQUE DE CABECERA === */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Elimina el sidebar antiguo */
+.sidebar-actions {
+  display: none;
+}
+
+/* Ajuste general para el layout */
+.panel-main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* === BOTÓN PRINCIPAL === */
+.action-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: #0046b8;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: #003b9d;
+}
+
+.action-primary {
+  background-color: #0046b8;
+}
+
+/* === BUSCADOR === */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-input {
+  min-width: 150px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+}
+
+.search-btn,
+.search-btn-secondary {
+  border-radius: 999px;
+  border: none;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.search-btn {
+  background-color: #0046b8;
+  color: #fff;
+}
+
+.search-btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
 }
