@@ -68,6 +68,11 @@ body {
   max-width: 1200px;
   display: flex; /* Añadimos flex para organizar título y controles */
   flex-direction: column; /* Apilamos verticalmente título y el resto */
+  /**/
+  opacity: 1;
+  position: relative;
+  z-index: 2;
+  min-height: 400px;
 }
 
 .evidence-panel h1 {
@@ -82,6 +87,8 @@ body {
   gap: 40px; /* Espacio entre la columna de botones y el área de datos */
   align-items: flex-start; /* Alinea los elementos al inicio de su contenedor flex */
   flex-grow: 1; /* Permite que ocupe el espacio restante */
+  /**/
+  min-width: 700px;
 }
 
 /* Columna de Botones */
@@ -173,7 +180,7 @@ body {
 /* Encabezado de la Tabla */
 .table-header {
   display: flex;
-  background-color: var(--color-table-header);
+  background-color: var(--color-primary-dark); /*var(--color-table-header);*/
   color: white;
   font-weight: bold;
   padding: 15px 10px;
@@ -202,12 +209,12 @@ body {
   display: flex;
   padding: 10px;
   border-bottom: 1px solid #b0b0b0;
-  background-color: var(--color-table-cell); /* Fondo de fila por defecto */
+  background-color: #ffffff;/*var(--color-table-cell);*/ /* Fondo de fila por defecto */
   min-width: 500px; /* Asegura que las filas tengan el mismo ancho mínimo que el encabezado */
 }
 
 .table-row:nth-child(even) {
-  background-color: #ddd; /* Un gris ligeramente diferente para las filas pares (opcional) */
+  background-color: #f7f7f7;/*#ddd;*/ /* Un gris ligeramente diferente para las filas pares (opcional) */
 }
 
 .table-row > div {
@@ -239,17 +246,17 @@ body {
 
 
 /* Clases para manejar visibilidad con TypeScript */
-.hidden {
+/*.hidden {
   display: none !important;
 }
 
 .visible {
-  display: flex !important; /* Para inputs y id-input-group */
+  display: flex !important; /* Para inputs y id-input-group
 }
 
 .visible-block {
-  display: block !important; /* Para la tabla */
-}
+  display: block !important; /* Para la tabla
+}*/
 /* Estilos Globales y Fondo */
 body {
   font-family: Arial, sans-serif;

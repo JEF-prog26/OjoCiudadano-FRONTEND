@@ -1,4 +1,99 @@
-// notificacion.ts (o notificacion.js si no usas estricto TS)
+import { Component, OnInit } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+
+@Component({
+  selector: 'app-panel-notificacion',
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
+  templateUrl: './panel-notificacion-component.html',
+  styleUrls: ['./panel-notificacion-component.css']
+})
+export class PanelNotificacionComponent implements OnInit { // <-- CLAVE: Componente exportable
+
+  // 1. MOCK de datos simulados (movido a la clase como propiedad)
+  NOTIFICACIONES_MOCK: any[] = [
+    { id: 101, nombre: 'Solicitud Cambio', documentoUr: 'U20204567', fechaEnvio: '2025-10-01' },
+    { id: 102, nombre: 'Alerta Incidente', documentoUr: 'U20211234', fechaEnvio: '2025-10-05' },
+    { id: 103, nombre: 'Aviso Manteniemto', documentoUr: 'U20229876', fechaEnvio: '2025-11-10' },
+  ];
+
+  // 2. Propiedades para controlar la visibilidad (reemplazan el manejo de clases CSS)
+  showInputs: boolean = false;
+  showId: boolean = false;
+  showTable: boolean = true; // Estado inicial: Listar Notificaciones
+
+  // Propiedad para la lista que se muestra en la tabla
+  notificacionesData: any[] = [];
+
+  // Propiedad para manejar el input del ID (para buscar, actualizar, eliminar)
+  notificacionIdInput: string = '';
+
+  constructor() { }
+
+  ngOnInit(): void {
+    // Establecer el estado inicial: Listar Notificaciones
+    this.updatePanelVisibility(false, false, true);
+    this.notificacionesData = this.NOTIFICACIONES_MOCK; // Cargar la tabla
+    console.log('Panel de Notificaciones inicializado.');
+  }
+
+  // --- FUNCIÓN DE UTILIDAD: Control de Visibilidad (Adaptada) ---
+  updatePanelVisibility(showInputs: boolean, showId: boolean, showTable: boolean): void {
+    this.showInputs = showInputs;
+    this.showId = showId;
+    this.showTable = showTable;
+    // En Angular, la limpieza de inputs se hace con ngModel si los hubieras usado
+    // Por simplicidad, solo limpiamos el input de ID.
+    this.notificacionIdInput = '';
+  }
+
+  // --- Manejadores de Eventos de los Botones (Adaptados) ---
+
+  onRegistrarClick(): void {
+    this.updatePanelVisibility(true, false, false);
+  }
+
+  onListarClick(): void {
+    this.updatePanelVisibility(false, false, true);
+    this.notificacionesData = this.NOTIFICACIONES_MOCK; // Recargar la tabla
+  }
+
+  onBuscarClick(): void {
+    this.updatePanelVisibility(false, true, true);
+    // Nota: La lógica de búsqueda real iría aquí, filtrando this.NOTIFICACIONES_MOCK
+  }
+
+  onActualizarClick(): void {
+    this.updatePanelVisibility(true, true, false);
+  }
+
+  onEliminarClick(): void {
+    this.updatePanelVisibility(false, true, true);
+    // Nota: La lógica de eliminación real iría aquí.
+  }
+
+  // --- Manejadores de Acciones de Fila (Reemplazan las funciones globales 'window.editNotificacion') ---
+
+  onEditNotificacion(id: number): void {
+    alert('Preparando edición para la Notificación ID: ' + id);
+    // Cambiar al modo de actualización y precargar el ID
+    this.onActualizarClick();
+    this.notificacionIdInput = id.toString();
+  }
+
+  onDeleteNotificacion(id: number): void {
+    if (confirm(`¿Está seguro de eliminar la Notificación con ID: ${id}?`)) {
+      alert('Enviando solicitud de eliminación...');
+      // Aquí iría la llamada al servicio de eliminación.
+    }
+  }
+}
+
+
+/*// notificacion.ts (o notificacion.js si no usas estricto TS)
 // He añadido tipado y manejo de null para corregir los errores del compilador.
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -123,4 +218,4 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Enviando solicitud de eliminación...');
     }
   };
-});
+});*/
