@@ -81,21 +81,21 @@
 }
 
 /* Contenedor Principal del Panel */
-.evidence-panel-container {
-  background: url("../../../assets/images/Imagen-Fondo.png") no-repeat;
-  background-position: center;
-  background-size: cover;
-  width: 100%;
-  min-height: calc(100vh - 100px);
-  /*height: auto;*/
-  margin-top: 0px;
-  justify-content: center; /* Centrar Horizontalmente*/
-  align-items: center; /* Centrar Verticalmente*/
-  /* Padding para separación del header fijo*/
-  display: flex;
-  padding: 40px 20px;
-  flex-grow: 1;
-}
+  .evidence-panel-container {
+    background: url("../../../assets/images/Imagen-Fondo.png") no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    min-height: calc(100vh - 100px);
+    /*height: auto;*/
+    margin-top: 0px;
+    justify-content: center; /* Centrar Horizontalmente*/
+    align-items: center; /* Centrar Verticalmente*/
+    /* Padding para separación del header fijo*/
+    display: flex;
+    padding: 40px 20px;
+    flex-grow: 1;
+  }
 
 .evidence-panel {
   background-color: #ffffff;

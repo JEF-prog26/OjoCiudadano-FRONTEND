@@ -8,24 +8,36 @@
 
 /* FONDO GENERAL */
 .page-wrapper {
+  background: url("../../../assets/images/Imagen-Fondo.png") no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background:
+  /*background:
     repeating-linear-gradient(
       60deg,
       #7a7a7a 0 1px,
       #666 1px 24px
-    );
+    );*/
   border-top: 14px solid #e40000;
   border-bottom: 14px solid #e40000;
 }
 
 /* BARRA SUPERIOR */
 .top-bar {
+  /* Fondo rojo que cubre todo el ancho */
+  background-color: #f00; /* Rojo vibrante */
   display: flex;
+  /* El botón debe estar a la derecha */
   justify-content: flex-end;
-  padding: 16px 32px 0;
+  /* Centrar el botón verticalmente dentro del header */
+  align-items: center;
+  /* Dar altura a la barra superior */
+  height: 100px; /* Puedes ajustar esta altura */
+  /* Añadir algo de padding horizontal, pero no arriba */
+  padding: 0 32px;
 }
 
 .back-button {
