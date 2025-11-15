@@ -1,4 +1,15 @@
-<main class="evidence-panel-container">
+<nav class="topheader">
+  <div class="topheader-container">
+    <a routerLink="/"><img width="200px" height="57px" src="assets/images/Logotipo-OjoCiudadanoBlanco.png" alt="LogotipoOjoCiudadano"></a>
+    <div class="Btn-IniciarSesion">
+      <a routerLink="/"><button class="Btn-IconoMensaje">
+        <i class="fas fa-chevron-left"></i>
+        <span>Volver a la página principal</span>
+      </button></a>
+    </div>
+  </div>
+</nav>
+<div class="evidence-panel-container">
   <div class="evidence-panel">
     <h1>Panel de Evidencias</h1>
 
@@ -12,17 +23,14 @@
       </div>
 
       <div class="data-area">
-
-        <div class="input-row" *ngIf="showInputs">
+        <div class="input-row" *ngIf="showInputs" >
           <input type="text" placeholder="Nombre" class="data-input">
-          <input type="text" placeholder="Documento UR" class="data-input">
+          <input type="text" placeholder="Documento URL" class="data-input">
           <input type="text" placeholder="Tipo" class="data-input">
         </div>
-
         <div class="id-input-group" *ngIf="showId">
           <input type="text" placeholder="IdEvidencia" class="id-input">
         </div>
-
         <div class="evidence-table-container" *ngIf="showTable">
           <div class="table-header">
             <div>ID</div>
@@ -45,64 +53,4 @@
       </div>
     </div>
   </div>
-</main>
-
-
-<!--<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel de Evidencias - Ojo Ciudadano UPC</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<header class="header-banner">
-  <a href="#" class="back-link">&lt; Volver a la página anterior</a>
-</header>
-
-<main class="evidence-panel-container">
-  <div class="evidence-panel">
-    <h1>Panel de Evidencias</h1>
-
-    <div class="controls-layout">
-      <div class="button-column">
-        <button class="action-button primary-button" id="register-btn">Registrar Evidencia</button>
-        <button class="action-button primary-button" id="list-btn">Listar Evidencia</button>
-        <button class="action-button primary-button" id="search-btn">Buscar Evidencia por ID</button>
-        <button class="action-button primary-button" id="update-btn">Actualizar datos evidencia</button>
-        <button class="action-button primary-button" id="delete-btn">Eliminar evidencia</button>
-      </div>
-
-      <div class="data-area">
-        <div class="input-row">
-          <input type="text" placeholder="Nombre" class="data-input">
-          <input type="text" placeholder="Documento UR" class="data-input">
-          <input type="text" placeholder="Tipo" class="data-input">
-        </div>
-
-        <div class="id-input-group">
-          <input type="text" placeholder="IdEvidencia" class="id-input">
-        </div>
-
-        <div class="evidence-table-container">
-          <div class="table-header">
-            <div>ID</div>
-            <div>Nombre</div>
-            <div>Documento UR</div>
-            <div>Tipo</div>
-          </div>
-          <div class="table-body">
-            <div class="table-row"><div>1</div><div>Foto Incidente</div><div>...</div><div>Imagen</div></div>
-            <div class="table-row"><div>2</div><div>Video Prueba</div><div>...</div><div>Video</div></div>
-            <div class="table-row"><div>3</div><div>Audio Testigo</div><div>...</div><div>Audio</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
-
-<script type="module" src="main.ts"></script>
-</body>
-</html>-->
+</div>

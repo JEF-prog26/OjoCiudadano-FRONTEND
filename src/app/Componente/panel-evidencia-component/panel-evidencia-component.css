@@ -1,31 +1,54 @@
-:root {
-  --color-primary-dark: #003399; /* Azul oscuro para botones */
-  --color-primary-light: #007bff; /* Azul más claro */
-  --color-accent: #ff0000; /* Rojo para el banner */
-  --color-background: #f0f0f0; /* Fondo general, aunque el mockup tiene un patrón */
-  --color-panel-bg: #ffffff; /* Fondo blanco del panel */
-  --color-text-dark: #333;
-  --color-table-header: #999; /* Gris oscuro para el encabezado de tabla */
-  --color-table-cell: #ccc; /* Gris claro para las celdas de tabla */
-  --border-radius: 15px;
+.topheader {
+  background-color:#FF0000;
+  width: 100%;     /* Asegura que ocupe todo el ancho */
+  height: 100px;   /* Altura del header */
+  position: fixed; /* Mantiene el header fijo en la parte superior */
+  top: 0; /* Posiciona el header en la parte superior */
+  justify-content:space-around;
+  align-items: center;
+  display: flex;
 }
 
-/* Estilos Globales y Fondo */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: var(--color-background);
-  /* Intentamos replicar el patrón de fondo del mockup, aunque es complejo solo con CSS */
-  background-image: repeating-linear-gradient(45deg, rgba(128, 128, 128, 0.1) 0, rgba(128, 128, 128, 0.1) 1px, transparent 1px, transparent 10px);
-  min-height: 100vh;
+.topheader-container {
+  margin-left: 6.5%;
+  margin-right: 6.5%;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
   display: flex;
-  flex-direction: column;
+}
+.Btn-IniciarSesion{
+  justify-content: end;
+}
+
+.Btn-IconoMensaje {
+  background-color: #0033A0;
+  height: 54px;
+  width: 390px;
+  border: none;
+  border-radius: 75.5px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+}
+.Btn-IconoMensaje span{
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #ffffff;
+  margin-left: 20px;
+}
+
+.Btn-IconoMensaje i{
+  font-family: "Font Awesome 5 Free";
+  font-size: 30px;
+  color: #ffffff;
+  font-style: normal;
 }
 
 /* Encabezado Rojo Superior */
-.header-banner {
-  background-color: var(--color-accent);
+.header-banner.top-page-banner{
+  background-color: #ff0000;
   color: white;
   padding: 10px 20px;
   height: 60px; /* Ajuste para el espacio del banner */
@@ -33,11 +56,17 @@ body {
   justify-content: flex-end; /* Alinear a la derecha */
   align-items: center;
   border-bottom: 5px solid #a00; /* Borde interior rojo oscuro */
+  width: 100%;
+
+  position: fixed; /* O fixed si quieres que se quede quieto al hacer scroll */
+  top: 0;
+  left: 0;
+  z-index: 10;
 }
 
 .back-link {
   /* Color de fondo: CAMBIADO A AZUL */
-  background-color: var(--color-primary-dark);
+  background-color: #003399;
   color: white;
   text-decoration: none;
   font-size: 14px;
@@ -48,20 +77,29 @@ body {
 }
 
 .back-link:hover {
-  background-color: var(--color-primary-light); /* Un efecto de hover al pasar el ratón */
+  background-color: #007bff; /* Un efecto de hover al pasar el ratón */
 }
 
 /* Contenedor Principal del Panel */
-.evidence-panel-container {
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
-  flex-grow: 1; /* Para centrar verticalmente en la pantalla si el contenido es pequeño */
-}
+  .evidence-panel-container {
+    background: url("../../../assets/images/Imagen-Fondo.png") no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    min-height: calc(100vh - 100px);
+    /*height: auto;*/
+    margin-top: 0px;
+    justify-content: center; /* Centrar Horizontalmente*/
+    align-items: center; /* Centrar Verticalmente*/
+    /* Padding para separación del header fijo*/
+    display: flex;
+    padding: 40px 20px;
+    flex-grow: 1;
+  }
 
 .evidence-panel {
-  background-color: var(--color-panel-bg);
-  border-radius: var(--border-radius);
+  background-color: #ffffff;
+  border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   padding: 30px;
   width: 90%;
@@ -69,14 +107,14 @@ body {
   display: flex; /* Añadimos flex para organizar título y controles */
   flex-direction: column; /* Apilamos verticalmente título y el resto */
   /**/
-  opacity: 1;
   position: relative;
   z-index: 2;
   min-height: 400px;
+  border: 1px solid #ccc;
 }
 
 .evidence-panel h1 {
-  color: var(--color-text-dark);
+  color: #333;
   margin-top: 0;
   margin-bottom: 30px; /* Espacio debajo del título */
 }
@@ -96,6 +134,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 15px; /* Espacio entre botones */
+  opacity: 1;
 }
 
 .action-button {
@@ -110,12 +149,12 @@ body {
 }
 
 .primary-button {
-  background-color: var(--color-primary-dark);
+  background-color: #003399;
   color: white;
 }
 
 .primary-button:hover {
-  background-color: var(--color-primary-light);
+  background-color: #007bff;
 }
 
 /* Área de Datos (Inputs y Tabla) */
@@ -166,9 +205,9 @@ body {
 
 /* Contenedor de la Tabla */
 .evidence-table-container {
-  background-color: var(--color-panel-bg);
+  background-color: #ffffff;
   border: 1px solid #ccc;
-  border-radius: var(--border-radius);
+  border-radius: 15px;
   overflow: hidden; /* Para el borde redondeado */
   max-height: 400px; /* Altura máxima para la barra vertical */
   overflow-y: auto; /* Para la barra de desplazamiento vertical */
@@ -180,7 +219,7 @@ body {
 /* Encabezado de la Tabla */
 .table-header {
   display: flex;
-  background-color: var(--color-primary-dark); /*var(--color-table-header);*/
+  background-color: #999;
   color: white;
   font-weight: bold;
   padding: 15px 10px;
@@ -209,7 +248,7 @@ body {
   display: flex;
   padding: 10px;
   border-bottom: 1px solid #b0b0b0;
-  background-color: #ffffff;/*var(--color-table-cell);*/ /* Fondo de fila por defecto */
+  background-color: #ccc; /* Fondo de fila por defecto */
   min-width: 500px; /* Asegura que las filas tengan el mismo ancho mínimo que el encabezado */
 }
 
@@ -220,7 +259,7 @@ body {
 .table-row > div {
   flex: 1;
   text-align: center;
-  color: var(--color-text-dark);
+  color: #333;
   padding: 5px 0; /* Padding vertical para centrar el texto */
 }
 
@@ -245,45 +284,4 @@ body {
 }
 
 
-/* Clases para manejar visibilidad con TypeScript */
-/*.hidden {
-  display: none !important;
-}
 
-.visible {
-  display: flex !important; /* Para inputs y id-input-group
-}
-
-.visible-block {
-  display: block !important; /* Para la tabla
-}*/
-/* Estilos Globales y Fondo */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: var(--color-background); /* Color sólido de fondo */
-  /* ELIMINAMOS el background-image: repeating-linear-gradient... */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-/* Contenedor Principal del Panel */
-.evidence-panel-container {
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
-  flex-grow: 1;
-
-  /* --- ESTILOS DE FONDO APLICADOS AQUÍ --- */
-  background-image: url('https://us.123rf.com/450wm/trompinex/trompinex1606/trompinex160600030/58398485-decorative-checkered-pattern-vector-black-white-seamless-patterns-abstract-stylish-background.jpg');
-  background-repeat: repeat; /* Para que el patrón se repita y cubra toda el área */
-  background-size: 150px; /* Ajusta el tamaño si quieres que el patrón sea más grande o más pequeño */
-  /* --- FIN ESTILOS DE FONDO --- */
-}
-
-.evidence-panel {
-  /* ... otros estilos del panel ... */
-  background-color: var(--color-panel-bg); /* Es crucial que el panel tenga un fondo blanco sólido para que los elementos internos se vean bien */
-  /* ... */
-}
