@@ -1,1 +1,170 @@
-<p>panel-expediente-tecnico-component works!</p>
+<header class="top-bar">
+  <!-- El botón ahora se alineará a la derecha gracias al CSS ajustado -->
+  <button class="back-button" (click)="goBack()">
+    &lt; Volver a la página anterior
+  </button>
+</header>
+<div class="page-wrapper">
+  <div class="panel-wrapper">
+    <div class="panel-card">
+      <!-- 🔹 CABECERA CON TÍTULO, BOTÓN Y BUSCADOR -->
+      <div class="panel-header">
+        <h2 class="panel-title">Panel de Gestión de Expedientes Técnicos</h2>
+
+        <div class="header-actions">
+          <button class="action-btn action-primary" (click)="onRegistrarClick()">
+            Registrar Expediente
+          </button>
+
+          <div class="search-box">
+            <input
+              type="number"
+              class="search-input"
+              placeholder="Buscar por ID..."
+              [(ngModel)]="searchId"
+            />
+            <button class="search-btn" (click)="buscarPorId()">Buscar</button>
+            <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🔹 CONTENIDO PRINCIPAL -->
+      <section class="panel-main">
+        <!-- LISTA / TABLA -->
+        <ng-container *ngIf="!showForm; else formularioRegistro">
+          <div class="table-card">
+            <!-- TABLA -->
+            <div class="table-header">
+              <!-- Se han eliminado los estilos inline para una alineación precisa con el grid CSS -->
+              <span>ID</span>
+              <span>Nombre</span>
+              <span>Documento UR</span>
+              <span>Fecha Expediente</span>
+              <span>Acciones</span>
+            </div>
+
+            <div class="table-body">
+              <div class="table-row-expediente" *ngFor="let e of expedientesFiltrados">
+                <span>{{ e.id }}</span>
+                <span class="truncate-text">{{ e.nombre }}</span>
+                <span class="truncate-text">
+                  <!-- Se usa [href] para abrir el enlace correctamente -->
+                  <a [href]="e.documentoUr" target="_blank" class="document-link" title="{{ e.documentoUr }}">{{ e.documentoUr }}</a>
+                </span>
+                <span>{{ e.fechaExpediente }}</span>
+                <span class="cell-actions">
+                  <button class="icon-btn view" (click)="verDetalle(e)" title="Ver Detalle">👁</button>
+                  <button class="icon-btn edit" (click)="editarExpediente(e)" title="Editar">✏️</button>
+                  <button class="icon-btn delete" (click)="eliminarExpediente(e)" title="Eliminar">🗑</button>
+                </span>
+              </div>
+            </div>
+
+            <!-- Scrollbars decorativos -->
+            <div class="scrollbar-horizontal"></div>
+            <div class="scrollbar-vertical"></div>
+          </div>
+        </ng-container>
+
+        <!-- FORMULARIO (CREAR / EDITAR) -->
+        <ng-template #formularioRegistro>
+          <div class="form-card">
+            <h3>{{ editingId ? 'Editar expediente' : 'Registrar nuevo expediente' }}</h3>
+
+            <div class="form-row">
+              <label class="form-label">ID</label>
+              <input
+                class="form-input"
+                type="number"
+                [(ngModel)]="expedienteForm.id"
+                [readonly]="editingId !== null"
+              />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Nombre</label>
+              <input class="form-input" type="text" [(ngModel)]="expedienteForm.nombre" />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Documento UR</label>
+              <input class="form-input" type="text" [(ngModel)]="expedienteForm.documentoUr" />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Fecha de Expediente</label>
+              <input class="form-input" type="date" [(ngModel)]="expedienteForm.fechaExpediente" />
+            </div>
+
+            <div class="form-actions">
+              <button class="form-btn-secondary" (click)="cancelarForm()">Cancelar</button>
+              <button class="form-btn-primary" (click)="guardarExpediente()">
+                {{ editingId ? 'Guardar cambios' : 'Registrar' }}
+              </button>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- 🧩 MODAL DETALLE -->
+        <div class="modal-backdrop" *ngIf="detailOpen" (click)="cerrarDetalle()">
+          <section
+            class="modal-card pretty"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="detalleTitle"
+            (click)="$event.stopPropagation()"
+          >
+            <header class="modal-header pretty">
+              <div class="title-wrap">
+                <div class="title-icon">📂</div>
+                <div>
+                  <h3 id="detalleTitle" class="modal-title">Expediente #{{ detalleSeleccionado?.id }}</h3>
+                  <p class="modal-subtitle">{{ detalleSeleccionado?.nombre || '—' }}</p>
+                </div>
+              </div>
+              <button class="modal-close" (click)="cerrarDetalle()" aria-label="Cerrar">✖</button>
+            </header>
+
+            <div class="modal-body">
+              <!-- Detalles -->
+              <div class="detail-section card">
+                <h4 class="section-title">Detalles del Expediente</h4>
+
+                <div class="meta-grid">
+                  <div class="meta">
+                    <span class="meta-label">ID</span>
+                    <span class="meta-value mono">#{{ detalleSeleccionado?.id }}</span>
+                  </div>
+
+                  <div class="meta">
+                    <span class="meta-label">Fecha de Expediente</span>
+                    <span class="meta-value">{{ detalleSeleccionado?.fechaExpediente || '—' }}</span>
+                  </div>
+
+                  <div class="meta full">
+                    <span class="meta-label">Nombre del Proyecto / Obra</span>
+                    <p class="meta-value multiline">{{ detalleSeleccionado?.nombre || '—' }}</p>
+                  </div>
+
+                  <div class="meta full">
+                    <span class="meta-label">Documento UR (Ubicación/Referencia)</span>
+                    <p class="meta-value multiline">
+                      <!-- Enlace para ver el documento -->
+                      <a [href]="detalleSeleccionado?.documentoUr" target="_blank" class="document-link" title="Ver Documento">
+                        {{ detalleSeleccionado?.documentoUr || '—' }}
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer class="bottom-bar"></footer>
+</div>
