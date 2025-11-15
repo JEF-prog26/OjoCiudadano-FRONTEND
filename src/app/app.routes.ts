@@ -7,8 +7,6 @@ import { PanelEvidenciaComponent } from './Componente/panel-evidencia-component/
 import { PanelNotificacionComponent } from './Componente/panel-notificacion-component/panel-notificacion-component';
 import {PanelDenunciaComponent} from './Componente/panel-denuncia-component/panel-denuncia-component';
 
-import {PanelDenunciaComponent} from './Componente/panel-denuncia-component/panel-denuncia-component';
-
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
