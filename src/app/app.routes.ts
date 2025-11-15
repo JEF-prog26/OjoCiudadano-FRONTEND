@@ -5,7 +5,6 @@ import { QueEsComponent } from './Componente/que-es-component/que-es-component';
 import { LoginComponent } from './Componente/login-component/login-component';
 import { PanelEvidenciaComponent } from './Componente/panel-evidencia-component/panel-evidencia-component';
 import { PanelNotificacionComponent } from './Componente/panel-notificacion-component/panel-notificacion-component';
-
 import {PanelDenunciaComponent} from './Componente/panel-denuncia-component/panel-denuncia-component';
 
 
