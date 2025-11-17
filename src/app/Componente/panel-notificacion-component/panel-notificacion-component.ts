@@ -1,126 +1,202 @@
-// notificacion.ts (o notificacion.js si no usas estricto TS)
-// He añadido tipado y manejo de null para corregir los errores del compilador.
+import { Component, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-document.addEventListener('DOMContentLoaded', () => {
-  // 1. Obtener referencias a elementos usando aserciones de tipo para mayor seguridad
-  const mainInputs = document.getElementById('main-inputs') as HTMLElement | null;
-  const idInputGroup = document.getElementById('id-input-group') as HTMLElement | null;
-  const tableContainer = document.getElementById('notification-table-container') as HTMLElement | null;
-  const tableBody = document.getElementById('table-body') as HTMLElement | null;
+/* ===== Interfaces ===== */
+interface Notificacion {
+  id: number;
+  mensaje: string;
+  fecha: string; // 'YYYY-MM-DD' o Date
+  leida: boolean;
+  tipo: 'Alerta' | 'Sistema' | 'Info' | string;
+}
 
-  // Al usar querySelectorAll, asumimos que todos tienen la propiedad 'value'
-  // y forzamos el tipo a un array de elementos de input.
-  const allInputs = document.querySelectorAll('.data-input, .id-input') as NodeListOf<HTMLInputElement>;
+@Component({
+  selector: 'app-panel-notificacion-component',
+  standalone: true,
+  imports: [CommonModule, FormsModule, DatePipe],
+  templateUrl: './panel-notificacion-component.html',
+  styleUrl: './panel-notificacion-component.css',
+})
+export class PanelNotificacionComponent {
+  showForm = false;
+  editingId: number | null = null;
 
-  // Botones (declarados como posibles null, pero se manejan en los addEventListener)
-  const registrarBtn = document.getElementById('btn-registrar');
-  const listarBtn = document.getElementById('btn-listar');
-  const buscarBtn = document.getElementById('btn-buscar');
-  const actualizarBtn = document.getElementById('btn-actualizar');
-  const eliminarBtn = document.getElementById('btn-eliminar');
-
-  // ... (El MOCK de datos simulados se mantiene igual)
-  const NOTIFICACIONES_MOCK = [
-    { id: 101, nombre: 'Solicitud Cambio', documentoUr: 'U20204567', fechaEnvio: '2025-10-01' },
-    { id: 102, nombre: 'Alerta Incidente', documentoUr: 'U20211234', fechaEnvio: '2025-10-05' },
-    { id: 103, nombre: 'Aviso Manteniemto', documentoUr: 'U20229876', fechaEnvio: '2025-11-10' },
+  notificacionForm: Notificacion = this.crearFormVacio();
+  notificaciones: Notificacion[] = [
+    // Datos de ejemplo
+    {
+      id: 101,
+      mensaje: 'Nueva denuncia registrada en el sector centro y requiere asignación urgente.',
+      fecha: new Date().toISOString().slice(0, 10),
+      leida: false,
+      tipo: 'Alerta',
+    },
+    {
+      id: 102,
+      mensaje: 'El sistema fue actualizado a la versión 2.0 y ya puede usar el nuevo módulo.',
+      fecha: '2025-11-15',
+      leida: true,
+      tipo: 'Sistema',
+    },
+    {
+      id: 103,
+      mensaje: 'Revisa las evidencias pendientes de aprobación en el caso 2025-004.',
+      fecha: '2025-11-17',
+      leida: false,
+      tipo: 'Info',
+    },
   ];
+  notificacionesFiltradas: Notificacion[] = [];
 
+  // 🔍 valor del buscador por ID
+  searchId: number | null = null;
 
-  // --- FUNCIÓN DE UTILIDAD: Control de Visibilidad (Tipado) ---
-  function updatePanelVisibility(showInputs: boolean, showId: boolean, showTable: boolean) {
-    if (mainInputs) {
-      mainInputs.classList.toggle('hidden', !showInputs);
-    }
-    if (idInputGroup) {
-      idInputGroup.classList.toggle('hidden', !showId);
-    }
-    if (tableContainer) {
-      tableContainer.style.display = showTable ? 'block' : 'none';
-    }
+  // 🧩 modal detalle
+  detailOpen = false;
+  detalleSeleccionado: Notificacion | null = null;
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.notificacionesFiltradas = this.notificaciones;
   }
 
-  // --- FUNCIÓN: Llenar la Tabla (Tipado) ---
-  // Usamos 'any' para el tipo de datos ya que es un MOCK
-  function renderTable(data: any[]) {
-    if (!tableBody) return; // Comprobar si es null
+  private crearFormVacio(): Notificacion {
+    return {
+      id: 0,
+      mensaje: '',
+      fecha: new Date().toISOString().slice(0, 10), // Fecha actual por defecto
+      leida: false,
+      tipo: 'Info',
+    };
+  }
 
-    tableBody.innerHTML = ''; // Limpiar filas existentes
+  goBack(): void {
+    // Implementación real debe navegar a una ruta existente, ej:
+    // this.router.navigate(['/home']);
+    // Por ahora, solo simula volver:
+    console.log("Volviendo...");
+  }
 
-    if (data && data.length > 0) {
-      data.forEach((notif: any) => { // Tipamos notif como any
-        const row = document.createElement('div');
-        row.classList.add('table-row');
-        row.innerHTML = `
-                    <div style="flex: 0.5;">${notif.id}</div>
-                    <div>${notif.nombre}</div>
-                    <div>${notif.documentoUr}</div>
-                    <div>${notif.fechaEnvio}</div>
-                    <div style="flex: 0.5;">
-                        <button onclick="window.editNotificacion(${notif.id})" class="action-btn">✏️</button>
-                        <button onclick="window.deleteNotificacion(${notif.id})" class="action-btn">🗑️</button>
-                    </div>
-                `;
-        tableBody.appendChild(row);
-      });
+  onRegistrarClick(): void {
+    this.showForm = true;
+    this.editingId = null;
+    this.notificacionForm = this.crearFormVacio();
+  }
+
+  cancelarForm(): void {
+    this.showForm = false;
+    this.editingId = null;
+    this.notificacionForm = this.crearFormVacio();
+  }
+
+  guardarNotificacion(): void {
+    if (!this.notificacionForm.mensaje) {
+      alert('El campo Mensaje no puede estar vacío.');
+      return;
+    }
+
+    if (this.editingId === null) {
+      // 🆕 CREAR
+      const existe = this.notificaciones.some((n) => n.id === this.notificacionForm.id);
+      if (existe) {
+        alert('Ya existe una notificación con ese ID.');
+        return;
+      }
+      this.notificaciones.push({ ...this.notificacionForm });
+
     } else {
-      const row = document.createElement('div');
-      row.classList.add('table-row');
-      row.innerHTML = `<div style="flex: 4; font-style: italic;">No hay notificaciones para mostrar.</div>`;
-      tableBody.appendChild(row);
+      // ✏️ EDITAR
+      const idx = this.notificaciones.findIndex((n) => n.id === this.editingId);
+      if (idx > -1) {
+        this.notificaciones[idx] = { ...this.notificacionForm };
+      }
+    }
+
+    this.notificacionesFiltradas = [...this.notificaciones];
+    this.showForm = false;
+    this.editingId = null;
+    this.notificacionForm = this.crearFormVacio();
+    this.searchId = null;
+  }
+
+  // 🔎 Buscar por ID
+  buscarPorId(): void {
+    this.showForm = false;
+
+    if (this.searchId === null || this.searchId === undefined) {
+      this.notificacionesFiltradas = [...this.notificaciones];
+      return;
+    }
+
+    this.notificacionesFiltradas = this.notificaciones.filter(
+      (n) => n.id === this.searchId
+    );
+
+    if (this.notificacionesFiltradas.length === 0) {
+      alert('No se encontró ninguna notificación con ese ID.');
     }
   }
 
-  // Función para limpiar todos los inputs del formulario
-  function clearInputs() {
-    allInputs.forEach(input => input.value = ''); // Funciona porque forzamos el tipo a HTMLInputElement
+  limpiarBusqueda(): void {
+    this.searchId = null;
+    this.notificacionesFiltradas = [...this.notificaciones];
   }
 
-  // 2. Establecer el estado inicial: Listar Notificaciones
-  updatePanelVisibility(false, false, true);
-  renderTable(NOTIFICACIONES_MOCK);
+  // 🗑 ELIMINAR DESDE LA TABLA
+  eliminarNotificacion(notificacion: Notificacion): void {
+    const ok = confirm(
+      `¿Seguro que deseas eliminar la notificación con ID ${notificacion.id}?`
+    );
+    if (!ok) return;
 
-  // 3. Asignar Event Listeners a los botones (Comprobación de null)
+    this.notificaciones = this.notificaciones.filter((n) => n.id !== notificacion.id);
+    this.notificacionesFiltradas = [...this.notificaciones];
+    this.searchId = null;
 
-  registrarBtn?.addEventListener('click', () => { // Usamos el encadenamiento opcional (?)
-    updatePanelVisibility(true, false, false);
-    clearInputs();
-  });
-
-  listarBtn?.addEventListener('click', () => {
-    updatePanelVisibility(false, false, true);
-    clearInputs();
-    renderTable(NOTIFICACIONES_MOCK);
-  });
-
-  buscarBtn?.addEventListener('click', () => {
-    updatePanelVisibility(false, true, true);
-    clearInputs();
-  });
-
-  actualizarBtn?.addEventListener('click', () => {
-    updatePanelVisibility(true, true, false);
-    clearInputs();
-  });
-
-  eliminarBtn?.addEventListener('click', () => {
-    updatePanelVisibility(false, true, true);
-    clearInputs();
-  });
-
-  // 4. Funciones globales (para los botones de la tabla) - Añadimos a 'window' y tipamos 'id'
-  (window as any).editNotificacion = (id: number) => {
-    alert('Preparando edición para la Notificación ID: ' + id);
-    actualizarBtn?.click(); // Llamada segura al método click
-    const idInput = document.getElementById('input-id') as HTMLInputElement;
-    if (idInput) {
-      idInput.value = id.toString();
+    if (this.detalleSeleccionado?.id === notificacion.id) {
+      this.cerrarDetalle();
     }
-  };
+  }
 
-  (window as any).deleteNotificacion = (id: number) => {
-    if (confirm(`¿Está seguro de eliminar la Notificación con ID: ${id}?`)) {
-      alert('Enviando solicitud de eliminación...');
+  // 🆕 ACCIÓN ADICIONAL: MARCAR COMO LEÍDA
+  marcarComoLeida(notificacion: Notificacion): void {
+    const idx = this.notificaciones.findIndex(n => n.id === notificacion.id);
+    if (idx > -1) {
+      this.notificaciones[idx].leida = true;
+      // Actualizar la lista filtrada si es necesario
+      this.notificacionesFiltradas = [...this.notificaciones];
     }
-  };
-});
+  }
+
+  // 👁 VER DETALLE (abre modal)
+  verDetalle(n: Notificacion): void {
+    // Cuando ves el detalle, asumes que la lees
+    if (!n.leida) {
+      this.marcarComoLeida(n);
+    }
+    this.detalleSeleccionado = n;
+    this.detailOpen = true;
+  }
+
+  cerrarDetalle(): void {
+    this.detailOpen = false;
+    this.detalleSeleccionado = null;
+  }
+
+  // 🎨 Clase CSS por tipo (para resaltar la celda en la tabla)
+  tipoClass(tipo?: string): string {
+    const t = (tipo || '').toLowerCase();
+    if (t.includes('alerta')) return 'tipo-alerta';
+    if (t.includes('sistema')) return 'tipo-sistema';
+    return ''; // Sin clase específica para 'Info' u otros
+  }
+
+  // Cerrar modal con ESC (opcional)
+  @HostListener('document:keydown.escape')
+  onEsc() {
+    if (this.detailOpen) this.cerrarDetalle();
+  }
+}

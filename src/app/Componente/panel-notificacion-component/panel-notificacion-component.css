@@ -1,222 +1,445 @@
-:root {
-  --color-primary-dark: #003399; /* Azul oscuro para botones */
-  --color-primary-light: #007bff; /* Azul más claro */
-  --color-accent: #ff0000; /* Rojo para el banner */
-  --color-background: #f0f0f0;
-  --color-panel-bg: #ffffff; /* Fondo blanco del panel */
-  --color-text-dark: #333;
-  --color-table-header: #999; /* Gris oscuro para el encabezado de tabla */
-  --color-table-cell: #ccc; /* Gris claro para las celdas de tabla */
-  --border-radius: 15px;
+/* panel-notificacion-component.css - CÓDIGO FINAL ESTRUCTURADO */
+
+/* === 1. RESET Y BASE === */
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+  sans-serif;
 }
 
-/* Estilos Globales y Fondo */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: var(--color-background);
+/* === 2. LAYOUT GENERAL (WRAPPER Y BARRAS) === */
+.page-wrapper {
+  background: url("../../../assets/images/Imagen-Fondo.png") no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  border-top: 14px solid #e40000;
+  border-bottom: 14px solid #e40000;
 }
 
-/* Encabezado Rojo Superior */
-.header-banner {
-  background-color: var(--color-accent);
-  color: white;
-  padding: 10px 20px;
-  height: 60px;
+.top-bar {
+  background-color: #f00;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  border-bottom: 5px solid #a00;
+  height: 100px;
+  padding: 0 32px;
 }
 
-.back-link {
-  background-color: var(--color-primary-dark);
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  padding: 10px 15px;
-  border: 2px solid white;
-  border-radius: 8px;
-  transition: background-color 0.2s;
+.back-button {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  background-color: #0046b8;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
 }
 
-.back-link:hover {
-  background-color: var(--color-primary-light);
+.bottom-bar {
+  height: 0;
 }
 
-/* Contenedor Principal del Panel - (Fondo patrón) */
-.notification-panel-container {
+/* === 3. CONTENEDOR CENTRAL Y TARJETA === */
+.panel-wrapper {
+  flex: 1;
   display: flex;
   justify-content: center;
-  padding: 40px 20px;
-  flex-grow: 1;
-
-  /* === CAMBIOS AQUÍ (Usando la URL externa) === */
-  background-image: url('https://us.123rf.com/450wm/trompinex/trompinex1606/trompinex160600030/58398485-decorative-checkered-pattern-vector-black-white-seamless-patterns-abstract-stylish-background.jpg');
-  background-repeat: repeat;
-  background-size: 200px; /* Ajusta según el tamaño de la imagen */
-  /* === FIN CAMBIOS === */
+  align-items: center;
+  padding: 24px 16px 32px;
 }
 
-/* Panel de Notificaciones */
-.notification-panel {
-  background-color: var(--color-panel-bg);
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+.panel-card {
   width: 90%;
-  max-width: 1200px;
+  max-width: 1000px;
+  min-height: 420px;
+  background-color: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  padding: 24px 32px 32px;
+}
+
+/* === 4. CABECERA (TÍTULO, BOTÓN, BUSCADOR) === */
+.panel-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
 }
 
-.notification-panel h1 {
-  color: var(--color-text-dark);
-  margin-top: 0;
-  margin-bottom: 30px;
+.panel-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
-.controls-layout {
+.header-actions {
   display: flex;
-  gap: 40px;
-  align-items: flex-start;
-  flex-grow: 1;
+  align-items: center;
+  gap: 12px;
 }
 
-/* Columna de Botones */
-.button-column {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.action-button {
-  padding: 12px 20px;
+.action-btn {
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: #0046b8;
+  color: #ffffff;
   cursor: pointer;
-  text-align: left;
-  width: 220px;
-  transition: background-color 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+.action-btn:hover {
+  background-color: #003b9d;
+}
+.action-primary {
+  background-color: #0046b8;
 }
 
-.primary-button {
-  background-color: var(--color-primary-dark);
-  color: white;
+/* --- Buscador --- */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.primary-button:hover {
-  background-color: var(--color-primary-light);
+.search-input {
+  min-width: 150px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
 }
 
-/* Área de Datos (Inputs y Tabla) */
-.data-area {
-  flex-grow: 1;
+.search-btn,
+.search-btn-secondary {
+  border-radius: 999px;
+  border: none;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.search-btn {
+  background-color: #0046b8;
+  color: #fff;
+}
+
+.search-btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+/* --- Media Queries para Header --- */
+@media (max-width: 800px) {
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* === 5. CONTENIDO PRINCIPAL === */
+.panel-main {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  min-width: 0;
+  gap: 14px;
+  margin-top: 4px;
 }
 
-/* Fila de Inputs (Nombre, Documento UR, Fecha de envío) */
-.input-row {
-  display: flex; /* Se usa para mostrar/ocultar */
-  gap: 10px;
-}
-
-.data-input {
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  flex-grow: 1;
-  font-size: 14px;
-  background-color: #e0e0e0;
-  color: #666;
-  height: 20px;
-}
-
-/* Grupo de Input ID (IdNotificacion) */
-.id-notificacion-input-group {
-  display: flex; /* Se usa para mostrar/ocultar */
-  width: 220px;
-  align-self: flex-start;
-  margin-left: 0; /* Lo alineamos con el resto de inputs */
-}
-
-.id-input {
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  background-color: #e0e0e0;
-  width: 100%;
-  color: #666;
-  height: 20px;
-}
-
-/* Contenedor de la Tabla */
-.notification-table-container {
-  background-color: var(--color-panel-bg);
-  border: 1px solid #ccc;
-  border-radius: var(--border-radius);
+/* === 6. TABLA Y LISTA DE NOTIFICACIONES === */
+.table-card {
+  position: relative;
+  margin-top: 8px;
+  background-color: #cfcfcf;
+  border-radius: 18px;
+  padding: 0;
   overflow: hidden;
-  max-height: 400px;
-  overflow-y: auto;
-  overflow-x: auto;
-  flex-grow: 1;
-  margin-top: 10px;
-}
-
-.table-header {
+  height: 230px;
   display: flex;
-  background-color: var(--color-table-header);
-  color: white;
-  font-weight: bold;
-  padding: 15px 10px;
-  position: sticky;
-  top: 0;
-  min-width: 600px;
+  flex-direction: column;
 }
 
-.table-header > div {
+.table-body {
   flex: 1;
-  text-align: center;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 5px 0;
+  padding: 4px 12px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-.table-header > div:last-child {
-  border-right: none;
+
+/* 🚀 AJUSTE CLAVE PARA EL ANCHO DEL MENSAJE (GRID) */
+.table-notification-grid {
+  /* Distribución de 6 columnas: ID, Mensaje (3fr), Fecha, Tipo, Estado, Acciones */
+  display: grid;
+  grid-template-columns: 60px 3fr 1fr 1fr 1fr 90px;
+  column-gap: 8px;
+  padding: 6px 14px;
+}
+
+/* CABECERA NEGRA (APLICA LA REJILLA DE NOTIFICACIÓN) */
+.table-header {
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 0.8rem;
 }
 
 .table-row {
+  height: 40px;
+}
+
+/* Estilo general de las celdas de la fila */
+.table-row span {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 1px;
+  /* Asegura que el contenido quede alineado al centro vertical */
   display: flex;
-  padding: 10px;
-  border-bottom: 1px solid #b0b0b0;
-  background-color: var(--color-table-cell);
-  min-width: 600px;
+  align-items: center;
+  padding: 0 4px;
 }
 
-.table-row:nth-child(even) {
-  background-color: #ddd;
+/* --- Celda de Mensaje Específica --- */
+.table-row .message-cell {
+  /* Propiedades para manejar el texto largo en la tabla */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.table-row > div {
-  flex: 1;
-  text-align: center;
-  color: var(--color-text-dark);
-  padding: 5px 0;
+/* --- Acciones y Botones --- */
+.cell-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: transparent; /* Anula el color de fondo del span genérico */
 }
 
-/* Utilitarios para JS */
-.hidden {
-  display: none !important;
+.icon-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
 }
 
-.visible-block {
-  display: block !important;
+.icon-btn.edit {
+  background-color: #ffffff;
+}
+
+.icon-btn.delete {
+  background-color: #e40000;
+  color: #fff;
+}
+
+/* 🆕 Botón de Marcar como Leída */
+.icon-btn.mark-read {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: 700;
+  padding: 4px 8px;
+}
+
+.icon-btn.mark-read:hover {
+  background-color: #0056b3;
+}
+
+/* --- Scrollbars Decorativos --- */
+.scrollbar-horizontal {
+  position: absolute;
+  left: 18%;
+  right: 10%;
+  bottom: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background-color: #b3b3b3;
+}
+
+.scrollbar-vertical {
+  position: absolute;
+  top: 16%;
+  right: 12px;
+  width: 10px;
+  bottom: 26px;
+  border-radius: 999px;
+  background-color: #b3b3b3;
+}
+
+/* === 7. ESTILOS DE NOTIFICACIONES === */
+
+.table-row .unread {
+  font-weight: 700;
+  color: #000000; /* Hace que el mensaje no leído resalte */
+}
+
+/* Badges de Estado (Leída/Pendiente) */
+.status-leida {
+  background: #dcf7e4;
+  color: #116a2e;
+}
+
+.status-pendiente {
+  background: #ffe3e3;
+  color: #a61111;
+}
+
+/* Tipos de Notificación */
+.tipo-alerta {
+  color: #e40000;
+  font-weight: 600;
+}
+.tipo-sistema {
+  color: #0046b8;
+  font-weight: 600;
+}
+
+/* === 8. FORMULARIO === */
+.form-card {
+  margin-top: 8px;
+  background-color: #f3f3f3;
+  border-radius: 18px;
+  padding: 20px 24px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  height: 100%;
+}
+
+.form-card h3 {
+  margin-top: 0;
+  margin-bottom: 14px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.form-input {
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+.form-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.form-btn-primary,
+.form-btn-secondary {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-btn-primary {
+  background-color: #0046b8;
+  color: #fff;
+}
+
+.form-btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+/* === 9. ESTILOS DEL MODAL DETALLE (Pretty) === */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(10,10,10,.45);
+  backdrop-filter: blur(2px);
+  display: grid; place-items: center;
+  z-index: 1200; animation: fadeIn 120ms ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
+.modal-card.pretty {
+  width: min(720px, 94vw);
+  max-height: 88vh;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 60px rgba(0,0,0,.35);
+  display: flex; flex-direction: column;
+  border-top: 6px solid #0a49c2;
+  animation: popIn 140ms ease-out;
+}
+@keyframes popIn {
+  from { transform: translateY(8px) scale(.98); opacity: .9; }
+  to   { transform: translateY(0) scale(1);    opacity: 1;  }
+}
+
+.modal-header.pretty {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 18px;
+  background: linear-gradient(180deg,#f7faff, #f2f5fb);
+  border-bottom: 1px solid #e6ebf3;
+}
+.title-wrap { display: flex; align-items: center; gap: 10px; }
+.title-icon {
+  width: 36px; height: 36px; display: grid; place-items: center;
+  background: #e9f0ff; color: #0a49c2; border-radius: 10px;
+  font-size: 18px;
+}
+.modal-title { margin: 0; font-size: 1.2rem; font-weight: 700; color: #1c1c1c; }
+.modal-subtitle { margin: 2px 0 0; color: #596171; font-size: .95rem; }
+
+.modal-close {
+  border: none; background: #edf0f4; color: #344054;
+  border-radius: 10px; padding: 6px 10px; cursor: pointer; font-weight: 700;
+}
+.modal-close:hover { background: #dfe4ec; }
+
+.modal-body { padding: 16px 18px; overflow: auto; }
+
+/* --- Detalles --- */
+.card {
+  background: #fff;
+  border: 1px solid #eef1f6;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+}
+.section-title { margin: 0 0 10px; color: #0a49c2; font-weight: 700; font-size: 1rem; }
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+.meta { display: flex; flex-direction: column; gap: 6px; }
+.meta.full { grid-column: 1 / -1; }
+.meta-label { font-size: .78rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: .02em; }
+.meta-value { font-size: .95rem; color: #111827; }
+.meta-value.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.meta-value.multiline {
+  line-height: 1.35; background: #f8fafc; border: 1px solid #eef1f6;
+  padding: 10px 12px; border-radius: 10px;
+}
+
+.badge.big { padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: .85rem; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .meta-grid { grid-template-columns: 1fr; }
+  .modal-title { font-size: 1.05rem; }
 }

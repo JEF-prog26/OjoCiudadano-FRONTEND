@@ -1,56 +1,181 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel de Notificaciones - Ojo Ciudadano UPC</title>
-  <link rel="stylesheet" href="css/notificacion-styles.css">
-</head>
-<body>
+<header class="top-bar">
+  <button class="back-button" (click)="goBack()">
+    &lt; Volver a la página anterior
+  </button>
+</header>
+<div class="page-wrapper">
+  <div class="panel-wrapper">
+    <div class="panel-card">
 
-<div class="header-banner">
-  <a href="#" class="back-link">Volver a la página anterior</a>
-</div>
+      <div class="panel-header">
+        <h2 class="panel-title">Panel de Gestión de Notificaciones</h2>
 
-<div class="notification-panel-container">
-  <div class="notification-panel">
-    <h1>Panel de Notificaciones</h1>
+        <div class="header-actions">
+          <button class="action-btn action-primary" (click)="onRegistrarClick()">
+            Crear Notificación
+          </button>
 
-    <div class="controls-layout">
-      <div class="button-column">
-        <button class="action-button primary-button" id="btn-registrar">Registrar Notificacion</button>
-        <button class="action-button primary-button" id="btn-listar">Listar Notificacion</button>
-        <button class="action-button primary-button" id="btn-buscar">Buscar Notificacion por ID</button>
-        <button class="action-button primary-button" id="btn-actualizar">Actualizar datos Notificacion</button>
-        <button class="action-button primary-button" id="btn-eliminar">Eliminar Notificacion</button>
-      </div>
-
-      <div class="data-area">
-        <div class="input-row hidden" id="main-inputs">
-          <input type="text" class="data-input" placeholder="Nombre" id="input-nombre">
-          <input type="text" class="data-input" placeholder="Documento UR" id="input-documentour">
-          <input type="date" class="data-input" placeholder="Fecha de envío" id="input-fechaenvio">
-        </div>
-
-        <div class="id-notificacion-input-group hidden" id="id-input-group">
-          <input type="text" class="id-input" placeholder="IdNotificacion" id="input-id">
-        </div>
-
-        <div class="notification-table-container visible-block" id="notification-table-container">
-          <div class="table-header">
-            <div style="flex: 0.5;">ID</div>
-            <div>Nombre</div>
-            <div>Documento UR</div>
-            <div>Fecha de envío</div>
-            <div style="flex: 0.5;">Acciones</div> </div>
-          <div class="table-body" id="table-body">
+          <div class="search-box">
+            <input
+              type="number"
+              class="search-input"
+              placeholder="Buscar por ID..."
+              [(ngModel)]="searchId"
+            />
+            <button class="search-btn" (click)="buscarPorId()">Buscar</button>
+            <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
           </div>
         </div>
       </div>
+
+      <section class="panel-main">
+
+        <ng-container *ngIf="!showForm; else formularioRegistro">
+          <div class="table-card">
+
+            <div class="table-header table-notification-grid">
+              <span>ID</span>
+              <span>Mensaje</span>
+              <span>Fecha</span>
+              <span>Tipo</span>
+              <span>Estado</span>
+              <span>Acciones</span>
+            </div>
+
+            <div class="table-body">
+              <div class="table-row table-notification-grid" *ngFor="let n of notificacionesFiltradas">
+                <span>{{ n.id }}</span>
+                <span [class.unread]="!n.leida" class="message-cell">{{ n.mensaje }}</span>
+                <span>{{ n.fecha | date: 'shortDate' }}</span>
+                <span [ngClass]="tipoClass(n.tipo)">{{ n.tipo }}</span>
+                <span class="status-cell">
+                    <span class="badge" [ngClass]="n.leida ? 'status-leida' : 'status-pendiente'">
+                        {{ n.leida ? 'Leída' : 'Pendiente' }}
+                    </span>
+                </span>
+                <span class="cell-actions">
+                  <button class="icon-btn view" (click)="verDetalle(n)" title="Ver Detalle">👁</button>
+
+                  <button
+                    *ngIf="!n.leida"
+                    class="icon-btn mark-read"
+                    (click)="marcarComoLeida(n)"
+                    title="Marcar como Leída"
+                  >✓</button>
+
+                  <button class="icon-btn delete" (click)="eliminarNotificacion(n)" title="Eliminar">🗑</button>
+                </span>
+              </div>
+            </div>
+
+            <div class="scrollbar-horizontal"></div>
+            <div class="scrollbar-vertical"></div>
+          </div>
+        </ng-container>
+
+        <ng-template #formularioRegistro>
+          <div class="form-card">
+            <h3>{{ editingId ? 'Editar notificación' : 'Registrar nueva notificación' }}</h3>
+
+            <div class="form-row">
+              <label class="form-label">ID</label>
+              <input
+                class="form-input"
+                type="number"
+                [(ngModel)]="notificacionForm.id"
+                [readonly]="editingId !== null"
+              />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Mensaje</label>
+              <textarea
+                class="form-input"
+                rows="3"
+                [(ngModel)]="notificacionForm.mensaje">
+              </textarea>
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Tipo (EJ: Alerta, Info, Sistema)</label>
+              <input class="form-input" type="text" [(ngModel)]="notificacionForm.tipo" />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">¿Está Leída?</label>
+              <input type="checkbox" [(ngModel)]="notificacionForm.leida" />
+            </div>
+
+            <div class="form-actions">
+              <button class="form-btn-secondary" (click)="cancelarForm()">Cancelar</button>
+              <button class="form-btn-primary" (click)="guardarNotificacion()">
+                {{ editingId ? 'Guardar cambios' : 'Registrar' }}
+              </button>
+            </div>
+          </div>
+        </ng-template>
+
+        <div class="modal-backdrop" *ngIf="detailOpen" (click)="cerrarDetalle()">
+          <section
+            class="modal-card pretty"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="detalleTitle"
+            (click)="$event.stopPropagation()"
+          >
+            <header class="modal-header pretty">
+              <div class="title-wrap">
+                <div class="title-icon">🔔</div>
+                <div>
+                  <h3 id="detalleTitle" class="modal-title">Notificación #{{ detalleSeleccionado?.id }}</h3>
+                  <p class="modal-subtitle">{{ detalleSeleccionado?.tipo || '—' }}</p>
+                </div>
+              </div>
+              <button class="modal-close" (click)="cerrarDetalle()" aria-label="Cerrar">✖</button>
+            </header>
+
+            <div class="modal-body">
+              <div class="detail-section card">
+                <h4 class="section-title">Detalles de la Notificación</h4>
+
+                <div class="meta-grid">
+                  <div class="meta">
+                    <span class="meta-label">ID</span>
+                    <span class="meta-value mono">#{{ detalleSeleccionado?.id }}</span>
+                  </div>
+
+                  <div class="meta">
+                    <span class="meta-label">Fecha de Envío</span>
+                    <span class="meta-value">{{ detalleSeleccionado?.fecha | date: 'medium' }}</span>
+                  </div>
+
+                  <div class="meta">
+                    <span class="meta-label">Tipo</span>
+                    <span class="meta-value" [ngClass]="tipoClass(detalleSeleccionado?.tipo)">
+                        {{ detalleSeleccionado?.tipo || '—' }}
+                    </span>
+                  </div>
+
+                  <div class="meta">
+                    <span class="meta-label">Estado</span>
+                    <span class="badge big" [ngClass]="detalleSeleccionado?.leida ? 'status-leida' : 'status-pendiente'">
+                        {{ detalleSeleccionado?.leida ? 'Leída' : 'Pendiente' }}
+                    </span>
+                  </div>
+
+                  <div class="meta full">
+                    <span class="meta-label">Mensaje</span>
+                    <p class="meta-value multiline">{{ detalleSeleccionado?.mensaje || '—' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </section>
     </div>
   </div>
-</div>
 
-<script src="js/notificacion.js" defer></script>
-</body>
-</html>
+  <footer class="bottom-bar"></footer>
+</div>
