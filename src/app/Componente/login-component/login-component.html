@@ -4,7 +4,7 @@
     <div class="Btn-IniciarSesion">
       <a routerLink="/"><button class="Btn-IconoMensaje">
         <i class="fas fa-chevron-left"></i>
-        <span>Volver a la página principal</span>
+         Volver a la página home
       </button></a>
     </div>
   </div>
@@ -15,9 +15,9 @@
     <h2>Inicia Sesión</h2>
     <form>
       <div class="input-group">
-        <label for="username">
+        <label for="correo">
           <img src="assets/images/Icono-Usuario.png" alt="icon-user">
-          <input type="text" id="username" placeholder="Usuario" required>
+          <input type="email" id="correo" placeholder="Usuario" required>
         </label>
       </div>
       <div class="input-group">
@@ -26,19 +26,19 @@
           <input type="password" id="password" placeholder="Contraseña" required>
         </label>
       </div>
-      <button type="submit" class="btn-primary">Iniciar Sesión</button>
+      <a routerLink="/dashboard"><button type="submit" class="btn-primary">Iniciar Sesión</button></a>
       <p>O inicie sesión con:</p>
-      <button type="button" class="btn-google">
+      <a routerLink="/registrar-usuario"><button type="button" class="btn-google">
         <img src="assets/images/Icono-Google.png" alt="Google"> <p class="social-text">Continuar con Google</p>
-      </button>
-      <button type="button" class="btn-facebook">
+      </button></a>
+      <a routerLink="/registrar-usuario"><button type="button" class="btn-facebook">
         <img src="assets/images/Icono-Facebook2.png" alt="Facebook"> <p class="social-text">Continuar con Facebook</p>
-      </button>
+      </button></a>
       <div class="links">
         <p class="link-label">¿Olvidaste tu contraseña?</p>
-        <a routerLink="/recuperar-contrasena">Haz click aquí</a>
+        <a routerLink="/registrar-usuario">Haz click aquí</a>
         <p class="link-label">¿No tienes cuenta?</p>
-        <a routerLink="/crear-cuenta">Registrate aquí</a>
+        <a routerLink="/registrar-usuario">Registrate aquí</a>
       </div>
     </form>
   </div>

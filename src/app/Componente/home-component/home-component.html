@@ -1,47 +1,4 @@
-<!--______________________________________ENCABEZADO______________________________________-->
-<nav class="topheader">
-  <div class="topheader-container">
-    <a routerLink="/"><img width="200" height="57" src="assets/images/Logotipo-OjoCiudadanoBlanco.png" alt="Logotipo OjoCiudadano"></a>
-
-    <nav class="Contenedor-menu-horizontal" id="Contenedor-menu-horizontal">
-      <button class="close-menu" id="close-menu">
-        <i class="fas fa-times"></i>
-      </button>
-      <ul class="menu-horizontal" id="menu-horizontal">
-        <li>
-          <a class="opcion" id="opcion">Conócenos ▼</a>
-          <ul class="menu-vertical">
-            <li><a routerLink="/sobre-nosotros">Sobre nosotros</a></li>
-            <li><a routerLink="/que-es">¿Qué es OjoCiudadano?</a></li>
-          </ul>
-        </li>
-          <li><a routerLink="/evidencias" class="opcion">Evidencias</a></li>
-          <li><a routerLink="/notificaciones" class="opcion">Notificaciones</a></li>
-        <li><a href="https://elpais.com/noticias/obras-publicas/" target="_blank">Noticias</a></li>
-        <li><a href="#Menj-Formu">Ayuda</a></li>
-        <li><a routerLink="/panel-denuncias">Denuncias</a></li>
-      </ul>
-    </nav>
-
-    <div class="Btn-IniciarSesion">
-      <a routerLink="/login">
-        <button class="Btn-IconoMensaje">
-          <span>Iniciar Sesión</span>
-          <i class="far fa-user"></i>
-        </button>
-      </a>
-      <!--<ul class="menu-vertical">
-        <li><a routerLink="/perfil">Ver perfil</a></li>
-        <li><a (click)="logout()">Cerrar sesión</a></li>
-      </ul>-->
-    </div>
-
-    <button class="open-menu" id="open-menu">
-      <i class="fas fa-bars"></i>
-    </button>
-  </div>
-</nav>
-
+<app-header-component/>
 <!--______________________________________SECCIONES______________________________________-->
 <section class="PrimeraSeccion">
   <div class="presentacion">

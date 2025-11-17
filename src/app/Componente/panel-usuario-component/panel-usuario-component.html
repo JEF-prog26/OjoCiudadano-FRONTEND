@@ -1,1 +1,377 @@
-<p>panel-usuario-component works!</p>
+<app-header-panel-component/>
+<div class="page-wrapper">
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="panel-wrapper">
+    <div class="panel-card">
+
+      <!-- CABECERA DE LA PÁGINA (Título principal y acciones) -->
+      <div class="panel-header">
+        <!-- TÍTULO DINÁMICO -->
+        <h2 class="panel-title">Panel de Gestión de {{ vistaActual() === 'usuarios' ? 'Usuarios' : 'Roles' }}</h2>
+
+        <!-- ACCIONES DE BÚSQUEDA Y REGISTRO (DINÁMICAS) -->
+        <div class="header-actions">
+          <!-- Botón de Registro Dinámico -->
+          <button
+            class="action-btn action-primary"
+            (click)="vistaActual() === 'usuarios' ? onRegistrarUsuarioClick() : onRegistrarRolClick()"
+          >
+            Registrar Nuevo {{ vistaActual() === 'usuarios' ? 'Usuario' : 'Rol' }}
+          </button>
+
+          <!-- Buscador Dinámico -->
+          <div class="search-box">
+            <input
+              type="number"
+              class="search-input"
+              placeholder="Buscar por ID..."
+              [ngModel]="vistaActual() === 'usuarios' ? searchIdUsuario() : searchIdRol()"
+              (ngModelChange)="vistaActual() === 'usuarios' ? searchIdUsuario.set($event) : searchIdRol.set($event)"
+            />
+            <button class="search-btn" (click)="vistaActual() === 'usuarios' ? buscarPorIdUsuario() : buscarPorIdRol()">Buscar</button>
+            <button class="search-btn-secondary" (click)="vistaActual() === 'usuarios' ? limpiarBusquedaUsuario() : limpiarBusquedaRol()">Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENÚ DE PESTAÑAS (NUEVO) -->
+      <div class="tab-menu">
+        <button
+          class="tab-btn"
+          [class.active]="vistaActual() === 'usuarios'"
+          (click)="cambiarVista('usuarios')"
+        >
+          👤 Usuarios
+        </button>
+        <button
+          class="tab-btn"
+          [class.active]="vistaActual() === 'roles'"
+          (click)="cambiarVista('roles')"
+        >
+          🔑 Roles de Sistema
+        </button>
+      </div>
+
+      <!-- CONTENIDO PRINCIPAL (SECTION DINÁMICA) -->
+      <section class="panel-main">
+
+        <!-- ===================================== -->
+        <!-- === VISTA: GESTIÓN DE USUARIOS === -->
+        <!-- ===================================== -->
+        @if (vistaActual() === 'usuarios') {
+
+          <!-- LISTA / TABLA DE USUARIOS -->
+          @if (!showFormUsuario()) {
+            <div class="table-card">
+              <!-- La cabecera se mantendrá igual ya que las columnas son las mismas (ID, Nombre, Correo, Rol, Fecha, Acciones) -->
+              <div class="table-header user-header">
+                <span>ID</span>
+                <span>Nombre Completo</span>
+                <span>Correo</span>
+                <span>Rol</span>
+                <span>Fecha Registro</span>
+                <span>Acciones</span>
+              </div>
+
+              <div class="table-body">
+                @for (u of usuariosFiltrados(); track u.id) {
+                  <div class="table-row user-row">
+                    <span>{{ u.id }}</span>
+                    <span>{{ u.nombres }} {{ u.apellidos }}</span>
+                    <span>{{ u.correo }}</span>
+                    <span [class]="rolClass(u.rol)">{{ u.rol }}</span>
+                    <span>{{ u.fechaRegistro }}</span>
+                    <span class="cell-actions">
+                          <button class="icon-btn view" (click)="verDetalleUsuario(u)">👁</button>
+                          <button class="icon-btn edit" (click)="editarUsuario(u)">✏️</button>
+                          <button class="icon-btn delete" (click)="eliminarUsuario(u)">🗑</button>
+                        </span>
+                  </div>
+                } @empty {
+                  <div class="p-4 text-center text-gray-500">No se encontraron usuarios.</div>
+                }
+              </div>
+            </div>
+          } @else {
+            <!-- FORMULARIO DE USUARIOS (CREAR / EDITAR) -->
+            <div class="form-card">
+              <h3>{{ editingIdUsuario() ? 'Editar usuario' : 'Registrar nuevo usuario' }}</h3>
+
+              <!-- Campos de Solo Lectura (ID y Fecha de Registro) -->
+              <div class="form-row">
+                <label class="form-label">ID de Usuario</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  [ngModel]="editingIdUsuario() ? usuarioForm.id : 'AUTO GENERADO'"
+                  readonly
+                />
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Fecha de Registro</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  [ngModel]="editingIdUsuario() ? usuarioForm.fechaRegistro : 'PENDIENTE'"
+                  readonly
+                />
+              </div>
+
+              <div class="divider-form"></div>
+
+              <!-- Campos Editables -->
+              <div class="form-row">
+                <label class="form-label">Nombres (*)</label>
+                <input class="form-input" type="text" [(ngModel)]="usuarioForm.nombres" required />
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Apellidos (*)</label>
+                <input class="form-input" type="text" [(ngModel)]="usuarioForm.apellidos" required />
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Correo electrónico (*)</label>
+                <input class="form-input" type="email" [(ngModel)]="usuarioForm.correo" required />
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Contraseña (*)</label>
+                <input class="form-input" type="password" [(ngModel)]="usuarioForm.contrasena" [placeholder]="editingIdUsuario() ? 'Dejar vacío para no cambiar' : ''" [required]="!editingIdUsuario()" />
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Rol del Sistema (*)</label>
+                <select class="form-input" [(ngModel)]="usuarioForm.rol" required>
+                  @for (rol of ROLES; track rol) {
+                    <option [value]="rol">{{ rol }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-actions">
+                <button class="form-btn-secondary" (click)="cancelarFormUsuario()">Cancelar</button>
+                <button class="form-btn-primary" (click)="guardarUsuario()">
+                  {{ editingIdUsuario() ? 'Guardar cambios' : 'Registrar' }}
+                </button>
+              </div>
+            </div>
+          }
+        }
+
+        <!-- ===================================== -->
+        <!-- === VISTA: GESTIÓN DE ROLES (NUEVO) === -->
+        <!-- ===================================== -->
+        @if (vistaActual() === 'roles') {
+          <!-- LISTA / TABLA DE ROLES -->
+          @if (!showFormRol()) {
+            <div class="table-card">
+              <div class="table-header role-header">
+                <span>ID</span>
+                <span>Nombre del Rol</span>
+                <span>Descripción</span>
+                <span>Fecha Creación</span>
+                <span>Acciones</span>
+              </div>
+
+              <div class="table-body">
+                @for (r of rolesFiltrados(); track r.id) {
+                  <div class="table-row role-row">
+                    <span>{{ r.id }}</span>
+                    <span>{{ r.nombre }}</span>
+                    <span>{{ r.descripcion || '—' }}</span>
+                    <span>{{ r.fechaCreacion }}</span>
+                    <span class="cell-actions">
+                          <button class="icon-btn view" (click)="verDetalleRol(r)">👁</button>
+                          <button class="icon-btn edit" (click)="editarRol(r)">✏️</button>
+                          <button class="icon-btn delete" (click)="eliminarRol(r)">🗑</button>
+                        </span>
+                  </div>
+                } @empty {
+                  <div class="p-4 text-center text-gray-500">No se encontraron roles.</div>
+                }
+              </div>
+            </div>
+          } @else {
+            <!-- FORMULARIO DE ROLES (CREAR / EDITAR) -->
+            <div class="form-card">
+              <h3>{{ editingIdRol() ? 'Editar Rol' : 'Registrar Nuevo Rol' }}</h3>
+
+              <!-- Campos de Solo Lectura (ID y Fecha de Creación) -->
+              <div class="form-row">
+                <label class="form-label">ID del Rol</label>
+                <!-- ID no se edita -->
+                <input
+                  class="form-input"
+                  type="text"
+                  [ngModel]="editingIdRol() ? rolForm.id : 'AUTO GENERADO'"
+                  readonly
+                />
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Fecha de Creación</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  [ngModel]="editingIdRol() ? rolForm.fechaCreacion : 'PENDIENTE'"
+                  readonly
+                />
+              </div>
+
+              <div class="divider-form"></div>
+
+              <!-- Campos Editables -->
+              <div class="form-row">
+                <label class="form-label">Nombre del Rol (*)</label>
+                <!-- Guía de formato para el usuario -->
+                <input
+                  class="form-input"
+                  type="text"
+                  [(ngModel)]="rolForm.nombre"
+                  placeholder="Ej: ROLE_EDITOR"
+                  required
+                />
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Descripción</label>
+                <input class="form-input" type="text" [(ngModel)]="rolForm.descripcion" />
+              </div>
+
+              <div class="form-actions">
+                <button class="form-btn-secondary" (click)="cancelarFormRol()">Cancelar</button>
+                <button class="form-btn-primary" (click)="guardarRol()">
+                  {{ editingIdRol() ? 'Guardar cambios' : 'Registrar Rol' }}
+                </button>
+              </div>
+            </div>
+          }
+        }
+
+
+        <!-- MODALES DINÁMICOS -->
+
+        <!-- MODAL DETALLE DE USUARIO -->
+        @if (detailOpenUsuario()) {
+          <div class="modal-backdrop" (click)="cerrarDetalleUsuario()">
+            <section
+              class="modal-card pretty"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="detalleTitleUsuario"
+              (click)="$event.stopPropagation()"
+            >
+              <header class="modal-header pretty">
+                <div class="title-wrap">
+                  <div class="title-icon">👤</div>
+                  <div>
+                    <h3 id="detalleTitleUsuario" class="modal-title">Detalle de Usuario #{{ detalleSeleccionadoUsuario()?.id }}</h3>
+                    <p class="modal-subtitle">{{ detalleSeleccionadoUsuario()?.nombres }} {{ detalleSeleccionadoUsuario()?.apellidos }}</p>
+                  </div>
+                </div>
+                <button class="modal-close" (click)="cerrarDetalleUsuario()" aria-label="Cerrar">✖</button>
+              </header>
+
+              <div class="modal-body">
+                <div class="detail-section card">
+                  <h4 class="section-title">Información de la Cuenta</h4>
+
+                  <div class="meta-grid">
+                    <div class="meta">
+                      <span class="meta-label">ID de Usuario</span>
+                      <span class="meta-value mono">#{{ detalleSeleccionadoUsuario()?.id }}</span>
+                    </div>
+
+                    <div class="meta">
+                      <span class="meta-label">Rol Asignado</span>
+                      <span class="badge big" [ngClass]="rolClass(detalleSeleccionadoUsuario()?.rol)">
+                            {{ detalleSeleccionadoUsuario()?.rol }}
+                          </span>
+                    </div>
+
+                    <div class="meta">
+                      <span class="meta-label">Nombres</span>
+                      <span class="meta-value">{{ detalleSeleccionadoUsuario()?.nombres || '—' }}</span>
+                    </div>
+
+                    <div class="meta">
+                      <span class="meta-label">Apellidos</span>
+                      <span class="meta-value">{{ detalleSeleccionadoUsuario()?.apellidos || '—' }}</span>
+                    </div>
+
+                    <div class="meta full">
+                      <span class="meta-label">Correo Electrónico</span>
+                      <p class="meta-value">{{ detalleSeleccionadoUsuario()?.correo || '—' }}</p>
+                    </div>
+
+                    <div class="meta">
+                      <span class="meta-label">Fecha de Registro</span>
+                      <span class="meta-value">{{ detalleSeleccionadoUsuario()?.fechaRegistro || '—' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        }
+
+        <!-- MODAL DETALLE DE ROL (NUEVO) -->
+        @if (detailOpenRol()) {
+          <div class="modal-backdrop" (click)="cerrarDetalleRol()">
+            <section
+              class="modal-card pretty"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="detalleTitleRol"
+              (click)="$event.stopPropagation()"
+            >
+              <header class="modal-header pretty">
+                <div class="title-wrap">
+                  <div class="title-icon">🔑</div>
+                  <div>
+                    <h3 id="detalleTitleRol" class="modal-title">Detalle de Rol #{{ detalleSeleccionadoRol()?.id }}</h3>
+                    <p class="modal-subtitle">{{ detalleSeleccionadoRol()?.nombre }}</p>
+                  </div>
+                </div>
+                <button class="modal-close" (click)="cerrarDetalleRol()" aria-label="Cerrar">✖</button>
+              </header>
+
+              <div class="modal-body">
+                <div class="detail-section card">
+                  <h4 class="section-title">Información del Rol de Sistema</h4>
+
+                  <div class="meta-grid">
+                    <div class="meta">
+                      <span class="meta-label">ID del Rol</span>
+                      <span class="meta-value mono">#{{ detalleSeleccionadoRol()?.id }}</span>
+                    </div>
+
+                    <div class="meta">
+                      <span class="meta-label">Fecha de Creación</span>
+                      <span class="meta-value">{{ detalleSeleccionadoRol()?.fechaCreacion || '—' }}</span>
+                    </div>
+
+                    <div class="meta full">
+                      <span class="meta-label">Nombre Completo (Identificador)</span>
+                      <p class="meta-value mono big">{{ detalleSeleccionadoRol()?.nombre || '—' }}</p>
+                    </div>
+
+                    <div class="meta full">
+                      <span class="meta-label">Descripción</span>
+                      <p class="meta-value">{{ detalleSeleccionadoRol()?.descripcion || 'No especificada' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        }
+
+      </section>
+    </div>
+  </div>
+  <!-- BARRA INFERIOR -->
+  <footer class="bottom-bar"></footer>
+</div>

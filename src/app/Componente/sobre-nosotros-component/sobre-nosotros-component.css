@@ -1,0 +1,590 @@
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+/*___________________________________________________TOPHEADER___________________________________________________*/
+.topheader {
+  background-color:#FF0000;
+  width: 100%;
+  height: 100px;
+  position: fixed;
+  top: 0;
+  z-index: 10; /* Asegura que el header esté por encima del contenido */
+  justify-content: space-around;
+  align-items: center;
+  display: flex;
+}
+
+.topheader-container {
+  margin-left: 6.5%;
+  margin-right: 6.5%;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  display: flex;
+}
+
+.menu-horizontal {
+  list-style: none;
+  width: 100%;
+  font-size: 18px;
+  justify-content: end;
+  display: flex;
+  padding: 0; /* Añadido para mejor práctica */
+}
+
+.menu-horizontal li a {
+  display: block;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-decoration: none;
+  list-style: none;
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.menu-vertical {
+  position: absolute;
+  background-color: #cacaca;
+  box-shadow: 0 10px 10px #00000080;
+  border: none;
+  border-radius: 10px;
+  padding: 0px;
+  margin-top: 0px;
+  list-style: none;
+  display: none; /* Por defecto, oculto */
+  min-width: 200px; /* Asegura un ancho mínimo */
+}
+
+.menu-horizontal .menu-vertical {
+  margin-left: 20px;
+  z-index: 1; /* Asegura que esté sobre el contenido */
+}
+
+.menu-horizontal .menu-vertical li a {
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.menu-horizontal li:hover .menu-vertical {
+  display: block; /* Muestra el menú en hover (desktop) */
+}
+
+.menu-vertical li a:hover {
+  background-color: #0033A0;
+  color:#ffffff;
+}
+
+/* Estilos específicos para el dropdown "Conócenos" en móvil */
+/* En Angular, usaremos la clase .activado para el toggle en móvil/ts */
+@media (max-width: 768px) {
+  /* Para el submenú de Conócenos, que ya está usando menu-vertical */
+  .menu-horizontal li a.activado + .menu-vertical {
+    display: block;
+    /* Estos estilos son para el modo móvil sobreescrito en el media query */
+    position: relative;
+    box-shadow: none;
+    margin: 0%;
+    padding: 0%;
+    color: #000000;
+    background-color: #8c8c8c;
+    border-right: 5px solid transparent;
+    border-radius: 0%;
+    width: 100%;
+    overflow: visible;
+    height: auto;
+    transition: all .5s;
+    transform: translateX(0%);
+  }
+}
+
+
+.Btn-IniciarSesion{
+  margin-left: 20px;
+  justify-content: end;
+  position: relative; /* Necesario para posicionar el menú vertical */
+}
+
+.Btn-IconoMensaje {
+  background-color: #0033A0;
+  height: 54px;
+  width: 255px;
+  border: none;
+  border-radius: 75.5px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+}
+
+.Btn-IconoMensaje span{
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #ffffff;
+  margin-right: 20px;
+}
+
+.Btn-IconoMensaje i{
+  font-family: "Font Awesome 5 Free";
+  font-size: 30px;
+  font-weight: 2;
+  color: #ffffff;
+  /* Eliminando estilos redundantes o incorrectos: color:none; font-style: none; */
+}
+
+.Btn-IniciarSesion .user-menu-vertical {
+  left: auto;
+  right: 0;
+  width: 255px;
+}
+
+.Btn-IniciarSesion li a {
+  display: block;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #000000;
+  padding-right: 95px;
+  text-decoration: none;
+  list-style: none;
+  cursor: pointer;
+  text-align: left; /* Asegurar alineación */
+}
+
+.Btn-IniciarSesion:hover .menu-vertical {
+  display: block;
+}
+
+.topheader-container img {
+  cursor: pointer;
+}
+
+.buscador {
+  padding-left: 60px;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+}
+
+.buscador input[type="text"] {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 14px 0px 0px 14px;
+  height: 54px;
+  width: 200px;
+  font-family: sans-serif;
+  font-size: 20px;
+  color: #8C8C8C;
+  padding: 0px 10px;
+}
+
+.buscador input::placeholder {
+  font-family: sans-serif;
+  font-size: 20px;
+  color: #8c8c8c;
+}
+
+.Ico-lupa {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 0px 14px 14px 0px;
+  height: 54px;
+  width: 50px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+}
+
+.Ico-lupa i {
+  font-family: "Font Awesome 5 Free";
+  font-size: 28px;
+  color: #8c8c8c;
+}
+/*______________________________________________________________¿Que es OjoCiudadano?______________________________________________________________*/
+/* Contenido en fila */
+.GobiernosRegionales {
+  align-items: center;
+  padding: 140px 6.5% 80px 6.5%;
+  max-width: 100%;
+  box-sizing: border-box; /* Asegura que el padding no cause overflow */
+}
+
+/* Título */
+.GobReg-container h1 {
+  font-family: "Lexend", sans-serif;
+  font-size: 40px;
+  color: #333;
+}
+/* Párrafo */
+.GobReg-container p {
+  font-family: sans-serif;
+  text-align: justify;
+  line-height: 30px;
+  font-size: 22px;
+}
+
+/* Imagen */
+.GobiernosRegionales img {
+  object-fit: cover;
+  background-position: center;
+  background-size:cover;
+  height: 450px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-top: 30px;
+}
+
+.MisionVision-container {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.Container {
+  border: 1px solid #000000;
+  border-radius: 15px;
+  padding: 5%;
+}
+
+.Container h2 {
+  font-family: "Lexend", sans-serif;
+  font-size: 30px;
+  color: #000000;
+  text-decoration: underline;
+  margin: 0% 0% 2% 0%;
+}
+
+.Container p {
+  font-family: sans-serif;
+  text-align: justify;
+  line-height: 24px;
+  font-size: 20px;
+  margin: 0%;
+}
+
+/*______________________________________________________________PIE DE PAGINA______________________________________________________________*/
+.piepagina{
+  /* Usando nombre de archivo proporcionado */
+  background: url("../../../assets/images/Imagen-Fondo.png") no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: auto;
+  width: 100%;
+  padding-top: 20px; /* Asegurar espacio si la imagen de fondo no es suficiente */
+}
+
+.Contenedor-piepagina{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Alineación cambiada para mejor visualización */
+}
+
+.Opciones{
+  margin-top: 10px;
+  margin-left: 6.5%;
+  margin-bottom: 40px;
+}
+
+.RedesSociales{
+  margin-top: 20px;
+  margin-right: 6.5%;
+  margin-bottom: 40px;
+}
+
+.Opciones a {
+  text-decoration: none;
+}
+
+.Opciones h1 {
+  font-family: "Lexend", sans-serif;
+  letter-spacing: -1px;
+  font-size: 30px;
+  color: #000000;
+}
+
+.Opciones p {
+  font-family: sans-serif;
+  font-size:15px;
+  color: #000000;
+  margin-bottom: 5px; /* Ajuste para evitar -5px, que es mala práctica */
+  cursor: pointer;
+}
+
+.Opciones p:hover{
+  text-decoration: underline;
+  color:#FF0000;
+}
+
+.RedesSociales p{
+  font-family: "Lexend", sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.Icons-RedesSociales img {
+  padding-right: 5px;
+}
+
+.IconX {
+  margin: 0px -10px 0px -10px;
+}
+
+.RedesSociales img:hover{
+  cursor: pointer;
+}
+
+/*_________________________________________________RESPONSIVE_________________________________________________*/
+.open-menu {
+  border: none;
+  background-color: #FF0000;
+  display: none;
+  margin-left: 20px;
+}
+
+.open-menu i{
+  font-family: "Font Awesome 5 Free";
+  font-size: 50px;
+  color: #ffffff;
+}
+
+.close-menu {
+  border: none;
+  background-color: #cacaca;
+  display: none;
+  padding: 0%;
+  margin: -6px 22px 0px 0px;
+  align-self: flex-end; /* Alinea la X a la derecha dentro del menú móvil */
+}
+
+.close-menu i{
+  font-family: "Font Awesome 5 Free";
+  font-size: 50px;
+  color: #000000;
+}
+
+/*CONFIGURACION RESPONSIVE*/
+@media (max-width: 768px) {
+  /*MENU*/
+  .open-menu, .close-menu{
+    display: block;
+    cursor: pointer;
+  }
+
+  /* Oculta los elementos de desktop */
+  .menu-horizontal, .buscador, .Btn-IniciarSesion {
+    display: none;
+  }
+
+  /* Oculta y prepara el contenedor del menú para el modo móvil */
+  .Contenedor-menu-horizontal {
+    opacity: 0;
+    visibility: hidden;
+    width: 60%; /* Ancho ajustado para móvil */
+    min-width: 250px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Alinea los elementos a la derecha */
+    gap: 1px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cacaca;
+    padding: 2rem 46px 0rem 0rem;
+    box-shadow: 0 0 0 100vmax #0000006a;
+    transition: all .5s;
+    transform: translateX(100%);
+    z-index: 20; /* Mayor z-index que el topheader */
+  }
+
+  .Contenedor-menu-horizontal.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0%);
+
+    /* Muestra los elementos del menú dentro del contenedor visible */
+    .menu-horizontal, .Btn-IniciarSesion {
+      display: flex; /* Cambia a flex para la lista */
+      flex-direction: column;
+      align-items: flex-end;
+      width: 100%;
+    }
+  }
+
+  /* Estilos de lista horizontal en modo móvil */
+  .menu-horizontal {
+    /* Sobreescribe display: flex; en .visible */
+    display: block;
+    padding-right: 0;
+  }
+
+  .menu-horizontal .menu-vertical {
+    display: none; /* Oculto por defecto, se muestra con la clase .activado */
+    position: relative;
+    box-shadow: none;
+    margin: 0%;
+    padding: 0%;
+    color: #000000;
+    background-color: #8c8c8c;
+    border-right: 5px solid transparent;
+    border-radius: 0%;
+    width: 100%; /* Ajuste para que ocupe todo el ancho del menú padre */
+    overflow: hidden;
+    height: 0;
+    transition: all .5s;
+    transform: translateX(0%);
+  }
+
+  /* Esta clase es la que se aplica desde el TS para mostrar el submenú */
+  .menu-horizontal .menu-vertical.activado {
+    overflow: visible;
+    height: auto;
+    display: block;
+    transform: translateX(0%);
+  }
+
+  .menu-horizontal li a{
+    display: block;
+    color: #000000;
+    border-right: 5px solid transparent;
+    border-radius: 0%;
+    width: auto; /* Ancho automático, no 100% del padre para no empujar la X */
+  }
+
+  /* Buscador en Móvil */
+  .buscador{
+    padding-left: 0;
+    justify-content: flex-start; /* Alinea la lupa a la izquierda del header */
+  }
+
+  /* Hace que la lupa sea un botón completo en modo móvil */
+  .Ico-lupa {
+    border-radius: 14px;
+    display: flex;
+    width: 54px; /* Ajuste para ser cuadrado/redondo */
+    height: 54px;
+  }
+
+  .buscador input[type=text]{
+    display: none; /* Oculta el campo de texto de búsqueda en móvil */
+  }
+
+  /* Iniciar Sesión en Móvil (dentro del menú móvil) */
+  .Btn-IniciarSesion {
+    padding-left: 0%;
+    margin-left: 0;
+    margin-top: 20px;
+  }
+
+  .Btn-IconoMensaje {
+    width: auto;
+    padding: 20px;
+    border-radius: 100px;
+    margin: 0%;
+  }
+
+  .Btn-IniciarSesion span {
+    display: none;
+    padding: 0%;
+  }
+
+  /* Ocultar el dropdown de Iniciar Sesión en móvil, ya que el botón en sí lleva a otra página */
+  .Btn-IniciarSesion .menu-vertical{
+    display: none;
+  }
+
+  /* Estilos de hover/click en móvil */
+  .menu-horizontal li a:hover {
+    border-right: 5px solid #FF0000;
+    border-radius: 0%;
+    background: #8C8C8C;
+  }
+
+  .menu-horizontal .menu-vertical li a:hover{
+    background-color: #0033A0;
+    color: #ffffff;
+    padding-right: 15px;
+  }
+
+  /* Header container adjustment */
+  .topheader-container {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  /* Contenido Principal Responsive */
+  .GobiernosRegionales {
+    padding: 120px 5% 60px 5%; /* Ajuste de padding superior */
+  }
+
+  /* Misión/Visión a una columna en móvil */
+  .MisionVision-container {
+    grid-template-columns: 1fr;
+  }
+
+  /* Pie de Página Responsive */
+  .Contenedor-piepagina {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .Opciones, .RedesSociales {
+    width: 80%; /* Más ancho en móvil */
+    margin-left: 0;
+    margin-right: 0;
+    text-align: center;
+  }
+
+  .Opciones h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .RedesSociales {
+    margin-top: 15px;
+  }
+
+  .Siguenos, .App {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .Icons-RedesSociales, .Icons-AppStores {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Ajustes de tamaño de fuente en móvil */
+  .GobReg-container h1 {
+    font-size: 35px;
+  }
+
+  .GobReg-container p {
+    font-size: 19px;
+    line-height: 24px;
+  }
+
+  .Container h2{
+    font-size: 28px;
+  }
+
+  .Container p{
+    font-size: 17px;
+    line-height: 24px;
+  }
+}
