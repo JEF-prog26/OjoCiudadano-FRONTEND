@@ -1,0 +1,132 @@
+.topheader {
+  background-color:#FF0000;
+  width: 100%;     /* Asegura que ocupe todo el ancho */
+  height: 100px;   /* Altura del header */
+  position: fixed; /* Mantiene el header fijo en la parte superior */
+  top: 0; /* Posiciona el header en la parte superior */
+  justify-content: space-around;
+  align-items: center;
+  display: flex;
+}
+
+.topheader-container {
+  margin-left: 6.5%;
+  margin-right: 6.5%;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  display: flex;
+}
+
+.menu-horizontal {
+  list-style: none;
+  width: 100%;
+  font-size: 18px;
+  margin: 0%;
+  justify-content: end;
+  display: flex;
+}
+
+.Contenedor-menu-horizontal {
+  width: 100%;
+  display: flex;
+}
+
+.menu-horizontal li a {
+  display: block;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-decoration: none;
+  list-style: none;
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.menu-vertical {
+  position: absolute;
+  background-color: #cacaca;
+  box-shadow: 0 10px 10px #00000080;
+  border: none;
+  border-radius: 10px;
+  padding: 0px;
+  margin-top: 0px;
+  list-style: none;
+  display: none;
+}
+
+.menu-horizontal .menu-vertical {
+  margin-left: 20px;
+}
+
+.menu-horizontal .menu-vertical li a {
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.menu-horizontal li:hover .menu-vertical {
+  display: block;
+}
+
+.menu-vertical li a:hover {
+  background-color: #0033A0;
+  color:#ffffff;
+}
+
+.Btn-CerrarSesion{
+  margin-left: 80px;
+  justify-content: end;
+}
+
+.Btn-IconoMensaje {
+  background-color: #0033A0;
+  height: 54px;
+  width: 255px;
+  border: none;
+  border-radius: 75.5px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+}
+
+.Btn-IconoMensaje span{
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #ffffff;
+  margin-right: 20px;
+  margin-left: 15px;
+}
+
+.Btn-IconoMensaje i{
+  font-family: "Font Awesome 5 Free";
+  font-size: 30px;
+  font-weight: 2;
+  color: #ffffff;
+  color: none;
+  font-style: none;
+}
+
+.Btn-CerrarSesion  li a {
+  display: block;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #000000;
+  padding-right: 95px;
+  text-decoration: none;
+  list-style: none;
+  cursor: pointer;
+}
+
+.Btn-CerrarSesion:hover .menu-vertical {
+  display: block;
+}
+
+.topheader-container img {
+  cursor: pointer;
+}

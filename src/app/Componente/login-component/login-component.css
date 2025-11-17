@@ -7,15 +7,24 @@
   background-size: cover;
   width: 100%;
   min-height: calc(100vh - 100px);
-  /*height: auto;
-  margin-top: 140px;*/
+  /*height: auto;*/
+  margin-top: 0px;
   justify-content: center; /* Centrar Horizontalmente*/
   align-items: center; /* Centrar Verticalmente*/
   /* Padding para separación del header fijo*/
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 140px;
+  padding-bottom: 0px;
 }
-.login-container {margin: 0;}
+.login-container {
+  margin: 0;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 360px;
+  height: auto;
+  text-align: center;
+}
 
 .topheader {
   background-color:#FF0000;
@@ -39,21 +48,19 @@
 
 .Btn-IniciarSesion{
   justify-content: end;
+
 }
 
 .Btn-IconoMensaje {
   background-color: #0033A0;
   height: 54px;
-  width: 390px;
+  width: 330px;
   border: none;
   border-radius: 75.5px;
   justify-content: center;
   align-items: center;
   display: flex;
   cursor: pointer;
-}
-
-.Btn-IconoMensaje span{
   font-family: "Lexend", sans-serif;
   font-size: 22px;
   color: #ffffff;
@@ -65,6 +72,7 @@
   font-size: 30px;
   color: #ffffff;
   font-style: normal;
+  margin-right: 10px;
 }
 
 .topheader-container img {

@@ -1,0 +1,243 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: url("../../../assets/images/Imagen-Fondo.png") no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  min-height: calc(100vh - 100px);
+  margin-top: 0px;
+  justify-content: center; /* Centrar Horizontalmente*/
+  align-items: center; /* Centrar Verticalmente*/
+  /* Padding para separación del header fijo*/
+  display: flex;
+  padding: 40px 20px;
+  flex-grow: 1;
+}
+
+.topheader {
+  background-color:#FF0000;
+  width: 100%;     /* Asegura que ocupe todo el ancho */
+  height: 100px;   /* Altura del header */
+  position: fixed; /* Mantiene el header fijo en la parte superior */
+  top: 0; /* Posiciona el header en la parte superior */
+  justify-content:space-around;
+  align-items: center;
+  display: flex;
+}
+
+.topheader-container {
+  margin-left: 6.5%;
+  margin-right: 6.5%;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+.Btn-IniciarSesion{
+  justify-content: end;
+}
+
+.Btn-IconoMensaje {
+  background-color: #0033A0;
+  height: 54px;
+  width: 330px;
+  border: none;
+  border-radius: 75.5px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+}
+
+.Btn-IconoMensaje span{
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #ffffff;
+  margin-left: 10px;
+}
+
+.Btn-IconoMensaje i{
+  font-family: "Font Awesome 5 Free";
+  font-size: 30px;
+  color: #ffffff;
+  /*font-style: none;*/
+}
+
+.topheader-container img {
+  cursor: pointer;
+}
+
+.login-container {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 360px; /* Ancho fijo */
+  height: auto;
+  margin: auto; /* Centrado */
+  text-align: center;
+  margin-bottom: 175px;
+}
+
+.login-box h2 {
+  text-align: left;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: flex;
+  align-items: center;
+  background: #CACACA;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 10px 15px;
+}
+
+.input-group i {
+  color: #e63946;
+  font-size: 1.2rem;
+  margin-right: 2px;
+
+}
+
+.input-group input {
+  font-family: sans-serif;
+  border: none;
+  outline: none;
+  background: none;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  background: #0033A0;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 60%;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  transition: background 0.3s;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+p {
+  font-family: sans-serif;
+  text-align: left;
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+
+button.btn-google{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 5px;
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+button.btn-facebook {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0866FF;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 5px;
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input-group img,
+button img {
+  max-width: 100%; /* Asegura que las imágenes no desborden */
+  height: auto;
+}
+
+button {
+  width: 100%; /* Ocupa el ancho del contenedor */
+}
+
+button.btn-google img,
+button.btn-facebook img {
+  height: 30px;
+  margin-right: 20px;
+}
+button.btn-google p{
+  font-family: sans-serif;
+  color: #808080;
+  font-weight: 500;
+  font-size: 1rem;
+  padding-top: 10px;
+}
+
+button.btn-facebook p{
+  font-family: sans-serif;
+  color: white;
+  font-weight: 500;
+  font-size: 1rem;
+  padding-top: 10px;
+}
+
+button.btn-google:hover {
+  background: #f5f5f5;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+button.btn-facebook:hover {
+  background: rgb(0, 54, 248);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+
+}
+
+@media (max-width: 768px){
+  .Btn-IniciarSesion span{
+    font-size: 18px;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .Btn-IconoMensaje{
+    width: auto;
+    height: 45px;
+  }
+
+  .Btn-IconoMensaje i{
+    font-size: 20px;
+    margin-left: 15px;
+  }
+}

@@ -2,14 +2,15 @@
 import { Component, OnInit } from '@angular/core';
 import {CommonModule, NgClass} from '@angular/common';
 import {RouterLink} from '@angular/router';
+import {HeaderComponent} from '../header-component/header-component';
 
 @Component({
   selector: 'app-home-component',
   templateUrl: './home-component.html',
   imports: [
-    NgClass,
     CommonModule,
-    RouterLink
+    RouterLink,
+    HeaderComponent
   ],
   styleUrls: ['./home-component.css']
 })

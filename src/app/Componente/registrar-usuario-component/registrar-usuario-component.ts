@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-registrar-usuario-component',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './registrar-usuario-component.html',
   styleUrl: './registrar-usuario-component.css',
 })
