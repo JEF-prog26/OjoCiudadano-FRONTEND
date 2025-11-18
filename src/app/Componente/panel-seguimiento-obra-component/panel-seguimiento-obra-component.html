@@ -1,1 +1,98 @@
-<p>panel-seguimiento-obra-component works!</p>
+<div class="page-wrapper">
+  <header class="top-bar">
+    <button class="back-button" (click)="goBack()">
+      &lt; Volver a la página anterior
+    </button>
+  </header>
+
+  <div class="panel-wrapper">
+    <!-- Título fuera del card, como en su imagen de referencia -->
+    <h2 class="page-title">Panel de seguimiento de la obra</h2>
+
+    <div class="panel-card-split">
+
+      <!-- 🌍 IZQUIERDA: EL MAPA -->
+      <!-- Este div es crucial. El id="map" es donde Leaflet dibuja el mapa -->
+      <div class="map-container">
+        <div id="map"></div>
+      </div>
+
+      <!-- ⚙️ DERECHA: PANEL DE INFORMACIÓN (Admin) -->
+      <div class="info-panel">
+
+        <!-- Encabezado Azul -->
+        <div class="info-header">
+          Información de la obra
+        </div>
+
+        <!-- Formulario vinculado a 'obraSeleccionada' del TS -->
+        <div class="info-form">
+
+          <div class="info-row">
+            <label>Nombre Obra:</label>
+            <input type="text" [(ngModel)]="obraSeleccionada.nombre" placeholder="Nombre de la obra">
+          </div>
+
+          <div class="info-row">
+            <label>Fecha de inicio:</label>
+            <input type="date" [(ngModel)]="obraSeleccionada.fechaInicio">
+          </div>
+
+          <div class="info-row">
+            <label>Estado:</label>
+            <select [(ngModel)]="obraSeleccionada.estado">
+              <option value="Activo">Activo</option>
+              <option value="Detenido">Detenido</option>
+              <option value="Finalizado">Finalizado</option>
+            </select>
+          </div>
+
+          <div class="info-row">
+            <label>Obra Publica (ID):</label>
+            <input type="number" [(ngModel)]="obraSeleccionada.id" readonly disabled class="disabled-input">
+          </div>
+
+          <div class="info-row">
+            <label>Activo:</label>
+            <!-- Este 'toggle' falso actualiza la variable 'activo' en el TS -->
+            <div class="toggle-fake" (click)="obraSeleccionada.activo = !obraSeleccionada.activo">
+              {{ obraSeleccionada.activo ? 'TRUE' : 'FALSE' }}
+            </div>
+          </div>
+
+          <!-- Coordenadas (vinculadas al TS) -->
+          <div class="info-row coordinates">
+            <input type="number" [(ngModel)]="obraSeleccionada.lat" placeholder="Lat">
+            <input type="number" [(ngModel)]="obraSeleccionada.lng" placeholder="Lng">
+          </div>
+
+        </div>
+
+        <hr class="divider">
+
+        <!-- Botonera Grid (vinculada a las funciones del TS) -->
+        <div class="actions-grid">
+          <button class="btn-action" (click)="registrar()">Registrar</button>
+          <button class="btn-action" (click)="eliminar()">Eliminar</button>
+          <button class="btn-action" (click)="actualizar()">Actualizar</button>
+          <button class="btn-action" (click)="listar()">Listar</button>
+        </div>
+
+        <!-- Buscador con la nueva lógica de 'Enter' -->
+        <div class="search-row">
+          <label>Buscar por ID</label>
+          <input
+            type="number"
+            class="search-input-grey"
+            placeholder="Escriba ID y presione Enter..."
+            [(ngModel)]="searchId"
+            (keyup.enter)="buscarPorId()">
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="bottom-bar"></footer>
+</div>
