@@ -117,7 +117,7 @@
 
             <div class="form-row">
               <label class="form-label">Descripción</label>
-              <textarea
+              <textarea>
                 class="form-input"
                 rows="3"
                 [(ngModel)]="comentarioForm.descripcion">
@@ -137,6 +137,81 @@
             </div>
           </div>
         </ng-template>
+
+        <div class="modal-backdrop" *ngIf="detailOpen" (click)="cerrarDetalle()">
+          <section
+            class="modal-card pretty"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="detalleTitle"
+            (click)="$event.stopPropagation()"
+          >
+            <header class="modal-header pretty">
+              <div class="title-wrap">
+                <div class="title-icon">🗂️</div>
+                <div>
+                  <h3 id="detalleTitle" class="modal-title">Comentario #{{ detalleSeleccionado?.id }}</h3>
+                  <p class="modal-subtitle">{{ detalleSeleccionado?.titulo || '—' }}</p>
+                </div>
+              </div>
+              <button class="modal-close" (click)="cerrarDetalle()" aria-label="Cerrar">✖</button>
+            </header>
+
+            <div class="modal-body">
+              <div class="detail-section card">
+                <h4 class="section-title">Detalles generales</h4>
+
+                <div class="meta-grid">
+                  <div class="meta">
+                    <span class="meta-label">ID</span>
+                    <span class="meta-value mono">#{{ detalleSeleccionado?.id }}</span>
+                  </div>
+
+                  <div class="meta full">
+                    <span class="meta-label">Descripción</span>
+                    <p class="meta-value multiline">{{ detalleSeleccionado?.descripcion || '—' }}</p>
+                  </div>
+
+                  <div class="meta">
+                    <span class="meta-label">Estado actual</span>
+                    <span class="badge big" [ngClass]="estadoClass(detalleSeleccionado?.estado)">
+                      {{ detalleSeleccionado?.estado || '—' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="detail-section card">
+                <h4 class="section-title">Seguimiento</h4>
+                <ul class="timeline pretty">
+                  <li class="timeline-item" *ngFor="let h of detalleSeleccionado?.historial">
+                    <div class="timeline-dot" [ngClass]="estadoClass(h.estado)"></div>
+                    <div class="timeline-content">
+                      <div class="timeline-head">
+                        <span class="timeline-state" [ngClass]="estadoClass(h.estado)">{{ h.estado }}</span>
+                        <span class="timeline-date">{{ h.fecha }}</span>
+                      </div>
+                      <p class="timeline-desc">{{ h.descripcion || '—' }}</p>
+                    </div>
+                  </li>
+                  <li *ngIf="!detalleSeleccionado?.historial?.length" class="timeline-empty">
+                    Aún no hay eventos registrados.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="modal-footer pretty">
+              <div class="footer-left"></div>
+              <div class="footer-actions">
+                <button class="btn-neutral" (click)="cerrarDetalle()">Cerrar</button>
+              </div>
+            </div>
+
+          </section>
+        </div>
 
       </section>
     </div>
