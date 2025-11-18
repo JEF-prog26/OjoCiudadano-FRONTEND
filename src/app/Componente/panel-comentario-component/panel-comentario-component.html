@@ -1,1 +1,186 @@
-<p>panel-comentario-component works!</p>
+<div class="page-wrapper">
+
+  <header class="top-bar">
+
+    <button class="back-button" (click)="goBack()">
+
+      &lt; Volver a la página anterior
+
+    </button>
+
+  </header>
+
+
+
+  <div class="panel-wrapper">
+
+    <div class="panel-card">
+
+
+
+      <!-- 🔹 CABECERA CON TÍTULO, BOTÓN Y BUSCADOR -->
+
+      <div class="panel-header">
+
+        <h2 class="panel-title">Panel de Gestión de Comentarios</h2>
+
+
+
+        <div class="header-actions">
+
+          <button class="action-btn action-primary" (click)="onRegistrarClick()">
+
+            Registrar Comentario
+
+          </button>
+
+
+
+          <div class="search-box">
+
+            <input
+
+              type="number"
+
+              class="search-input"
+
+              placeholder="Buscar por ID..."
+
+              [(ngModel)]="searchId"
+
+            />
+
+            <button class="search-btn" (click)="buscarPorId()">Buscar</button>
+
+            <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- 🔹 CONTENIDO PRINCIPAL -->
+
+      <section class="panel-main">
+        <ng-container *ngIf="!showForm; else formularioRegistro">
+
+          <div class="dashboard-grid">
+
+            <section class="chat-section">
+              <div class="chat-header">
+                <h3>Comentarios en vivo</h3>
+                <span class="badge-count">{{ comentariosFiltrados.length }}</span>
+              </div>
+
+              <div class="chat-feed">
+                <div class="chat-bubble" *ngFor="let d of comentariosFiltrados">
+                  <div class="avatar-placeholder">{{ d.descripcion.charAt(0).toUpperCase() }}</div>
+                  <div class="bubble-content">
+                    <div class="bubble-meta">
+                      <span class="bubble-id">#{{ d.id }}</span>
+                      <span class="bubble-date">{{ d.fechaComentario }}</span>
+                    </div>
+                    <p class="bubble-text">{{ d.descripcion }}</p>
+                    <span class="bubble-status" [ngClass]="estadoClass(d.estado)">{{ d.estado }}</span>
+                  </div>
+                </div>
+                <div *ngIf="comentariosFiltrados.length === 0" class="empty-chat">
+                  No hay comentarios para mostrar.
+                </div>
+              </div>
+
+              <div class="chat-input-area">
+                <input
+                  type="text"
+                  class="chat-input"
+                  placeholder="Escribe un comentario aquí..."
+                  [(ngModel)]="nuevoComentarioTexto"
+                  (keyup.enter)="registrarRapido()"
+                >
+                <button class="send-btn" (click)="registrarRapido()">➤</button>
+              </div>
+            </section>
+
+            <section class="admin-section">
+              <div class="admin-header">
+                <h3>Base de Datos</h3>
+              </div>
+
+              <div class="table-card">
+                <div class="table-header">
+                  <span>ID</span>
+                  <span>Descripción</span>
+                  <span>Fecha</span>
+                  <span>Estado</span>
+                  <span>Acciones</span>
+                </div>
+
+                <div class="table-body">
+                  <div class="table-row" *ngFor="let d of comentariosFiltrados">
+                    <span>{{ d.id }}</span>
+                    <span [title]="d.descripcion">{{ d.descripcion }}</span>
+                    <span>{{ d.fechaComentario }}</span>
+                    <span>{{ d.estado }}</span>
+                    <span class="cell-actions">
+                      <button class="icon-btn view" (click)="verDetalle(d)">👁</button>
+                      <button class="icon-btn edit" (click)="editarComentario(d)">✏️</button>
+                      <button class="icon-btn delete" (click)="eliminarComentario(d)">🗑</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </div> </ng-container>
+
+        <ng-template #formularioRegistro>
+          <div class="form-card">
+            <h3>{{ editingId ? 'Editar Comentario' : 'Registrar nuevo Comentario' }}</h3>
+
+            <div class="form-row">
+              <label class="form-label">ID</label>
+              <input
+                class="form-input"
+                type="text"
+                [value]="editingId ? comentarioForm.id : 'Autogenerado'"
+                readonly
+                disabled
+              />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Descripción</label>
+              <textarea
+                class="form-input"
+                rows="3"
+                [(ngModel)]="comentarioForm.descripcion">
+              </textarea>
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Estado</label>
+              <input class="form-input" type="text" [(ngModel)]="comentarioForm.estado" />
+            </div>
+
+            <div class="form-actions">
+              <button class="form-btn-secondary" (click)="cancelarForm()">Cancelar</button>
+              <button class="form-btn-primary" (click)="guardarComentario()">
+                {{ editingId ? 'Guardar cambios' : 'Registrar' }}
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </section>
+
+    </div>
+
+  </div>
+
+
+
+  <footer class="bottom-bar"></footer>
+
+</div>
