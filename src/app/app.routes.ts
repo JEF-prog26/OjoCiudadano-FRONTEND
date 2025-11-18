@@ -7,6 +7,8 @@ import { PanelEvidenciaComponent } from './Componente/panel-evidencia-component/
 import { PanelNotificacionComponent } from './Componente/panel-notificacion-component/panel-notificacion-component';
 import {PanelDenunciaComponent} from './Componente/panel-denuncia-component/panel-denuncia-component';
 import {PanelComentarioComponent} from './Componente/panel-comentario-component/panel-comentario-component';
+import {PanelSeguimientoObraComponent} from './Componente/panel-seguimiento-obra-component/panel-seguimiento-obra-component';
+
 
 
 export const routes: Routes = [
@@ -17,6 +19,8 @@ export const routes: Routes = [
   { path: 'comentarios', component: PanelComentarioComponent },
   { path: 'evidencias', component: PanelEvidenciaComponent },
   { path: 'notificaciones', component: PanelNotificacionComponent },
+  { path: 'seguimientoobra', component: PanelSeguimientoObraComponent },
+
 
   { path: 'panel-denuncias', component: PanelDenunciaComponent },
 
