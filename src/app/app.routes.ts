@@ -10,7 +10,7 @@ import {PanelComentarioComponent} from './Componente/panel-comentario-component/
 
 
 export const routes: Routes = [
-  { path: '', component: PanelComentarioComponent, pathMatch: 'full' },
+  { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'sobre-nosotros', component: SobreNosotrosComponent },
   { path: 'que-es', component: QueEsComponent },
   { path: 'login', component: LoginComponent },
