@@ -1,20 +1,24 @@
-/* panel-comentario-component.css - CÓDIGO FINAL VERSIÓN LIMPIA */
-
+/* panel-denuncia-component.css */
 * {
   box-sizing: border-box;
   font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
   sans-serif;
 }
-
-/* === GENERAL Y WRAPPER === */
+/* FONDO GENERAL */
 .page-wrapper {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: repeating-linear-gradient(60deg, #7a7a7a 0 1px, #666 1px 24px);
+  background:
+    repeating-linear-gradient(
+      60deg,
+      #7a7a7a 0 1px,
+      #666 1px 24px
+    );
   border-top: 14px solid #e40000;
   border-bottom: 14px solid #e40000;
 }
+/* BARRA SUPERIOR */
 .top-bar {
   display: flex;
   justify-content: flex-end;
@@ -29,6 +33,7 @@
   font-size: 0.9rem;
   cursor: pointer;
 }
+/* CONTENEDOR CENTRAL */
 .panel-wrapper {
   flex: 1;
   display: flex;
@@ -38,215 +43,211 @@
 }
 .panel-card {
   width: 90%;
-  max-width: 1200px; /* Ancho final elegido */
+  max-width: 1000px;
   min-height: 420px;
   background-color: #ffffff;
   border-radius: 28px;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
   padding: 24px 32px 32px;
 }
-.panel-title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-.action-primary {
-  background-color: #0046b8;
-}
-
-/* === HEADER Y CONTROLES === */
+/* TÍTULO + BUSCADOR */
 .panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.search-box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.search-input {
-  min-width: 150px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid #ccc;
-  font-size: 0.85rem;
-}
-.search-btn, .search-btn-secondary {
-  border-radius: 999px;
-  border: none;
-  padding: 6px 14px;
-  font-size: 0.8rem;
+.panel-title {
+  margin: 0;
+  font-size: 1.5rem;
   font-weight: 600;
-  cursor: pointer;
 }
-.search-btn {
-  background-color: #0046b8;
-  color: #fff;
+/* DISTRIBUCIÓN INTERNA */
+.panel-content {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  column-gap: 28px;
+  margin-top: 10px;
 }
-.search-btn-secondary {
-  background-color: #e0e0e0;
-  color: #333;
+@media (max-width: 800px) {
+  .panel-content {
+    grid-template-columns: 1fr;
+    row-gap: 24px;
+  }
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+/* SIDEBAR BOTONES */
+.sidebar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
 }
 .action-btn {
   border: none;
   border-radius: 999px;
-  padding: 10px 16px;
+  padding: 12px 16px;
+  text-align: left;
   font-size: 0.9rem;
   font-weight: 600;
   background-color: #0046b8;
   color: #ffffff;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
 }
-
-/* === DASHBOARD GRID LAYOUT === */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr; /* Chat (40%) | Tabla (60%) */
-  gap: 24px;
-  height: 550px;
-  margin-top: 16px;
+.action-primary {
+  background-color: #0046b8;
 }
-
-/* === CHAT SECTION (IZQUIERDA) === */
-.chat-section {
-  background-color: #f4f6f8;
-  border-radius: 16px;
-  border: 1px solid #e0e0e0;
+/* CONTENIDO PRINCIPAL */
+.panel-main {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 14px;
+  margin-top: 4px;
 }
-.chat-header {
-  padding: 16px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  display: flex; justify-content: space-between; align-items: center;
-}
-.chat-header h3 { margin: 0; font-size: 1rem; font-weight: 700; color: #333; }
-.badge-count { background: #0046b8; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; }
-.chat-feed {
-  flex: 1;
-  padding: 16px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background-image: radial-gradient(#cfcfcf 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-.chat-bubble {
-  display: flex;
-  gap: 10px;
-}
-.avatar-placeholder {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white; border-radius: 50%;
-  display: grid; place-items: center;
-  font-weight: bold; flex-shrink: 0;
-}
-.bubble-content {
-  background: white;
-  padding: 10px 14px;
-  border-radius: 0 12px 12px 12px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  max-width: 90%;
-}
-.chat-input-area {
-  padding: 12px;
-  background: white;
-  border-top: 1px solid #ddd;
-  display: flex;
-  gap: 8px;
-}
-.chat-input {
-  flex: 1;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  padding: 8px 14px;
-  outline: none;
-}
-.send-btn {
-  background: #0046b8; color: white; border: none;
-  border-radius: 20px; padding: 0 16px; cursor: pointer;
-  font-weight: bold;
-}
-.bubble-text { margin: 0; font-size: 0.9rem; line-height: 1.4; color: #333; }
-
-/* === ADMIN SECTION (DERECHA) === */
-.admin-section {
-  display: flex; flex-direction: column;
-  background: white;
-}
-.admin-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 10px;
-}
-
-/* === TABLA Y GRID DEFINITIVO === */
+/* TARJETA DE TABLA */
 .table-card {
   position: relative;
+  margin-top: 8px;
   background-color: #cfcfcf;
   border-radius: 8px;
   padding: 0;
   overflow: hidden;
-  height: 100%;
+  height: 230px;
   display: flex;
   flex-direction: column;
   overflow-x: auto;
-  min-width: 0; /* CRÍTICO para no romper el Grid padre */
+  min-width: 800px;
   width: 100%;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-
-.table-header,
-.table-row {
-  display: grid;
-  /* La definición compacta para la columna 1.5fr del dashboard */
-  grid-template-columns: 50px 1fr 100px 90px 110px;
-  align-items: center;
-  padding: 10px;
-  gap: 8px;
-}
+/* CABECERA NEGRA */
 .table-header {
+  display: grid;
+  grid-template-columns: 70px 1.2fr 2fr 1.4fr 1fr 110px;
   background-color: #000000;
   color: #ffffff;
   font-size: 0.8rem;
-  font-weight: bold;
+  padding: 6px 14px;
+  column-gap: 8px;
   border-bottom: 2px solid #eee;
 }
-/* Truncamiento de la Descripción */
+.table-header,
+.table-row {
+  display: grid;
+  /* AQUI ESTÁ LA MAGIA: */
+  /* ID (corto) | Descripción (Flexible) | Fecha (Medio) | Estado (Medio) | Acciones (Fijo) */
+  grid-template-columns: 60px 2fr 150px 120px 140px;
+  align-items: center; /* Centra verticalmente el contenido */
+  padding: 15px 20px; /* Espaciado interno (Relleno) para que se vea "GRANDE" */
+  gap: 15px; /* Espacio entre columnas */
+}
+/* Apuntamos específicamente a la 2da columna (Descripción) de cada fila */
 .table-row span:nth-child(2) {
+  /* 1. Obliga al texto a quedarse en una sola línea */
   white-space: nowrap;
+  /* 2. Oculta lo que se desborde del contenedor */
   overflow: hidden;
+  /* 3. Agrega los puntos suspensivos (...) al final */
   text-overflow: ellipsis;
+  /* 4. CRÍTICO: Asegura que respete el ancho del Grid */
   display: block;
-  min-width: 0;
 }
 .table-body {
   flex: 1;
   padding: 4px 12px 18px;
   display: block;
+  flex-direction: column;
+  gap: 6px;
   overflow-x: hidden;
   overflow-y: auto;
   max-height: 400px;
 }
 .table-row {
+  display: grid;
+  grid-template-columns: 70px 1.2fr 2fr 1.4fr 1fr 110px;
+  column-gap: 8px;
+  height: 40px;
   border-bottom: 1px solid #eee;
   transition: background-color 0.2s;
 }
-
-/* === FORMULARIOS Y UTILIDADES === */
+.table-row:hover {
+  background-color: #f1f5f9; /* Efecto hover para que se sienta interactivo */
+}
+.table-row span {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 1px;
+}
+/* Personalización de la barra de desplazamiento (Solo WebKit: Chrome, Edge, Safari) */
+/* Ancho de la barra */
+.table-body::-webkit-scrollbar,
+.table-card::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+/* El riel (fondo) de la barra */
+.table-body::-webkit-scrollbar-track,
+.table-card::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+/* La barra en sí (el pulgar) */
+.table-body::-webkit-scrollbar-thumb,
+.table-card::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+/* Hover sobre la barra */
+.table-body::-webkit-scrollbar-thumb:hover,
+.table-card::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+/* ACCIONES POR FILA */
+.cell-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: transparent;
+}
+.icon-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.icon-btn.edit {
+  background-color: #ffffff;
+}
+.icon-btn.delete {
+  background-color: #e40000;
+  color: #fff;
+}
+/* SCROLLBARS DECORATIVOS */
+.scrollbar-horizontal {
+  position: absolute;
+  left: 18%;
+  right: 10%;
+  bottom: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background-color: #b3b3b3;
+}
+.scrollbar-vertical {
+  position: absolute;
+  top: 16%;
+  right: 12px;
+  width: 10px;
+  bottom: 26px;
+  border-radius: 999px;
+  background-color: #b3b3b3;
+}
+/* FORMULARIO */
 .form-card {
   margin-top: 8px;
   background-color: #f3f3f3;
@@ -282,80 +283,676 @@
   justify-content: flex-end;
   gap: 8px;
 }
-/* ... etc. [Estilos de botones, etc. que ya estaban en su código anterior] */
-
-
-/* === RESPONSIVE DESIGN === */
-@media screen and (max-width: 1100px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr; /* Apilar columnas en tabletas */
-    height: auto;
-    gap: 30px;
-  }
-  .chat-section {
-    height: 400px;
-  }
-  .table-card {
-    height: 400px;
+.form-btn-primary,
+.form-btn-secondary {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.form-btn-primary {
+  background-color: #0046b8;
+  color: #fff;
+}
+.form-btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+/* BUSCADOR */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.search-input {
+  min-width: 150px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+}
+.search-btn,
+.search-btn-secondary {
+  border-radius: 999px;
+  border: none;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.search-btn {
+  background-color: #0046b8;
+  color: #fff;
+}
+.search-btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+/* BARRA INFERIOR ROJA */
+.bottom-bar {
+  height: 0;
+}
+/* === NUEVO BLOQUE DE CABECERA === */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+/* Elimina el sidebar antiguo */
+.sidebar-actions {
+  display: none;
+}
+/* Ajuste general para el layout */
+.panel-main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* === BOTÓN PRINCIPAL === */
+.action-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: #0046b8;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+.action-btn:hover {
+  background-color: #003b9d;
+}
+.action-primary {
+  background-color: #0046b8;
+}
+/* === BUSCADOR === */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.search-input {
+  min-width: 150px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+}
+.search-btn,
+.search-btn-secondary {
+  border-radius: 999px;
+  border: none;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.search-btn {
+  background-color: #0046b8;
+  color: #fff;
+}
+.search-btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+/* ===== MODAL centrado ===== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: grid;
+  place-items: center;
+  z-index: 1200;
+  animation: fadeIn 120ms ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+.modal-card {
+  width: min(720px, 92vw);
+  max-height: 88vh;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: popIn 140ms ease-out;
+}
+@keyframes popIn {
+  from { transform: translateY(8px) scale(.98); opacity: .9; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+}
+.modal-title { margin: 0; font-size: 1.1rem; font-weight: 700; }
+.modal-subtitle { margin: 2px 0 0; color: #555; }
+.modal-close {
+  border: none; background: #f2f2f2; border-radius: 8px; padding: 6px 10px;
+  cursor: pointer; font-weight: 700;
+}
+.modal-body {
+  padding: 14px 16px;
+  overflow: auto;
+  flex: 1;
+}
+.modal-footer {
+  padding: 10px 16px;
+  display: flex; justify-content: flex-end; gap: 8px;
+  border-top: 1px solid #eee;
+}
+.btn-primary {
+  background: #0046b8; color: #fff; border: none; border-radius: 10px;
+  padding: 8px 14px; cursor: pointer; font-weight: 600;
+}
+.btn-neutral {
+  background: #eaeaea; color: #333; border: none; border-radius: 10px;
+  padding: 8px 14px; cursor: pointer; font-weight: 600;
+}
+/* Reutiliza tus estilos existentes de detail-grid, badges y timeline */
+@media (max-width: 640px) {
+  .detail-grid { grid-template-columns: 1fr; }
+}
+/* ==== MODAL ESTÉTICO ==== */
+.modal-card {
+  width: min(680px, 92vw);
+  max-height: 88vh;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: popIn 140ms ease-out;
+  border-top: 6px solid #0046b8;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding: 16px 22px;
+  background-color: #f7f9fc;
+  border-bottom: 1px solid #e2e2e2;
+}
+.modal-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #222;
+}
+.modal-subtitle {
+  margin: 4px 0 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+.modal-close {
+  border: none;
+  background: #eaeaea;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: #333;
+  transition: all 0.2s ease;
+}
+.modal-close:hover {
+  background: #d1d1d1;
+}
+.modal-body {
+  padding: 18px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+/* === SECCIONES DE INFORMACIÓN === */
+.detail-section {
+  margin-bottom: 22px;
+}
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0046b8;
+  margin-bottom: 8px;
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+}
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.detail-item.full {
+  grid-column: span 2;
+}
+.detail-item label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 4px;
+}
+.detail-item p {
+  margin: 0;
+  color: #222;
+  font-size: 0.9rem;
+}
+/* === FOOTER === */
+.modal-footer {
+  padding: 12px 22px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #e2e2e2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.btn-primary {
+  background-color: #0046b8;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover {
+  background-color: #003b9d;
+}
+.btn-neutral {
+  background-color: #eaeaea;
+  color: #333;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-neutral:hover {
+  background-color: #dcdcdc;
+}
+/* Ajustes responsivos */
+@media (max-width: 600px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
   }
 }
-
+/* Backdrop con blur */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(10,10,10,.45);
+  backdrop-filter: blur(2px);
+  display: grid; place-items: center;
+  z-index: 1200; animation: fadeIn 120ms ease-out;
+}
+/* Card con borde acento y sombra suave */
+.modal-card.pretty {
+  width: min(720px, 94vw);
+  max-height: 88vh;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 60px rgba(0,0,0,.35);
+  display: flex; flex-direction: column;
+  border-top: 6px solid #0a49c2;
+  animation: popIn 140ms ease-out;
+}
+/* Header con gradiente sutil */
+.modal-header.pretty {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 18px;
+  background: linear-gradient(180deg,#f7faff, #f2f5fb);
+  border-bottom: 1px solid #e6ebf3;
+}
+.title-wrap { display: flex; align-items: center; gap: 10px; }
+.title-icon {
+  width: 36px; height: 36px; display: grid; place-items: center;
+  background: #e9f0ff; color: #0a49c2; border-radius: 10px;
+  font-size: 18px;
+}
+.modal-title { margin: 0; font-size: 1.2rem; font-weight: 700; color: #1c1c1c; }
+.modal-subtitle { margin: 2px 0 0; color: #596171; font-size: .95rem; }
+.modal-close {
+  border: none; background: #edf0f4; color: #344054;
+  border-radius: 10px; padding: 6px 10px; cursor: pointer; font-weight: 700;
+}
+.modal-close:hover { background: #dfe4ec; }
+.modal-body { padding: 16px 18px; overflow: auto; }
+/* Tarjeta interior */
+.card {
+  background: #fff;
+  border: 1px solid #eef1f6;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+}
+.section-title { margin: 0 0 10px; color: #0a49c2; font-weight: 700; font-size: 1rem; }
+/* Grid de metadatos */
+.meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+.meta { display: flex; flex-direction: column; gap: 6px; }
+.meta.full { grid-column: 1 / -1; }
+.meta-label { font-size: .78rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: .02em; }
+.meta-value { font-size: .95rem; color: #111827; }
+.meta-value.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.meta-value.multiline {
+  line-height: 1.35; background: #f8fafc; border: 1px solid #eef1f6;
+  padding: 10px 12px; border-radius: 10px;
+}
+/* Separador */
+.divider {
+  height: 1px; margin: 14px 0; background: linear-gradient(90deg, transparent, #e8edf6, transparent);
+}
+/* Badges de estado (ya usas estas clases; añadimos tamaños) */
+.badge.big { padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: .85rem; }
+.estado-revision { background: #fff6d6; color: #805a00; }
+.estado-investigacion { background: #e8f0ff; color: #0a49c2; }
+.estado-derivada { background: #efe6ff; color: #5a31b0; }
+.estado-resuelta { background: #dcf7e4; color: #116a2e; }
+.estado-observada { background: #ffe3e3; color: #a61111; }
+.estado-archivada { background: #f0f0f0; color: #4b5563; }
+/* Timeline refinada */
+.timeline.pretty { list-style: none; margin: 0; padding: 4px 0 0 0; position: relative; }
+.timeline.pretty .timeline-item { display: grid; grid-template-columns: 22px 1fr; gap: 10px; margin-bottom: 12px; }
+.timeline.pretty .timeline-dot {
+  width: 12px; height: 12px; border-radius: 999px; align-self: .45rem;
+  box-shadow: 0 0 0 4px #eef3ff;
+}
+.timeline.pretty .timeline-content { padding-bottom: 6px; border-bottom: 1px dashed #e9eef7; }
+.timeline.pretty .timeline-item:last-child .timeline-content { border-bottom: none; }
+.timeline-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 4px; }
+.timeline-state { font-size: .8rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+.timeline-date { font-size: .8rem; color: #6b7280; }
+.timeline-desc { margin: 0; color: #1f2937; line-height: 1.35; }
+/* Pintamos el dot con el mismo color del estado */
+.timeline-dot.estado-revision { background: #facc15; }
+.timeline-dot.estado-investigacion { background: #3b82f6; }
+.timeline-dot.estado-derivada { background: #8b5cf6; }
+.timeline-dot.estado-resuelta { background: #22c55e; }
+.timeline-dot.estado-observada { background: #ef4444; }
+.timeline-dot.estado-archivada { background: #9ca3af; }
+/* Footer alineado */
+.modal-footer.pretty {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; background: #fafbfc; border-top: 1px solid #e6ebf3;
+}
+.footer-left .hint { color: #6b7280; font-size: .85rem; }
+.footer-actions { display: flex; gap: 8px; }
+/* Botones */
+.btn-primary {
+  background-color: #0a49c2; color: #fff; border: none; border-radius: 10px;
+  padding: 8px 16px; font-weight: 700; cursor: pointer; transition: transform .06s ease, background .2s ease;
+}
+.btn-primary:hover { background: #083a9a; transform: translateY(-1px); }
+.btn-neutral {
+  background: #e9edf5; color: #111827; border: none; border-radius: 10px; padding: 8px 14px; font-weight: 600; cursor: pointer;
+}
+.btn-neutral:hover { background: #dfe5f0; }
+/* Responsive */
+@media (max-width: 640px) {
+  .meta-grid { grid-template-columns: 1fr; }
+  .modal-title { font-size: 1.05rem; }
+}
+/* ======================================================= */
+/* 📱 RESPONSIVE DESIGN (EL SALVAVIDAS MÓVIL) */
+/* ======================================================= */
 @media screen and (max-width: 850px) {
-  .panel-card {
-    width: 100%;
-    padding: 16px;
-    max-width: 100%;
+  /* 1. AJUSTES DEL WRAPPER GENERAL */
+  .panel-wrapper {
+    padding: 10px; /* Menos relleno para aprovechar espacio */
   }
+  .panel-card {
+    width: 100%; /* Usar todo el ancho */
+    padding: 16px; /* Menos padding interno */
+    border-radius: 16px; /* Bordes menos redondeados */
+  }
+  /* 2. REORGANIZACIÓN DE LA CABECERA (STACKING) */
   .panel-header {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: column; /* Poner elementos uno debajo del otro */
+    align-items: stretch; /* Que ocupen todo el ancho */
     gap: 16px;
   }
   .header-actions {
-    flex-direction: column;
+    flex-direction: column; /* Botón Registrar arriba, Buscador abajo */
     width: 100%;
     gap: 12px;
   }
+  /* Botón de Registrar: Ancho completo para dedos gordos */
   .header-actions .action-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+  /* 3. BUSCADOR RESPONSIVE */
+  .search-box {
+    display: grid;
+    grid-template-columns: 1fr auto auto; /* Input flexible, botones fijos */
+    width: 100%;
+    gap: 8px;
+  }
+  .search-input {
+    min-width: 0; /* Evita que el input rompa el grid */
+    width: 100%;
+  }
+  /* En pantallas MUY pequeñas (celulares), apilar botones del buscador */
+  @media (max-width: 480px) {
+    .search-box {
+      grid-template-columns: 1fr; /* Todo en una columna */
+    }
+    .search-btn, .search-btn-secondary {
+      width: 100%;
+    }
+  }
+  /* 4. TABLA CON SCROLL HORIZONTAL (Limpia) */
+  .table-card {
+    /* Aseguramos que la tarjeta no fuerce el ancho de la pantalla */
+    width: 100%;
+    /* Mantenemos el min-width interno para que la grilla no se rompa */
+    /* El scroll aparecerá automáticamente gracias a su overflow-x: auto existente */
+  }
+  /* Opcional: Reducir el tamaño de fuente en la tabla móvil */
+  .table-header, .table-row {
+    padding: 12px 10px;
+    gap: 10px;
+  }
+  .table-header {
+    font-size: 0.75rem;
+  }
+  .table-row span {
+    font-size: 0.85rem;
+  }
+  /* 5. MODAL RESPONSIVE */
+  .modal-card.pretty {
+    width: 95vw; /* Ocupar casi toda la pantalla */
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+  .detail-grid {
+    grid-template-columns: 1fr; /* Una sola columna de detalles */
+  }
+  .detail-item.full {
+    grid-column: auto; /* Resetear columnas */
+  }
+  .modal-footer.pretty {
+    flex-direction: column-reverse; /* Botones verticales */
+    gap: 12px;
+  }
+  .footer-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .footer-actions button {
     width: 100%;
   }
 }
 
-@media screen and (max-width: 480px) {
+/* === DASHBOARD LAYOUT (2 COLUMNAS) === */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr; /* Chat (40%) | Tabla (60%) */
+  gap: 24px;
+  height: 550px; /* Altura fija para permitir scroll interno independiente */
+  margin-top: 16px;
+}
 
-  /* 1. Buscador en Columna */
-  /* En vez de input al lado de botones, ponemos todo uno bajo otro */
-  .search-box {
-    display: grid;
+/* === SECCIÓN IZQUIERDA: CHAT === */
+.chat-section {
+  background-color: #f4f6f8;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Para contener los hijos */
+}
+
+.chat-header {
+  padding: 16px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.chat-header h3 { margin: 0; font-size: 1rem; font-weight: 700; color: #333; }
+.badge-count { background: #0046b8; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; }
+
+/* El feed escroleable */
+.chat-feed {
+  flex: 1; /* Ocupa el espacio restante */
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-image: radial-gradient(#cfcfcf 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Burbujas de Chat */
+.chat-bubble {
+  display: flex;
+  gap: 10px;
+  animation: fadeIn 0.3s ease;
+}
+
+.avatar-placeholder {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white; border-radius: 50%;
+  display: grid; place-items: center;
+  font-weight: bold; flex-shrink: 0;
+}
+
+.bubble-content {
+  background: white;
+  padding: 10px 14px;
+  border-radius: 0 12px 12px 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  max-width: 90%;
+}
+
+.bubble-meta {
+  display: flex; justify-content: space-between; gap: 10px;
+  font-size: 0.7rem; color: #888; margin-bottom: 4px;
+}
+
+.bubble-text { margin: 0; font-size: 0.9rem; line-height: 1.4; color: #333; }
+
+.bubble-status {
+  display: inline-block; font-size: 0.65rem; padding: 2px 6px;
+  border-radius: 4px; margin-top: 6px; background: #eee;
+}
+
+/* ÁREA DE INPUT (Fixed at bottom of chat) */
+.chat-input-area {
+  padding: 12px;
+  background: white;
+  border-top: 1px solid #ddd;
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 8px 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+.chat-input:focus { border-color: #0046b8; }
+
+.send-btn {
+  background: #0046b8; color: white; border: none;
+  border-radius: 20px; padding: 0 16px; cursor: pointer;
+  font-weight: bold;
+}
+.send-btn:hover { background: #003690; }
+
+
+/* === SECCIÓN DERECHA: ADMIN === */
+.admin-section {
+  display: flex; flex-direction: column;
+  background: white;
+}
+
+.admin-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.admin-header h3 { margin: 0; font-size: 1.1rem; color: #555; }
+.compact { padding: 6px 12px; font-size: 0.8rem; }
+
+/* Ajuste a la tabla para que entre en la columna */
+.table-card {
+  min-width: 0; /* Permite que se encoja en Grid */
+  height: 100%; /* Llenar altura */
+  width: 100%;
+}
+/* Modificamos el Grid de la tabla para que sea más compacto */
+.table-header, .table-row {
+  grid-template-columns: 50px 1fr 100px 90px 110px; /* Ajuste de anchos */
+  padding: 10px;
+  gap: 8px;
+}
+
+
+/* === RESPONSIVE (Importante para su "Top Global") === */
+@media (max-width: 1100px) {
+  .dashboard-grid {
     grid-template-columns: 1fr; /* Una sola columna */
-    gap: 10px;
+    height: auto; /* Altura automática */
   }
 
-  /* 2. Input Gigante */
-  .search-input {
-    width: 100%;
-    height: 40px; /* Más alto para dedos */
+  .chat-section {
+    height: 400px; /* Altura fija para el chat en móvil */
   }
 
-  /* 3. Botones de Ancho Completo */
-  /* Para que sean fáciles de tocar con el pulgar */
-  .search-btn,
-  .search-btn-secondary {
-    width: 100%;
-    padding: 10px;
-    justify-content: center;
-  }
-
-  /* 4. Ajuste del título del modal en móviles */
-  .modal-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .modal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+  .table-card {
+    height: 400px;
   }
 }

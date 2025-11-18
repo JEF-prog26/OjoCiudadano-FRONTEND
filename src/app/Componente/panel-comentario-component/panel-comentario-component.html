@@ -1,70 +1,33 @@
 <div class="page-wrapper">
-
   <header class="top-bar">
-
     <button class="back-button" (click)="goBack()">
-
       &lt; Volver a la página anterior
-
     </button>
-
   </header>
-
-
-
   <div class="panel-wrapper">
-
     <div class="panel-card">
-
-
-
       <!-- 🔹 CABECERA CON TÍTULO, BOTÓN Y BUSCADOR -->
-
       <div class="panel-header">
-
         <h2 class="panel-title">Panel de Gestión de Comentarios</h2>
-
-
-
         <div class="header-actions">
-
           <button class="action-btn action-primary" (click)="onRegistrarClick()">
-
             Registrar Comentario
-
           </button>
-
-
-
           <div class="search-box">
-
             <input
-
               type="number"
-
               class="search-input"
-
               placeholder="Buscar por ID..."
-
               [(ngModel)]="searchId"
-
             />
-
             <button class="search-btn" (click)="buscarPorId()">Buscar</button>
-
             <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
-
           </div>
-
         </div>
-
       </div>
-
-
-
       <!-- 🔹 CONTENIDO PRINCIPAL -->
-
       <section class="panel-main">
+
         <ng-container *ngIf="!showForm; else formularioRegistro">
 
           <div class="dashboard-grid">
@@ -134,7 +97,8 @@
               </div>
             </section>
 
-          </div> </ng-container>
+          </div>
+        </ng-container>
 
         <ng-template #formularioRegistro>
           <div class="form-card">
@@ -173,14 +137,9 @@
             </div>
           </div>
         </ng-template>
+
       </section>
-
     </div>
-
   </div>
-
-
-
   <footer class="bottom-bar"></footer>
-
 </div>
