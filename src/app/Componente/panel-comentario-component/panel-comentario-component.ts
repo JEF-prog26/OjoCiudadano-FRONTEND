@@ -140,7 +140,6 @@ export class PanelComentarioComponent {
 
   }
 
-
   registrarRapido(): void {
     if (!this.nuevoComentarioTexto.trim()) return;
 
