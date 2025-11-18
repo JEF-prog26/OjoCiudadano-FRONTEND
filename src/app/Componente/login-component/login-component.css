@@ -48,21 +48,19 @@
 
 .Btn-IniciarSesion{
   justify-content: end;
+
 }
 
 .Btn-IconoMensaje {
   background-color: #0033A0;
   height: 54px;
-  width: 390px;
+  width: 330px;
   border: none;
   border-radius: 75.5px;
   justify-content: center;
   align-items: center;
   display: flex;
   cursor: pointer;
-}
-
-.Btn-IconoMensaje span{
   font-family: "Lexend", sans-serif;
   font-size: 22px;
   color: #ffffff;
@@ -74,6 +72,7 @@
   font-size: 30px;
   color: #ffffff;
   font-style: normal;
+  margin-right: 10px;
 }
 
 .topheader-container img {

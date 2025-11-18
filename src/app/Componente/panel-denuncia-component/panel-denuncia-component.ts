@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {HeaderPanelComponent} from '../header-panel-component/header-panel-component';
 
 /* ===== Estados tipados ===== */
 type Estado =
@@ -42,7 +43,7 @@ interface Denuncia {
 @Component({
   selector: 'app-panel-denuncia-component',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HeaderPanelComponent],
   templateUrl: './panel-denuncia-component.html',
   styleUrl: './panel-denuncia-component.css',
 })

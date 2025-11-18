@@ -1,5 +1,3 @@
-/* panel-denuncia-component.css */
-
 * {
   box-sizing: border-box;
   font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -15,13 +13,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /*background:
-    repeating-linear-gradient(
-      60deg,
-      #7a7a7a 0 1px,
-      #666 1px 24px
-    );*/
-  border-top: 14px solid #e40000;
   border-bottom: 14px solid #e40000;
 }
 
@@ -41,13 +32,19 @@
 }
 
 .back-button {
-  padding: 8px 18px;
-  border-radius: 999px;
+  background-color: #0033A0;
+  height: 54px;
+  width: 390px;
   border: none;
-  background-color: #0046b8;
-  color: #fff;
-  font-size: 0.9rem;
+  border-radius: 75.5px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
   cursor: pointer;
+  font-family: "Lexend", sans-serif;
+  font-size: 22px;
+  color: #ffffff;
+  margin-left: 20px;
 }
 
 /* CONTENEDOR CENTRAL */
