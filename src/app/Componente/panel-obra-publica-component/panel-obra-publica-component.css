@@ -20,7 +20,6 @@
   display: flex;
   flex-direction: column;
   /* Borde de acento superior e inferior */
-  border-top: 14px solid #e40000;
   border-bottom: 14px solid #e40000;
 }
 
@@ -53,7 +52,7 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Alineado arriba */
+  align-items: center; /* Alineado arriba */
   padding: 24px 16px 32px;
 }
 

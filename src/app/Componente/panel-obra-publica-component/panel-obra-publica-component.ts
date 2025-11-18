@@ -1,7 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common'; // Necesario para ngIf y ngFor
-import { FormsModule } from '@angular/forms'; // Necesario para ngModel
+import { FormsModule } from '@angular/forms';
+import {HeaderPanelComponent} from '../header-panel-component/header-panel-component'; // Necesario para ngModel
 
 /* ===== Interfaces ===== */
 interface ObraPublica {
@@ -18,7 +19,7 @@ interface ObraPublica {
 @Component({
   selector: 'app-panel-obra-publica-component',
   standalone: true, // Asegura que se usa como componente standalone
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HeaderPanelComponent],
   templateUrl: './panel-obra-publica-component.html',
   styleUrl: './panel-obra-publica-component.css',
 })

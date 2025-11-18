@@ -11,6 +11,7 @@ import {PanelUsuarioComponent} from './Componente/panel-usuario-component/panel-
 import {HeaderComponent} from './Componente/header-component/header-component';
 import {HeaderPanelComponent} from './Componente/header-panel-component/header-panel-component';
 import {DashboardComponent} from './Componente/dashboard-component/dashboard-component';
+import {PanelObraPublicaComponent} from './Componente/panel-obra-publica-component/panel-obra-publica-component';
 
 
 export const routes: Routes = [
@@ -26,6 +27,7 @@ export const routes: Routes = [
   { path: 'registrar-usuario', component: RegistrarUsuarioComponent },
   { path: 'panel-denuncias', component: PanelDenunciaComponent },
   { path: 'panel-usuarios', component: PanelUsuarioComponent },
+  { path: 'panel-obra-publica', component: PanelObraPublicaComponent },
 
   { path:'**', component:HomeComponent}
 ];
