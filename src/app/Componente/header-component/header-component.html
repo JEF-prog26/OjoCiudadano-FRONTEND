@@ -1,28 +1,42 @@
-<!--______________________________________ENCABEZADO______________________________________-->
-<nav class="topheader" xmlns:src="http://www.w3.org/1999/xhtml">
-  <div class="topheader-container">
-    <a routerLink="/"><img width="200" height="57" src="assets/images/Logotipo-OjoCiudadanoBlanco.png" alt="Logotipo OjoCiudadano"></a>
+<mat-toolbar class="topheader">
 
-    <nav class="Contenedor-menu-horizontal" id="Contenedor-menu-horizontal">
-      <ul class="menu-horizontal" id="menu-horizontal">
-        <li>
-          <a class="opcion" id="opcion">Conócenos ▼</a>
-          <ul class="menu-vertical">
-            <li><a routerLink="/sobre-nosotros">Sobre nosotros</a></li>
-            <li><a routerLink="/que-es">¿Qué es OjoCiudadano?</a></li>
-          </ul>
-        </li>
+  <div class="topheader-container">
+
+    <a routerLink="/" style="cursor: pointer;">
+      <img width="200" height="57" src="assets/images/Logotipo-OjoCiudadanoBlanco.png" alt="Logotipo OjoCiudadano">
+    </a>
+
+    <nav class="Contenedor-menu-horizontal">
+      <ul class="menu-horizontal">
+        <button mat-button [matMenuTriggerFor]="menuConocenos" class="opcion" style="color: white; font-size: 22px; font-family: 'Lexend', sans-serif;">
+          Conócenos ▼
+        </button>
+
+        <mat-menu #menuConocenos="matMenu">
+          <button mat-menu-item [routerLink]="'/sobre-nosotros'">Sobre nosotros</button>
+          <button mat-menu-item [routerLink]="'/que-es'">¿Qué es OjoCiudadano?</button>
+        </mat-menu>
         <li><a href="https://elpais.com/noticias/obras-publicas/" target="_blank">Noticias</a></li>
         <li><a href="#Menj-Formu">Ayuda</a></li>
       </ul>
     </nav>
 
     <div class="Btn-IniciarSesion">
-      <a routerLink="/login"><button class="Btn-IconoMensaje">
-        <span>Iniciar Sesión</span>
-        <i class="far fa-user"></i>
-      </button>
-      </a>
+
+      @if (!estaLogueado()) {
+        <button mat-raised-button class="Btn-IconoMensaje" [routerLink]="'/login'">
+          <span>Iniciar Sesión</span>
+          <mat-icon fontIcon="person"></mat-icon> </button>
+      }
+
+      @if (estaLogueado()) {
+        <button mat-raised-button color="warn" class="Btn-IconoMensaje logout-style" (click)="cerrarSesion()">
+          <span>Cerrar Sesión</span>
+          <mat-icon fontIcon="logout"></mat-icon>
+        </button>
+      }
+
     </div>
+
   </div>
-</nav>
+</mat-toolbar>

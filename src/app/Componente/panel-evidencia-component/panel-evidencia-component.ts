@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {CommonModule} from '@angular/common';
+
 import {RouterLink} from '@angular/router';
 import {HeaderPanelComponent} from '../header-panel-component/header-panel-component';
 
@@ -7,7 +7,7 @@ import {HeaderPanelComponent} from '../header-panel-component/header-panel-compo
   selector: 'app-panel-evidencia', // Nombre del selector
   templateUrl: './panel-evidencia-component.html',
   styleUrls: ['./panel-evidencia-component.css'],
-  imports: [CommonModule, RouterLink,HeaderPanelComponent]
+  imports: [RouterLink, HeaderPanelComponent]
 })
 export class PanelEvidenciaComponent implements OnInit { // <-- CLASE EXPORTADA Y CONFIGURADA
 

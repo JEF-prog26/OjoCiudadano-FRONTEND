@@ -1,132 +1,139 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel de Notificaciones - Ojo Ciudadano UPC</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Notificaciones - Ojo Ciudadano UPC</title>
+  </head>
+  <body>
 
-<div class="header-banner">
-  <a href="#" class="back-link">Volver a la página anterior</a>
-</div>
-<div class="notification-panel-container">
-  <div class="notification-panel">
-    <h1>Panel de Notificaciones</h1>
+    <div class="header-banner">
+      <a href="#" class="back-link">Volver a la página anterior</a>
+    </div>
+    <div class="notification-panel-container">
+      <div class="notification-panel">
+        <h1>Panel de Notificaciones</h1>
 
-    <div class="controls-layout">
-      <div class="button-column">
-        <button class="action-button primary-button" (click)="onRegistrarClick()">Registrar Notificacion</button>
-        <button class="action-button primary-button" (click)="onListarClick()">Listar Notificacion</button>
-        <button class="action-button primary-button" (click)="onBuscarClick()">Buscar Notificacion por ID</button>
-        <button class="action-button primary-button" (click)="onActualizarClick()">Actualizar datos Notificacion</button>
-        <button class="action-button primary-button" (click)="onEliminarClick()">Eliminar Notificacion</button>
-      </div>
-
-      <div class="data-area">
-
-        <div class="input-row" *ngIf="showInputs">
-          <input type="text" class="data-input" placeholder="Nombre" id="input-nombre">
-          <input type="text" class="data-input" placeholder="Documento UR" id="input-documentour">
-          <input type="date" class="data-input" placeholder="Fecha de envío" id="input-fechaenvio">
-        </div>
-
-        <div class="id-notificacion-input-group" *ngIf="showId">
-          <input
-            type="text"
-            class="id-input"
-            placeholder="IdNotificacion"
-            id="input-id"
-            [(ngModel)]="notificacionIdInput">
-        </div>
-
-        <div class="notification-table-container" *ngIf="showTable">
-          <div class="table-header">
-            <div style="flex: 0.5;">ID</div>
-            <div>Nombre</div>
-            <div>Documento UR</div>
-            <div>Fecha de envío</div>
-            <div style="flex: 0.5;">Acciones</div>
+        <div class="controls-layout">
+          <div class="button-column">
+            <button class="action-button primary-button" (click)="onRegistrarClick()">Registrar Notificacion</button>
+            <button class="action-button primary-button" (click)="onListarClick()">Listar Notificacion</button>
+            <button class="action-button primary-button" (click)="onBuscarClick()">Buscar Notificacion por ID</button>
+            <button class="action-button primary-button" (click)="onActualizarClick()">Actualizar datos Notificacion</button>
+            <button class="action-button primary-button" (click)="onEliminarClick()">Eliminar Notificacion</button>
           </div>
 
-          <div class="table-body" id="table-body">
-            <div class="table-row" *ngFor="let notif of notificacionesData">
-              <div style="flex: 0.5;">{{ notif.id }}</div>
-              <div>{{ notif.nombre }}</div>
-              <div>{{ notif.documentoUr }}</div>
-              <div>{{ notif.fechaEnvio }}</div>
-              <div style="flex: 0.5;">
-                <button (click)="onEditNotificacion(notif.id)" class="action-btn">✏️</button>
-                <button (click)="onDeleteNotificacion(notif.id)" class="action-btn">🗑️</button>
+          <div class="data-area">
+
+            @if (showInputs) {
+              <div class="input-row">
+                <input type="text" class="data-input" placeholder="Nombre" id="input-nombre">
+                <input type="text" class="data-input" placeholder="Documento UR" id="input-documentour">
+                <input type="date" class="data-input" placeholder="Fecha de envío" id="input-fechaenvio">
+              </div>
+            }
+
+            @if (showId) {
+              <div class="id-notificacion-input-group">
+                <input
+                  type="text"
+                  class="id-input"
+                  placeholder="IdNotificacion"
+                  id="input-id"
+                  [(ngModel)]="notificacionIdInput">
+                </div>
+              }
+
+              @if (showTable) {
+                <div class="notification-table-container">
+                  <div class="table-header">
+                    <div style="flex: 0.5;">ID</div>
+                    <div>Nombre</div>
+                    <div>Documento UR</div>
+                    <div>Fecha de envío</div>
+                    <div style="flex: 0.5;">Acciones</div>
+                  </div>
+                  <div class="table-body" id="table-body">
+                    @for (notif of notificacionesData; track notif) {
+                      <div class="table-row">
+                        <div style="flex: 0.5;">{{ notif.id }}</div>
+                        <div>{{ notif.nombre }}</div>
+                        <div>{{ notif.documentoUr }}</div>
+                        <div>{{ notif.fechaEnvio }}</div>
+                        <div style="flex: 0.5;">
+                          <button (click)="onEditNotificacion(notif.id)" class="action-btn">✏️</button>
+                          <button (click)="onDeleteNotificacion(notif.id)" class="action-btn">🗑️</button>
+                        </div>
+                      </div>
+                    }
+                    @if (notificacionesData.length === 0) {
+                      <div class="table-row">
+                        <div style="flex: 4; font-style: italic; text-align: center;">No hay notificaciones para mostrar.</div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>
+
+  <!--<!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Panel de Notificaciones - Ojo Ciudadano UPC</title>
+      <link rel="stylesheet" href="css/notificacion-styles.css">
+    </head>
+    <body>
+
+      <div class="header-banner">
+        <a href="#" class="back-link">Volver a la página anterior</a>
+      </div>
+
+      <div class="notification-panel-container">
+        <div class="notification-panel">
+          <h1>Panel de Notificaciones</h1>
+
+          <div class="controls-layout">
+            <div class="button-column">
+              <button class="action-button primary-button" id="btn-registrar">Registrar Notificacion</button>
+              <button class="action-button primary-button" id="btn-listar">Listar Notificacion</button>
+              <button class="action-button primary-button" id="btn-buscar">Buscar Notificacion por ID</button>
+              <button class="action-button primary-button" id="btn-actualizar">Actualizar datos Notificacion</button>
+              <button class="action-button primary-button" id="btn-eliminar">Eliminar Notificacion</button>
+            </div>
+
+            <div class="data-area">
+              <div class="input-row hidden" id="main-inputs">
+                <input type="text" class="data-input" placeholder="Nombre" id="input-nombre">
+                <input type="text" class="data-input" placeholder="Documento UR" id="input-documentour">
+                <input type="date" class="data-input" placeholder="Fecha de envío" id="input-fechaenvio">
+              </div>
+
+              <div class="id-notificacion-input-group hidden" id="id-input-group">
+                <input type="text" class="id-input" placeholder="IdNotificacion" id="input-id">
+              </div>
+
+              <div class="notification-table-container visible-block" id="notification-table-container">
+                <div class="table-header">
+                  <div style="flex: 0.5;">ID</div>
+                  <div>Nombre</div>
+                  <div>Documento UR</div>
+                  <div>Fecha de envío</div>
+                  <div style="flex: 0.5;">Acciones</div> </div>
+                  <div class="table-body" id="table-body">
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div class="table-row" *ngIf="notificacionesData.length === 0">
-              <div style="flex: 4; font-style: italic; text-align: center;">No hay notificaciones para mostrar.</div>
-            </div>
-
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-</body>
-</html>
 
-<!--<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel de Notificaciones - Ojo Ciudadano UPC</title>
-  <link rel="stylesheet" href="css/notificacion-styles.css">
-</head>
-<body>
-
-<div class="header-banner">
-  <a href="#" class="back-link">Volver a la página anterior</a>
-</div>
-
-<div class="notification-panel-container">
-  <div class="notification-panel">
-    <h1>Panel de Notificaciones</h1>
-
-    <div class="controls-layout">
-      <div class="button-column">
-        <button class="action-button primary-button" id="btn-registrar">Registrar Notificacion</button>
-        <button class="action-button primary-button" id="btn-listar">Listar Notificacion</button>
-        <button class="action-button primary-button" id="btn-buscar">Buscar Notificacion por ID</button>
-        <button class="action-button primary-button" id="btn-actualizar">Actualizar datos Notificacion</button>
-        <button class="action-button primary-button" id="btn-eliminar">Eliminar Notificacion</button>
-      </div>
-
-      <div class="data-area">
-        <div class="input-row hidden" id="main-inputs">
-          <input type="text" class="data-input" placeholder="Nombre" id="input-nombre">
-          <input type="text" class="data-input" placeholder="Documento UR" id="input-documentour">
-          <input type="date" class="data-input" placeholder="Fecha de envío" id="input-fechaenvio">
-        </div>
-
-        <div class="id-notificacion-input-group hidden" id="id-input-group">
-          <input type="text" class="id-input" placeholder="IdNotificacion" id="input-id">
-        </div>
-
-        <div class="notification-table-container visible-block" id="notification-table-container">
-          <div class="table-header">
-            <div style="flex: 0.5;">ID</div>
-            <div>Nombre</div>
-            <div>Documento UR</div>
-            <div>Fecha de envío</div>
-            <div style="flex: 0.5;">Acciones</div> </div>
-          <div class="table-body" id="table-body">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script src="js/notificacion.js" defer></script>
-</body>
-</html>-->
+        <script src="js/notificacion.js" defer></script>
+      </body>
+    </html>-->

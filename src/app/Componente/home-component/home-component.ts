@@ -1,6 +1,6 @@
 // src/app/home-component/home-component.ts
 import { Component, OnInit } from '@angular/core';
-import {CommonModule, NgClass} from '@angular/common';
+import { NgClass } from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {HeaderComponent} from '../header-component/header-component';
 
@@ -8,10 +8,9 @@ import {HeaderComponent} from '../header-component/header-component';
   selector: 'app-home-component',
   templateUrl: './home-component.html',
   imports: [
-    CommonModule,
     RouterLink,
     HeaderComponent
-  ],
+],
   styleUrls: ['./home-component.css']
 })
 export class HomeComponent implements OnInit {

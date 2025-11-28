@@ -13,33 +13,43 @@
       </div>
 
       <div class="data-area">
-        <div class="input-row" *ngIf="showInputs" >
-          <input type="text" placeholder="Nombre" class="data-input">
-          <input type="text" placeholder="Documento URL" class="data-input">
-          <input type="text" placeholder="Tipo" class="data-input">
-        </div>
-        <div class="id-input-group" *ngIf="showId">
-          <input type="text" placeholder="IdEvidencia" class="id-input">
-        </div>
-        <div class="evidence-table-container" *ngIf="showTable">
-          <div class="table-header">
-            <div>ID</div>
-            <div>Nombre</div>
-            <div>Documento UR</div>
-            <div>Tipo</div>
+        @if (showInputs) {
+          <div class="input-row" >
+            <input type="text" placeholder="Nombre" class="data-input">
+            <input type="text" placeholder="Documento URL" class="data-input">
+            <input type="text" placeholder="Tipo" class="data-input">
           </div>
-          <div class="table-body">
-            <div class="table-row" *ngFor="let evidencia of evidenciasData">
-              <div>{{ evidencia.id }}</div>
-              <div>{{ evidencia.nombre }}</div>
-              <div>{{ evidencia.documentoUr }}</div>
-              <div>{{ evidencia.tipo }}</div>
+        }
+        @if (showId) {
+          <div class="id-input-group">
+            <input type="text" placeholder="IdEvidencia" class="id-input">
+          </div>
+        }
+        @if (showTable) {
+          <div class="evidence-table-container">
+            <div class="table-header">
+              <div>ID</div>
+              <div>Nombre</div>
+              <div>Documento UR</div>
+              <div>Tipo</div>
             </div>
-            <div class="table-row" *ngIf="evidenciasData.length === 0">
-              <div style="flex: 4; text-align: center; color: #666;">No hay evidencias para mostrar.</div>
+            <div class="table-body">
+              @for (evidencia of evidenciasData; track evidencia) {
+                <div class="table-row">
+                  <div>{{ evidencia.id }}</div>
+                  <div>{{ evidencia.nombre }}</div>
+                  <div>{{ evidencia.documentoUr }}</div>
+                  <div>{{ evidencia.tipo }}</div>
+                </div>
+              }
+              @if (evidenciasData.length === 0) {
+                <div class="table-row">
+                  <div style="flex: 4; text-align: center; color: #666;">No hay evidencias para mostrar.</div>
+                </div>
+              }
             </div>
           </div>
-        </div>
+        }
       </div>
     </div>
   </div>
