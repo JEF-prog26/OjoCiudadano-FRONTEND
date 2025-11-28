@@ -1,287 +1,270 @@
-.topheader {
-  background-color:#FF0000;
-  width: 100%;     /* Asegura que ocupe todo el ancho */
-  height: 100px;   /* Altura del header */
-  position: fixed; /* Mantiene el header fijo en la parte superior */
-  top: 0; /* Posiciona el header en la parte superior */
-  justify-content:space-around;
-  align-items: center;
-  display: flex;
+/* Variables de color */
+:root {
+  --primary-color: #007bff; /* Azul de Ojo Ciudadano */
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --background-light: #f8f9fa;
+  --card-background: #ffffff;
+  --text-dark: #343a40;
+  --border-color: #dee2e6;
 }
 
-.topheader-container {
-  margin-left: 6.5%;
-  margin-right: 6.5%;
-  width: 100%;
+/* Estilos de la página y contenedor principal */
+.page-wrapper {
+  min-height: 100vh;
+  padding: 30px;
+  background-color: var(--background-light);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.panel-card {
+  background: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 95%; /* Ancho adaptable */
+  max-width: 1200px;
+  padding: 30px;
+}
+
+.panel-header {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  display: flex;
-}
-.Btn-IniciarSesion{
-  justify-content: end;
+  margin-bottom: 25px;
+  flex-wrap: wrap; /* Adaptabilidad */
 }
 
-.Btn-IconoMensaje {
-  background-color: #0033A0;
-  height: 54px;
-  width: 390px;
-  border: none;
-  border-radius: 75.5px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  cursor: pointer;
-}
-.Btn-IconoMensaje span{
-  font-family: "Lexend", sans-serif;
-  font-size: 22px;
-  color: #ffffff;
-  margin-left: 20px;
+.panel-title {
+  color: var(--text-dark);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
 }
 
-.Btn-IconoMensaje i{
-  font-family: "Font Awesome 5 Free";
-  font-size: 30px;
-  color: #ffffff;
-  font-style: normal;
-}
-
-/* Encabezado Rojo Superior */
-.header-banner.top-page-banner{
-  background-color: #ff0000;
-  color: white;
-  padding: 10px 20px;
-  height: 60px; /* Ajuste para el espacio del banner */
-  display: flex;
-  justify-content: flex-end; /* Alinear a la derecha */
-  align-items: center;
-  border-bottom: 5px solid #a00; /* Borde interior rojo oscuro */
-  width: 100%;
-
-  position: fixed; /* O fixed si quieres que se quede quieto al hacer scroll */
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
-
-.back-link {
-  /* Color de fondo: CAMBIADO A AZUL */
-  background-color: #003399;
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  padding: 10px 15px; /* Aumentamos el padding para hacerlo más grande */
-  border: 2px solid white; /* Aumentamos el grosor del borde */
-  border-radius: 8px; /* Redondeamos las esquinas */
-  transition: background-color 0.2s;
-}
-
-.back-link:hover {
-  background-color: #007bff; /* Un efecto de hover al pasar el ratón */
-}
-
-/* Contenedor Principal del Panel */
-  .evidence-panel-container {
-    background: url("../../../assets/images/Imagen-Fondo.png") no-repeat;
-    background-position: center;
-    background-size: cover;
-    width: 100%;
-    min-height: calc(100vh - 100px);
-    /*height: auto;*/
-    margin-top: 0px;
-    justify-content: center; /* Centrar Horizontalmente*/
-    align-items: center; /* Centrar Verticalmente*/
-    /* Padding para separación del header fijo*/
-    display: flex;
-    padding: 40px 20px;
-    flex-grow: 1;
-  }
-
-.evidence-panel {
-  background-color: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  width: 90%;
-  max-width: 1200px;
-  display: flex; /* Añadimos flex para organizar título y controles */
-  flex-direction: column; /* Apilamos verticalmente título y el resto */
-  /**/
-  position: relative;
-  z-index: 2;
-  min-height: 400px;
-  border: 1px solid #ccc;
-}
-
-.evidence-panel h1 {
-  color: #333;
-  margin-top: 0;
-  margin-bottom: 30px; /* Espacio debajo del título */
-}
-
-/* Maquetación de Botones y Área de Datos */
-.controls-layout {
-  display: flex;
-  gap: 40px; /* Espacio entre la columna de botones y el área de datos */
-  align-items: flex-start; /* Alinea los elementos al inicio de su contenedor flex */
-  flex-grow: 1; /* Permite que ocupe el espacio restante */
-  /**/
-  min-width: 700px;
-}
-
-/* Columna de Botones */
-.button-column {
-  display: flex;
-  flex-direction: column;
-  gap: 15px; /* Espacio entre botones */
-  opacity: 1;
-}
-
-.action-button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: left; /* Alineación del texto del botón */
-  width: 220px; /* Ancho fijo para botones, similar al mockup */
-  transition: background-color 0.2s;
-}
-
-.primary-button {
-  background-color: #003399;
-  color: white;
-}
-
-.primary-button:hover {
-  background-color: #007bff;
-}
-
-/* Área de Datos (Inputs y Tabla) */
-.data-area {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0; /* Permite que el contenido se encoja si es necesario */
-}
-
-/* Fila de Inputs (Nombre, Documento UR, Tipo) */
-.input-row {
+/* Estilos de las acciones (Buscar, Botones) */
+.header-actions {
   display: flex;
   gap: 10px;
-  /* margin-bottom: 10px; */ /* Quitamos este margen, el gap del data-area lo maneja */
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px; /* Espacio para móvil */
 }
 
-.data-input {
+.search-input {
   padding: 10px 15px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  flex-grow: 1;
-  font-size: 14px;
-  background-color: #e0e0e0; /* Gris claro para simular el estado de entrada */
-  color: #666;
-  height: 20px; /* Ajustar altura para que se vea más estilizado */
+  font-size: 1rem;
+  width: 250px;
+  transition: border-color 0.3s;
 }
 
-/* Grupo de Input ID (IdEvidencia) */
-.id-input-group {
-  display: flex;
-  width: 150px; /* Ancho del input */
-  align-self: flex-start; /* Se alinea a la izquierda dentro de data-area */
-  margin-left: 20px; /* Pequeño margen para separarlo del borde izquierdo del data-area */
+.search-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
 }
 
-.id-input {
-  padding: 10px 15px;
-  border: 1px solid #ccc;
+/* Estilos Generales de Botones */
+.action-btn {
+  padding: 10px 20px;
+  border: none;
   border-radius: 8px;
-  font-size: 14px;
-  background-color: #e0e0e0; /* Gris claro */
-  width: 100%;
-  color: #666;
-  height: 20px; /* Ajustar altura */
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.1s;
 }
 
-/* Contenedor de la Tabla */
-.evidence-table-container {
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  overflow: hidden; /* Para el borde redondeado */
-  max-height: 400px; /* Altura máxima para la barra vertical */
-  overflow-y: auto; /* Para la barra de desplazamiento vertical */
-  overflow-x: auto; /* Para la barra de desplazamiento horizontal */
-  flex-grow: 1; /* Permite que la tabla ocupe el espacio restante */
-  margin-top: 10px; /* Espacio entre los inputs y la tabla */
+.action-btn:active {
+  transform: scale(0.98);
 }
 
-/* Encabezado de la Tabla */
-.table-header {
-  display: flex;
-  background-color: #999;
+.action-btn-primary {
+  background-color: var(--primary-color);
   color: white;
-  font-weight: bold;
-  padding: 15px 10px;
-  /* Los bordes redondeados se manejarán por el overflow hidden del contenedor */
-  position: sticky; /* Fija el encabezado al hacer scroll */
-  top: 0;
-  min-width: 500px; /* Asegura un ancho mínimo para que aparezca la barra horizontal */
 }
 
-.table-header > div {
-  flex: 1;
-  text-align: center;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 5px 0; /* Padding vertical para centrar el texto */
-}
-.table-header > div:last-child {
-  border-right: none;
+.action-btn-primary:hover {
+  background-color: #0056b3;
 }
 
-/* Cuerpo de la Tabla (Filas) */
-.table-body {
-  /* Simula el color gris de las celdas, pero las filas individuales tendrán su propio color */
+.action-btn-secondary {
+  background-color: var(--secondary-color);
+  color: white;
 }
 
-.table-row {
+.action-btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.action-btn-add {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.action-btn-add:hover {
+  background-color: #1e7e34;
+}
+
+/* Estilos de la Tabla */
+.table-container {
+  overflow-x: auto; /* Permite desplazamiento horizontal en móviles */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate; /* Necesario para border-radius en el contenedor */
+  border-spacing: 0;
+  min-width: 700px; /* Asegura un ancho mínimo para escritorio */
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  background-color: var(--text-dark); /* Fondo oscuro para el encabezado */
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+/* Estilos para el enlace del documento */
+.document-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.document-link:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para las etiquetas de Tipo (Tipo de Documento) */
+.type-image {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.type-pdf {
+  color: #a94442;
+  background-color: #f2dede;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.type-video {
+  color: #3c763d;
+  background-color: #dff0d8;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Estilos de los Botones de Acción Individuales */
+.action-buttons {
   display: flex;
-  padding: 10px;
-  border-bottom: 1px solid #b0b0b0;
-  background-color: #ccc; /* Fondo de fila por defecto */
-  min-width: 500px; /* Asegura que las filas tengan el mismo ancho mínimo que el encabezado */
+  gap: 5px;
 }
 
-.table-row:nth-child(even) {
-  background-color: #f7f7f7;/*#ddd;*/ /* Un gris ligeramente diferente para las filas pares (opcional) */
+.action-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
 }
 
-.table-row > div {
-  flex: 1;
-  text-align: center;
-  color: #333;
-  padding: 5px 0; /* Padding vertical para centrar el texto */
+.action-icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.5;
 }
 
-/* Estilos para el scrollbar */
-.evidence-table-container::-webkit-scrollbar {
-  width: 10px; /* Ancho de la barra vertical */
-  height: 10px; /* Alto de la barra horizontal */
+.view-btn {
+  background-color: #17a2b8; /* Info Blue */
+  color: white;
 }
 
-.evidence-table-container::-webkit-scrollbar-track {
-  background: #ccc;
-  border-radius: 10px; /* Bordes redondeados para el track */
+.view-btn:hover {
+  background-color: #138496;
 }
 
-.evidence-table-container::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px; /* Bordes redondeados para el thumb */
+.edit-btn {
+  background-color: #ffc107; /* Warning Yellow */
+  color: #343a40;
 }
 
-.evidence-table-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
+.edit-btn:hover {
+  background-color: #e0a800;
 }
 
+.delete-btn {
+  background-color: var(--danger-color); /* Danger Red */
+  color: white;
+}
 
+.delete-btn:hover {
+  background-color: #c82333;
+}
 
+/* Adaptación a dispositivos móviles */
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding: 15px;
+  }
+
+  .panel-card {
+    padding: 20px;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .action-btn {
+    flex-grow: 1; /* Los botones se extienden en móvil */
+    margin-top: 5px;
+  }
+
+  /* Ocultar algunas columnas en móvil para mejorar la lectura */
+  th:nth-child(4), td:nth-child(4) { /* Columna Tipo */
+    display: none;
+  }
+}

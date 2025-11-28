@@ -1,16 +1,18 @@
-<app-header-panel-component/>
-<div class="evidence-panel-container">
-  <div class="evidence-panel">
-    <h1>Panel de Evidencias</h1>
+<!-- Contenedor principal y fondo -->
+<div class="page-wrapper">
+  <div class="panel-card">
+    <div class="panel-header">
+      <h2 class="panel-title">Panel de Gestión de Evidencias</h2>
 
-    <div class="controls-layout">
-      <div class="button-column">
-        <button class="action-button primary-button" (click)="onRegisterClick()">Registrar Evidencia</button>
-        <button class="action-button primary-button" (click)="onListClick()">Listar Evidencia</button>
-        <button class="action-button primary-button" (click)="onSearchClick()">Buscar Evidencia por ID</button>
-        <button class="action-button primary-button" (click)="onUpdateClick()">Actualizar datos evidencia</button>
-        <button class="action-button primary-button" (click)="onDeleteClick()">Eliminar evidencia</button>
+      <!-- Zona de búsqueda y acciones -->
+      <div class="header-actions">
+        <input type="text" class="search-input" placeholder="Buscar por Nombre o ID..." #searchInput>
+        <!-- Asumiendo que onBuscar existe en .ts para evitar errores -->
+        <button class="action-btn action-btn-primary" (click)="onBuscar(searchInput.value)">Buscar</button>
+        <button class="action-btn action-btn-secondary" (click)="searchInput.value = ''; onBuscar('')">Limpiar</button>
+        <button class="action-btn action-btn-add">Subir Evidencia</button>
       </div>
+    </div>
 
       <div class="data-area">
         @if (showInputs) {
