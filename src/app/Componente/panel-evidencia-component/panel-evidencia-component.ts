@@ -1,13 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-// Define la interfaz para la estructura de una Evidencia
-interface Evidencia {
-  id: number;
-  nombre: string;
-  documentoUrl: string;
-  tipo: string;
-  fechaEnvio: string;
-}
+import {RouterLink} from '@angular/router';
+import {HeaderPanelComponent} from '../header-panel-component/header-panel-component';
 
 @Component({
   selector: 'app-panel-evidencia',
@@ -17,6 +11,7 @@ interface Evidencia {
   // aunque para un componente simple en Angular 17+ puede no ser necesario si no se usa allí.
   templateUrl: './panel-evidencia-component.html',
   styleUrls: ['./panel-evidencia-component.css'],
+  imports: [RouterLink, HeaderPanelComponent]
 })
 export class PanelEvidenciaComponent implements OnInit {
   // Datos de ejemplo para la tabla

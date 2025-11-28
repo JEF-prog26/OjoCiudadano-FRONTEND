@@ -14,52 +14,45 @@
       </div>
     </div>
 
-    <!-- Tabla de Evidencias -->
-    <div class="table-container">
-      <table>
-        <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Documento UR</th>
-          <th>Tipo</th>
-          <th>Fecha de envío</th>
-          <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Iteración sobre los datos de evidencias -->
-        <tr *ngFor="let evidencia of evidencias">
-          <td>{{ evidencia.id }}</td>
-          <td>{{ evidencia.nombre }}</td>
-          <td>
-            <!-- Muestra el nombre del archivo y lo hace clicable -->
-            <a [href]="evidencia.documentoUrl" target="_blank" class="document-link">Ver Documento</a>
-          </td>
-          <td><span [ngClass]="{'type-image': evidencia.tipo === 'Imagen', 'type-pdf': evidencia.tipo === 'PDF', 'type-video': evidencia.tipo === 'Video'}">{{ evidencia.tipo }}</span></td>
-          <td>{{ evidencia.fechaEnvio }}</td>
-          <td>
-            <div class="action-buttons">
-              <!-- Botón de Visualizar (ojo) -->
-              <button class="action-icon-btn view-btn" title="Visualizar" (click)="onVisualizar(evidencia)">
-                <!-- Icono de ojo (Eye icon) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-              <!-- Botón de Editar (lápiz) -->
-              <button class="action-icon-btn edit-btn" title="Editar" (click)="onEditar(evidencia)">
-                <!-- Icono de lápiz (Pencil icon) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 0 0 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-              </button>
-              <!-- Botón de Eliminar (basura) -->
-              <button class="action-icon-btn delete-btn" title="Eliminar" (click)="onEliminar(evidencia)">
-                <!-- Icono de basurero (Trash icon) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
-              </button>
+      <div class="data-area">
+        @if (showInputs) {
+          <div class="input-row" >
+            <input type="text" placeholder="Nombre" class="data-input">
+            <input type="text" placeholder="Documento URL" class="data-input">
+            <input type="text" placeholder="Tipo" class="data-input">
+          </div>
+        }
+        @if (showId) {
+          <div class="id-input-group">
+            <input type="text" placeholder="IdEvidencia" class="id-input">
+          </div>
+        }
+        @if (showTable) {
+          <div class="evidence-table-container">
+            <div class="table-header">
+              <div>ID</div>
+              <div>Nombre</div>
+              <div>Documento UR</div>
+              <div>Tipo</div>
             </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+            <div class="table-body">
+              @for (evidencia of evidenciasData; track evidencia) {
+                <div class="table-row">
+                  <div>{{ evidencia.id }}</div>
+                  <div>{{ evidencia.nombre }}</div>
+                  <div>{{ evidencia.documentoUr }}</div>
+                  <div>{{ evidencia.tipo }}</div>
+                </div>
+              }
+              @if (evidenciasData.length === 0) {
+                <div class="table-row">
+                  <div style="flex: 4; text-align: center; color: #666;">No hay evidencias para mostrar.</div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
     </div>
   </div>
 </div>

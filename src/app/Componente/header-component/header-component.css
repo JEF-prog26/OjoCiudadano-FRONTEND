@@ -1,35 +1,41 @@
+/* Sobrescribimos el mat-toolbar para que use TUS estilos */
 .topheader {
-  background-color:#FF0000;
-  width: 100%;     /* Asegura que ocupe todo el ancho */
-  height: 100px;   /* Altura del header */
-  position: fixed; /* Mantiene el header fijo en la parte superior */
-  top: 0; /* Posiciona el header en la parte superior */
-  justify-content: space-around;
-  align-items: center;
-  display: flex;
+  background-color: #FF0000 !important; /* El !important asegura que pise el color de Material */
+  width: 100%;
+  height: 100px !important; /* Forzamos tu altura */
+  position: fixed;
+  top: 0;
+  z-index: 1000; /* Para que quede siempre encima del contenido */
+  padding: 0; /* Material a veces agrega padding, lo quitamos para usar el tuyo */
+  /* Quitamos display: flex aquí porque mat-toolbar ya es flex por defecto */
 }
 
+/* El contenedor interno ajusta los márgenes */
 .topheader-container {
   margin-left: 6.5%;
   margin-right: 6.5%;
   width: 100%;
-  justify-content: space-around;
-  align-items: center;
+  height: 100%; /* Para que ocupe el alto del toolbar */
   display: flex;
+  justify-content: space-between; /* Mejor control del espacio */
+  align-items: center;
 }
 
+/* ----- TUS ESTILOS ORIGINALES DEL MENÚ (Se mantienen casi igual) ----- */
 .menu-horizontal {
   list-style: none;
-  width: 100%;
-  font-size: 18px;
-  margin: 0%;
-  justify-content: end;
   display: flex;
+  align-items: center; /* Alineación vertical */
+  margin: 0;
+  padding: 0;
+  gap: 20px; /* Espacio entre items */
 }
 
 .Contenedor-menu-horizontal {
-  width: 100%;
   display: flex;
+  justify-content: flex-end; /* Empuja el menú a la derecha */
+  flex-grow: 1; /* Ocupa el espacio disponible */
+  margin-right: 20px;
 }
 
 .menu-horizontal li a {
@@ -37,96 +43,75 @@
   border-radius: 10px;
   padding: 10px 20px;
   text-decoration: none;
-  list-style: none;
   font-family: "Lexend", sans-serif;
   font-size: 22px;
   color: #ffffff;
   cursor: pointer;
+  background: none; /* Quitamos background por si acaso */
+  border: none;
 }
 
+/* Dropdown (Menú Vertical) - Sin cambios */
 .menu-vertical {
   position: absolute;
+  margin-top: 0;
+  padding-top: 20px;
+  /* El resto de tus estilos: */
+  background-clip: content-box;
   background-color: #cacaca;
   box-shadow: 0 10px 10px #00000080;
   border: none;
   border-radius: 10px;
-  padding: 0px;
-  margin-top: 0px;
   list-style: none;
   display: none;
-}
-
-.menu-horizontal .menu-vertical {
-  margin-left: 20px;
-}
-
-.menu-horizontal .menu-vertical li a {
-  font-family: "Lexend", sans-serif;
-  font-size: 22px;
-  color: #000000;
-  text-decoration: none;
+  z-index: 1000; /* Asegura que flote encima de todo */
 }
 
 .menu-horizontal li:hover .menu-vertical {
   display: block;
 }
 
+.menu-vertical li a {
+  color: #000000;
+  font-size: 18px; /* Un poco más pequeño para el submenú */
+}
+
 .menu-vertical li a:hover {
   background-color: #0033A0;
-  color:#ffffff;
+  color: #ffffff;
 }
 
-.Btn-IniciarSesion{
-  margin-left: 80px;
-  justify-content: end;
+/* ----- BOTÓN DE SESIÓN (Adaptado a Material Button) ----- */
+.Btn-IniciarSesion {
+  /* margin-left eliminado, usamos flexbox para espaciar */
 }
 
+/* Ajustamos tu clase para que funcione sobre un mat-raised-button */
 .Btn-IconoMensaje {
-  background-color: #0033A0;
+  background-color: #0033A0 !important; /* Color azul original */
   height: 54px;
   width: 255px;
-  border: none;
-  border-radius: 75.5px;
+  border-radius: 75.5px !important; /* Redondeado fuerte */
+  display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
-  cursor: pointer;
-}
-
-.Btn-IconoMensaje span{
   font-family: "Lexend", sans-serif;
   font-size: 22px;
-  color: #ffffff;
-  margin-right: 20px;
-  margin-left: 15px;
+  color: #ffffff !important;
 }
 
-.Btn-IconoMensaje i{
-  font-family: "Font Awesome 5 Free";
-  font-size: 30px;
-  font-weight: 2;
-  color: #ffffff;
-  color: none;
-  font-style: none;
+/* Estilo específico para cerrar sesión (opcional, por si quieres otro color) */
+.logout-style {
+  background-color: #d32f2f !important; /* Rojo oscuro para salir */
 }
 
-.Btn-IniciarSesion  li a {
-  display: block;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-family: "Lexend", sans-serif;
-  font-size: 22px;
-  color: #000000;
-  padding-right: 95px;
-  text-decoration: none;
-  list-style: none;
-  cursor: pointer;
+.Btn-IconoMensaje span {
+  margin-right: 10px;
 }
 
-.Btn-IniciarSesion:hover .menu-vertical {
-  display: block;
-}
-
-.topheader-container img {
-  cursor: pointer;
+/* Corrección para iconos de Material dentro del botón */
+.Btn-IconoMensaje mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
 }

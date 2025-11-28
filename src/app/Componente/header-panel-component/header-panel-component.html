@@ -1,24 +1,34 @@
-<!--______________________________________ENCABEZADO______________________________________-->
-<nav class="topheader" xmlns:src="http://www.w3.org/1999/xhtml">
-  <div class="topheader-container">
-    <a routerLink="/dashboard"><img width="200" height="57" src="assets/images/Logotipo-OjoCiudadanoBlanco.png" alt="Logotipo OjoCiudadano"></a>
+<mat-toolbar class="topheader">
 
-    <nav class="Contenedor-menu-horizontal" id="Contenedor-menu-horizontal">
-      <ul class="menu-horizontal" id="menu-horizontal">
-        <li><a routerLink="/evidencias" class="opcion">Evidencias</a></li>
-        <li><a routerLink="/notificaciones" class="opcion">Notificaciones</a></li>
-        <li><a routerLink="/panel-denuncias">Denuncias</a></li>
-        <li><a routerLink="/panel-usuarios">Usuarios</a></li>
-        <li><a routerLink="/panel-obra-publica">ObraPublica</a></li>
+  <div class="topheader-container">
+    <a routerLink="/dashboard" style="cursor: pointer;">
+      <img width="200" height="57" src="assets/images/Logotipo-OjoCiudadanoBlanco.png" alt="Logotipo OjoCiudadano">
+    </a>
+
+    <nav class="Contenedor-menu-horizontal">
+      <ul class="menu-horizontal">
+
+        <li><a routerLink="/evidencias" class="opcion" routerLinkActive="active-link">Evidencias</a></li>
+        <li><a routerLink="/notificaciones" class="opcion" routerLinkActive="active-link">Notificaciones</a></li>
+        <li><a routerLink="/panel-denuncias" class="opcion" routerLinkActive="active-link">Denuncias</a></li>
+
+        @if (esAdminODev) {
+          <li>
+            <a routerLink="/panel-usuarios" class="opcion" routerLinkActive="active-link">Usuarios</a>
+          </li>
+        }
+
+        <li><a routerLink="/panel-obra-publica" class="opcion" routerLinkActive="active-link">Obra Pública</a></li>
+
       </ul>
     </nav>
 
     <div class="Btn-CerrarSesion">
-      <a routerLink="/"><button class="Btn-IconoMensaje">
+      <button mat-raised-button class="Btn-IconoMensaje logout-style" (click)="cerrarSesion()">
         <span>Cerrar Sesión</span>
-        <i class="far fa-user"></i>
+        <mat-icon fontIcon="logout"></mat-icon>
       </button>
-      </a>
     </div>
+
   </div>
-</nav>
+</mat-toolbar>

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {CommonModule} from '@angular/common';
+
 import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-panel-notificacion',
   imports: [
-    CommonModule,
     FormsModule
-  ],
+],
   templateUrl: './panel-notificacion-component.html',
   styleUrls: ['./panel-notificacion-component.css']
 })

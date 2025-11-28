@@ -1,0 +1,31 @@
+.construccion-container {
+  display: flex;
+  flex-direction: column; /* Apila imagen y texto verticalmente */
+  align-items: center;    /* Centra horizontalmente */
+  justify-content: center; /* Centra verticalmente */
+  min-height: 80vh;       /* Ocupa el 80% de la altura de la pantalla */
+  text-align: center;
+  background-color: #f9f9f9; /* Un fondo gris muy suave */
+  padding: 20px;
+}
+
+.img-construccion {
+  width: 400px; /* Tamaño controlado de la imagen */
+  max-width: 100%; /* Para que no se salga en celulares */
+  margin-bottom: 20px;
+  border-radius: 20px; /* Bordes redondeados opcionales */
+  /* box-shadow: 0 4px 10px rgba(0,0,0,0.1); Efecto de sombra opcional */
+}
+
+h2 {
+  font-family: 'Lexend', sans-serif; /* Tu fuente personalizada */
+  color: #0033A0; /* El azul de OjoCiudadano */
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+p {
+  font-family: sans-serif;
+  color: #666;
+  font-size: 1.2rem;
+}
