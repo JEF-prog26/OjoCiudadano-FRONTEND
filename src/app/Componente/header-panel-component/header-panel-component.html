@@ -8,17 +8,15 @@
     <nav class="Contenedor-menu-horizontal">
       <ul class="menu-horizontal">
 
-        <li><a routerLink="/evidencias" class="opcion" routerLinkActive="active-link">Evidencias</a></li>
-        <li><a routerLink="/notificaciones" class="opcion" routerLinkActive="active-link">Notificaciones</a></li>
-        <li><a routerLink="/panel-denuncias" class="opcion" routerLinkActive="active-link">Denuncias</a></li>
-
         @if (esAdminODev) {
-          <li>
-            <a routerLink="/panel-usuarios" class="opcion" routerLinkActive="active-link">Usuarios</a>
-          </li>
-        }
+          <li><a routerLink="/panel-usuarios" class="opcion" routerLinkActive="active-link">Usuarios</a></li>
+          <li><a routerLink="/panel-notificaciones" class="opcion" routerLinkActive="active-link">Notificaciones</a></li>
 
-        <li><a routerLink="/panel-obra-publica" class="opcion" routerLinkActive="active-link">Obra Pública</a></li>
+
+          <li><a routerLink="/evidencias" class="opcion" routerLinkActive="active-link">Evidencias</a></li>
+          <li><a routerLink="/panel-denuncias" class="opcion" routerLinkActive="active-link">Denuncias</a></li>
+          <li><a routerLink="/panel-obra-publica" class="opcion" routerLinkActive="active-link">Obra Pública</a></li>
+        }
 
       </ul>
     </nav>

@@ -23,8 +23,8 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent},
 
   // Paneles de gestión
-  { path: 'evidencias', component: PanelEvidenciaComponent },
-  { path: 'notificaciones', component: PanelNotificacionComponent },
+  { path: 'panel-evidencias', component: PanelEvidenciaComponent },
+  { path: 'panel-notificaciones', component: PanelNotificacionComponent },
   { path: 'panel-denuncias', component: PanelDenunciaComponent },
   { path: 'panel-usuarios', component: PanelUsuarioComponent },
   { path: 'panel-obra-publica', component: PanelObraPublicaComponent },
@@ -32,8 +32,10 @@ export const routes: Routes = [
   // --- GESTIÓN DE USUARIOS (CREAR Y EDITAR) ---
   // Ruta para CREAR (Sin ID)
   { path: 'registrar-usuario', component: RegistrarUsuarioComponent },
-  // Ruta para EDITAR (Con ID) <- ¡ESTA ES LA QUE FALTABA!
+  // Ruta para EDITAR (Con ID)
   { path: 'registrar-usuario/:id', component: RegistrarUsuarioComponent },
+  { path: 'registrar-notificacion', component: PanelNotificacionComponent },
+  { path: 'registrar-notificacion/:id', component: PanelNotificacionComponent },
 
   // (Opcional) Ruta comodín: Si escriben cualquier cosa rara, van al home
   { path:'**', component:HomeComponent}
