@@ -4,157 +4,61 @@ import {RouterLink} from '@angular/router';
 import {HeaderPanelComponent} from '../header-panel-component/header-panel-component';
 
 @Component({
-  selector: 'app-panel-evidencia', // Nombre del selector
+  selector: 'app-panel-evidencia',
+  // Es importante usar 'standalone: true' en Angular moderno
+  standalone: true,
+  // Incluye CommonModule para directivas como *ngFor si tu entorno lo requiere,
+  // aunque para un componente simple en Angular 17+ puede no ser necesario si no se usa allí.
   templateUrl: './panel-evidencia-component.html',
   styleUrls: ['./panel-evidencia-component.css'],
   imports: [RouterLink, HeaderPanelComponent]
 })
-export class PanelEvidenciaComponent implements OnInit { // <-- CLASE EXPORTADA Y CONFIGURADA
-
-  // --- Propiedades para controlar la visibilidad ---
-  // Estas propiedades controlarán las clases CSS en el HTML usando [ngClass] o *ngIf
-  showInputs: boolean = false;
-  showId: boolean = false;
-  showTable: boolean = true; // Mostrar la tabla por defecto
-
-  // AÑADIR: Propiedad para simular los datos de la tabla
-  evidenciasData: any[] = [
-    { id: 1, nombre: 'Foto Incidente', documentoUr: 'ABC1234', tipo: 'Imagen' },
-    { id: 2, nombre: 'Video Prueba', documentoUr: 'DEF5678', tipo: 'Video' },
-    { id: 3, nombre: 'Audio Testigo', documentoUr: 'GHI9012', tipo: 'Audio' },
+export class PanelEvidenciaComponent implements OnInit {
+  // Datos de ejemplo para la tabla
+  evidencias: Evidencia[] = [
+    { id: 1, nombre: 'Foto Fachada Obra', documentoUrl: 'url/a/doc1', tipo: 'Imagen', fechaEnvio: '2025-11-15' },
+    { id: 2, nombre: 'PDF Permisos Municipales', documentoUrl: 'url/a/doc2', tipo: 'PDF', fechaEnvio: '2025-11-16' },
+    { id: 3, nombre: 'Video Avance Construcción', documentoUrl: 'url/a/doc3', tipo: 'Video', fechaEnvio: '2025-11-17' },
   ];
 
   constructor() { }
 
   ngOnInit(): void {
-    // Aquí iría la lógica de inicialización si fuera necesaria.
-    // El estado inicial ya se maneja en la declaración de las propiedades de arriba.
-    console.log('Componente de Panel de Evidencias inicializado.');
+    // Aquí puedes cargar los datos iniciales de las evidencias desde el servicio
+    console.log('Panel de Evidencias inicializado.');
   }
 
-  // --- Funciones de Utilidad (Adaptadas de tu JS) ---
+  // Métodos de acción
 
   /**
-   * Actualiza las propiedades de visibilidad basadas en el modo.
+   * Muestra la evidencia o abre el enlace del documento.
+   * @param evidencia - El objeto de la evidencia a visualizar.
    */
-  updateVisibility(showInputs: boolean, showId: boolean, showTable: boolean): void {
-    this.showInputs = showInputs;
-    this.showId = showId;
-    this.showTable = showTable;
+  onVisualizar(evidencia: Evidencia): void {
+    console.log(`Visualizar evidencia ID: ${evidencia.id} - URL: ${evidencia.documentoUrl}`);
+    // Implementar lógica para abrir el documento en una nueva pestaña o un modal
+    window.open(evidencia.documentoUrl, '_blank');
   }
-
-  // --- Manejadores de Eventos de los Botones (Adaptados de tu JS) ---
-
-  onRegisterClick(): void {
-    console.log('Modo: Registrar Evidencia');
-    this.updateVisibility(true, false, false);
-  }
-
-  onListClick(): void {
-    console.log('Modo: Listar Evidencia');
-    this.updateVisibility(false, false, true);
-    // Aquí iría la llamada a la API para cargar la lista de evidencias
-    // this.loadAllEvidences();
-  }
-
-  onSearchClick(): void {
-    console.log('Modo: Buscar Evidencia por ID');
-    this.updateVisibility(false, true, true);
-  }
-
-  onUpdateClick(): void {
-    console.log('Modo: Actualizar datos evidencia');
-    this.updateVisibility(true, true, true);
-  }
-
-  onDeleteClick(): void {
-    console.log('Modo: Eliminar evidencia');
-    this.updateVisibility(false, true, true);
-  }
-
-  // Si tenías más métodos como loadAllEvidences, deben ser métodos de clase aquí.
-}
-
-
-/*document.addEventListener('DOMContentLoaded', () => {
-  // --- Referencias a los elementos del DOM ---
-  const registerBtn = document.getElementById('register-btn');
-  const listBtn = document.getElementById('list-btn');
-  const searchBtn = document.getElementById('search-btn');
-  const updateBtn = document.getElementById('update-btn');
-  const deleteBtn = document.getElementById('delete-btn');
-
-  const inputRow = document.querySelector('.input-row') as HTMLElement;
-  const idInputGroup = document.querySelector('.id-input-group') as HTMLElement;
-  const evidenceTableContainer = document.querySelector('.evidence-table-container') as HTMLElement;
-
-  // --- Funciones de Utilidad ---
 
   /**
-   * Oculta o muestra elementos usando clases CSS.
-   * @param showInputs Muestra los inputs de Nombre, Documento, Tipo.
-   * @param showId Muestra el input de IdEvidencia.
-   * @param showTable Muestra la tabla.
+   * Inicia el proceso de edición de la evidencia.
+   * @param evidencia - El objeto de la evidencia a editar.
+   */
+  onEditar(evidencia: Evidencia): void {
+    console.log(`Editar evidencia ID: ${evidencia.id}`);
+    // Implementar lógica para abrir un formulario de edición
+  }
 
-  const updateVisibility = (showInputs: boolean, showId: boolean, showTable: boolean) => {
-    // Manejar la fila de inputs (Nombre, Documento UR, Tipo)
-    if (showInputs) {
-      inputRow.classList.remove('hidden');
-      inputRow.classList.add('visible');
-    } else {
-      inputRow.classList.add('hidden');
-      inputRow.classList.remove('visible');
+  /**
+   * Elimina la evidencia después de una confirmación.
+   * @param evidencia - El objeto de la evidencia a eliminar.
+   */
+  onEliminar(evidencia: Evidencia): void {
+    // Nota: Usamos confirm() solo por simplicidad, en un entorno real usarías un modal custom.
+    if (confirm(`¿Estás seguro de que quieres eliminar la evidencia ID ${evidencia.id}?`)) {
+      console.log(`Eliminando evidencia ID: ${evidencia.id}`);
+      // Implementar lógica del servicio para eliminar la evidencia
+      this.evidencias = this.evidencias.filter(e => e.id !== evidencia.id);
     }
-
-    // Manejar el input de ID (IdEvidencia)
-    if (showId) {
-      idInputGroup.classList.remove('hidden');
-      idInputGroup.classList.add('visible');
-    } else {
-      idInputGroup.classList.add('hidden');
-      idInputGroup.classList.remove('visible');
-    }
-
-    // Manejar el contenedor de la tabla
-    if (showTable) {
-      evidenceTableContainer.classList.remove('hidden');
-      evidenceTableContainer.classList.add('visible-block'); // Usamos visible-block para display: block
-    } else {
-      evidenceTableContainer.classList.add('hidden');
-      evidenceTableContainer.classList.remove('visible-block');
-    }
-  };
-
-  // --- Manejadores de Eventos de los Botones ---
-
-  registerBtn?.addEventListener('click', () => {
-    console.log('Modo: Registrar Evidencia');
-    updateVisibility(true, false, false);
-  });
-
-  listBtn?.addEventListener('click', () => {
-    console.log('Modo: Listar Evidencia');
-    updateVisibility(false, false, true);
-    // Aquí iría la llamada a la API para cargar la lista de evidencias
-    // loadAllEvidences();
-  });
-
-  searchBtn?.addEventListener('click', () => {
-    console.log('Modo: Buscar Evidencia por ID');
-    updateVisibility(false, true, true);
-  });
-
-  updateBtn?.addEventListener('click', () => {
-    console.log('Modo: Actualizar datos evidencia');
-    updateVisibility(true, true, true);
-  });
-
-  deleteBtn?.addEventListener('click', () => {
-    console.log('Modo: Eliminar evidencia');
-    updateVisibility(false, true, true);
-  });
-
-  // --- Estado Inicial ---
-  // Según el nuevo mockup, inicialmente solo se ve la tabla de listado.
-  updateVisibility(false, false, true); // Oculta inputs e ID, muestra la tabla por defecto
-});*/
+  }
+}
