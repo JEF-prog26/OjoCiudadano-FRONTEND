@@ -8,6 +8,7 @@ import {UserService} from '../../services/user-service';
 import {SeguimientoObra} from '../../model/seguimientoObra';
 import {ObraPublica} from '../../model/obraPublica';
 import {User} from '../../model/user';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-panel-seguimiento-obra-component',
@@ -20,6 +21,8 @@ export class PanelSeguimientoObraComponent implements OnInit {
   private seguimientoService = inject(SeguimientoObraService);
   private obraService = inject(ObraPublicaService);
   private userService = inject(UserService);
+  // Inyecta el Sanitizer en el constructor o como inject()
+  private sanitizer = inject(DomSanitizer);
 
   // Data Base
   seguimientos = signal<SeguimientoObra[]>([]);
@@ -90,7 +93,7 @@ export class PanelSeguimientoObraComponent implements OnInit {
 
   editar(s: SeguimientoObra): void {
     this.editingId.set(s.id);
-    this.seguimientoForm = { ...s }; // Clonar
+    this.seguimientoForm = {...s}; // Clonar
 
     // Pre-seleccionar selects
     if (s.obraPublica) {
@@ -135,5 +138,27 @@ export class PanelSeguimientoObraComponent implements OnInit {
     } else {
       this.seguimientoService.actualizarLista();
     }
+  }
+
+  // AGREGAR ESTA FUNCIÓN NUEVA AL FINAL DE TU CLASE
+  // Esta función decide qué dirección mostrar
+  getMapUrl(): SafeResourceUrl {
+    // A. Intentamos obtener la ubicación del Gobierno Regional de la obra seleccionada
+    let direccion = this.selectedObra?.gobiernoRegional?.ubicacion;
+
+    // B. Lógica de Respaldo (Fallback):
+    // Si la dirección es nula, undefined o está vacía (''), usamos una por defecto.
+    if (!direccion || direccion.trim() === '') {
+      direccion = 'Palacio de Gobierno, Lima, Perú'; // <--- TU DIRECCIÓN FIJA AQUÍ
+    }
+
+    // C. Construimos la URL para el iframe de Google Maps (Gratuito)
+    // q = query (la dirección)
+    // z = zoom (15 es nivel calle)
+    // output = embed (para que funcione en iframe)
+    const url = `https://maps.google.com/maps?q=${encodeURIComponent(direccion)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+
+    // D. Sanitizamos la URL para que Angular confíe en ella
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }
