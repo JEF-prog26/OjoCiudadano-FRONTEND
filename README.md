@@ -1,7 +1,16 @@
 HEAD
 # OjoCiudadanoFRONTEND
 
+OjoCiudadano es una interfaz web desarrollada con Angular diseñada para que la ciudadanía pueda reportar, consultar y dar seguimiento a incidencias y problemas en el espacio público (por ejemplo: alumbrado público defectuoso, baches, basura, grafitis, daños en mobiliario urbano, e inundaciones). La aplicación actúa como puente entre usuarios y las autoridades o equipos responsables, facilitando la captura de información estructurada (título, descripción, categoría), evidencia visual (fotografías), y ubicación geográfica precisa mediante geolocalización o selección en mapa.
 
-# OjoCiudadano-FRONTEND
-Interfaz web del proyecto OjoCiudadano desarrollado con JavaScript/Angular
-bc5c18e298a2c3f44c982ffdb660aa4b88e3ed54
+Pensada para usuarios finales, comunidades y equipos municipales, la plataforma ofrece una experiencia intuitiva: formularios guiados para crear reportes, listados filtrables para explorar incidentes por estado, fecha o categoría, y pantallas de detalle donde se muestra el historial de actualización del caso (comentarios, cambios de estado, asignaciones). La interfaz está optimizada para dispositivos móviles y escritorio para que los usuarios puedan reportar desde la calle con fotos tomadas al momento.
+
+En el corazón del flujo de datos, el frontend consume una API REST (o GraphQL) que gestiona la persistencia de reportes, archivos multimedia y estado de los casos. La aplicación maneja subida segura de imágenes, validación de campos y lleva un modelo simple de estados (por ejemplo: reportado, en revisión, en reparación, cerrado), permitiendo trazabilidad y notificaciones según la integración con el backend. Para mayor precisión, la integración con servicios de mapas (Leaflet, Google Maps u OpenStreetMap) permite georreferenciar el reporte y visualizar la distribución espacial de las incidencias.
+
+La privacidad y la calidad de la información son consideraciones centrales: la interfaz solicita datos esenciales, evita pedir información sensible innecesaria y, cuando hay autenticación, permite gestionar perfiles para seguir notificaciones y aportar seguimiento. Además, la UI fomenta reportes con evidencia suficiente (mínimo una foto o ubicación) y herramientas de edición para mejorar la claridad del contenido antes de enviar.
+
+Desde el punto de vista técnico, el proyecto está estructurado como una SPA (Single Page Application) modular, con componentes para formularios, listados, filtros, mapa y detalle. Se diseñan servicios para encapsular la comunicación con la API y facilitar pruebas unitarias y de integración. La arquitectura permite desacoplar el backend, facilitando que el mismo frontend funcione con diferentes instancias de API si se cambia la URL o adaptan los contratos de datos.
+
+OjoCiudadano también está pensado para ser extensible: es posible añadir roles (ciudadano, técnico, administrador), paneles administrativos para priorizar y asignar tareas, integración con sistemas de mensajería para notificaciones por email o push, y estadísticas agregadas para análisis de problemas recurrentes. Para una entrega académica, la aplicación demuestra buenas prácticas de desarrollo frontend (componentización, manejo de estados, consumo de API y diseño responsivo) y proporciona una base sobre la que se pueden añadir mejoras como autenticación federada, análisis geoespacial avanzado o pipelines de procesamiento de imágenes.
+
+En resumen: OjoCiudadano facilita la participación ciudadana en la detección y seguimiento de incidencias urbanas mediante una interfaz clara y accesible, integrando fotos, ubicación y flujo de estados para conectar ciudadanos con las entidades encargadas de la gestión y resolución de problemas en el espacio público.
