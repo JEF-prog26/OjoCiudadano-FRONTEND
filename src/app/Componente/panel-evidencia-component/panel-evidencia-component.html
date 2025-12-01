@@ -1,58 +1,129 @@
-<!-- Contenedor principal y fondo -->
+<app-header-panel-component/>
 <div class="page-wrapper">
-  <div class="panel-card">
-    <div class="panel-header">
-      <h2 class="panel-title">Panel de Gestión de Evidencias</h2>
+  <div class="panel-wrapper">
+    <div class="panel-card">
 
-      <!-- Zona de búsqueda y acciones -->
-      <div class="header-actions">
-        <input type="text" class="search-input" placeholder="Buscar por Nombre o ID..." #searchInput>
-        <!-- Asumiendo que onBuscar existe en .ts para evitar errores -->
-        <button class="action-btn action-btn-primary" (click)="onBuscar(searchInput.value)">Buscar</button>
-        <button class="action-btn action-btn-secondary" (click)="searchInput.value = ''; onBuscar('')">Limpiar</button>
-        <button class="action-btn action-btn-add">Subir Evidencia</button>
+      <div class="panel-header">
+        <h2 class="panel-title">Gestión de Evidencias</h2>
+        <div class="header-actions">
+          <button class="action-btn action-primary" (click)="onRegistrarClick()">
+            Nueva Evidencia
+          </button>
+
+          <div class="search-box">
+            <input type="number" class="search-input" placeholder="Buscar por ID..."
+                   [ngModel]="searchId()" (ngModelChange)="searchId.set($event)" />
+            <button class="search-btn" (click)="buscarPorId()">Buscar</button>
+            <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
+          </div>
+        </div>
       </div>
-    </div>
 
-      <div class="data-area">
-        @if (showInputs) {
-          <div class="input-row" >
-            <input type="text" placeholder="Nombre" class="data-input">
-            <input type="text" placeholder="Documento URL" class="data-input">
-            <input type="text" placeholder="Tipo" class="data-input">
-          </div>
-        }
-        @if (showId) {
-          <div class="id-input-group">
-            <input type="text" placeholder="IdEvidencia" class="id-input">
-          </div>
-        }
-        @if (showTable) {
-          <div class="evidence-table-container">
-            <div class="table-header">
-              <div>ID</div>
-              <div>Nombre</div>
-              <div>Documento UR</div>
-              <div>Tipo</div>
+      <section class="panel-main">
+
+        @if (!showForm()) {
+          <div class="table-card">
+            <div class="table-header evi-header">
+              <span>ID</span>
+              <span>Tipo</span>
+              <span>Archivo (URL)</span>
+              <span>Denuncia Asociada</span>
+              <span>Acciones</span>
             </div>
             <div class="table-body">
-              @for (evidencia of evidenciasData; track evidencia) {
-                <div class="table-row">
-                  <div>{{ evidencia.id }}</div>
-                  <div>{{ evidencia.nombre }}</div>
-                  <div>{{ evidencia.documentoUr }}</div>
-                  <div>{{ evidencia.tipo }}</div>
+              @for (e of evidenciasFiltradas(); track e.id) {
+                <div class="table-row evi-row">
+                  <span>{{ e.id }}</span>
+
+                  <span class="badge" [ngClass]="tipoClass(e.tipo)">{{ e.tipo }}</span>
+
+                  <span class="text-truncate">
+                    <a [href]="e.urlArchivo" target="_blank" class="file-link">
+                      📎 Ver Archivo
+                    </a>
+                  </span>
+
+                  <span class="text-truncate">{{ e.denuncia ? e.denuncia.titulo : 'Sin Asignar' }}</span>
+
+                  <span class="cell-actions">
+                    <button class="icon-btn view" (click)="verDetalle(e)">👁</button>
+                    <button class="icon-btn edit" (click)="editar(e)">✏️</button>
+                    <button class="icon-btn delete" (click)="eliminar(e)">🗑</button>
+                  </span>
                 </div>
-              }
-              @if (evidenciasData.length === 0) {
-                <div class="table-row">
-                  <div style="flex: 4; text-align: center; color: #666;">No hay evidencias para mostrar.</div>
-                </div>
-              }
+              } @empty { <div class="p-4 text-center">No hay evidencias registradas.</div> }
+            </div>
+          </div>
+        } @else {
+          <div class="form-card">
+            <h3>{{ editingId() ? 'Editar Evidencia' : 'Registrar Nueva Evidencia' }}</h3>
+
+            <div class="form-row">
+              <label class="form-label">Tipo de Evidencia (*)</label>
+              <select class="form-input" [(ngModel)]="evidenciaForm.tipo" required>
+                <option value="" disabled selected>Seleccione un tipo</option>
+                <option value="Foto">Foto</option>
+                <option value="Video">Video</option>
+                <option value="Documento">Documento (PDF/Word)</option>
+                <option value="Audio">Audio</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">URL del Archivo (*)</label>
+              <input class="form-input" type="text" [(ngModel)]="evidenciaForm.urlArchivo"
+                     placeholder="Ej: https://s3.amazonaws.com/mi-foto.jpg" required />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Denuncia Asociada (*)</label>
+              <select class="form-input" [(ngModel)]="selectedDenuncia">
+                <option [ngValue]="null">Seleccione denuncia</option>
+                @for (d of denunciasDisponibles(); track d.idDenuncia) {
+                  <option [ngValue]="d">#{{ d.idDenuncia }} - {{ d.titulo }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-actions">
+              <button class="form-btn-secondary" (click)="cancelarForm()">Cancelar</button>
+              <button class="form-btn-primary" (click)="guardar()">Guardar</button>
             </div>
           </div>
         }
-      </div>
+
+        @if (detailOpen()) {
+          <div class="modal-backdrop" (click)="cerrarDetalle()">
+            <div class="modal-card pretty" (click)="$event.stopPropagation()">
+              <header class="modal-header pretty">
+                <h3 class="modal-title">Evidencia #{{ detalleSeleccionado()?.id }}</h3>
+                <button class="modal-close" (click)="cerrarDetalle()">✖</button>
+              </header>
+              <div class="modal-body">
+                <div class="meta-grid">
+                  <div class="meta">
+                    <span class="meta-label">Tipo</span>
+                    <span class="badge" [ngClass]="tipoClass(detalleSeleccionado()?.tipo)">
+                      {{ detalleSeleccionado()?.tipo }}
+                    </span>
+                  </div>
+                  <div class="meta full">
+                    <span class="meta-label">Denuncia</span>
+                    <p class="meta-value">{{ detalleSeleccionado()?.denuncia?.titulo }}</p>
+                  </div>
+                  <div class="meta full">
+                    <span class="meta-label">Archivo</span>
+                    <a [href]="detalleSeleccionado()?.urlArchivo" target="_blank" class="doc-link big">
+                      {{ detalleSeleccionado()?.urlArchivo }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+      </section>
     </div>
   </div>
 </div>

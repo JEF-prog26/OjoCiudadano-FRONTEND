@@ -1,1 +1,133 @@
-<p>panel-inversion-component works!</p>
+<app-header-panel-component/>
+<div class="page-wrapper">
+  <div class="panel-wrapper">
+    <div class="panel-card">
+
+      <div class="panel-header">
+        <h2 class="panel-title">Gestión de Inversiones</h2>
+        <div class="header-actions">
+          <button class="action-btn action-primary" (click)="onRegistrarClick()">
+            Nueva Inversión
+          </button>
+
+          <div class="search-box">
+            <input type="number" class="search-input" placeholder="Buscar por ID..."
+                   [ngModel]="searchId()" (ngModelChange)="searchId.set($event)" />
+            <button class="search-btn" (click)="buscarPorId()">Buscar</button>
+            <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="panel-main">
+
+        @if (!showForm()) {
+          <div class="table-card">
+            <div class="table-header inv-header">
+              <span>ID</span>
+              <span>Monto Total</span>
+              <span>Fuente Financiamiento</span>
+              <span>Fecha Aprob.</span>
+              <span>Obra Destino</span>
+              <span>Acciones</span>
+            </div>
+            <div class="table-body">
+              @for (i of inversionesFiltradas(); track i.idInversion) {
+                <div class="table-row inv-row">
+                  <span>{{ i.idInversion }}</span>
+                  <span class="fw-bold">{{ i.montoTotal }}</span>
+                  <span class="text-truncate">{{ i.fuenteFinanciamiento }}</span>
+                  <span>{{ i.fechaAprobacion }}</span>
+
+                  <span class="text-truncate">
+                    {{ i.obrapublica ? i.obrapublica.nombreObra : 'Sin Asignar' }}
+                  </span>
+
+                  <span class="cell-actions">
+                    <button class="icon-btn view" (click)="verDetalle(i)">👁</button>
+                    <button class="icon-btn edit" (click)="editar(i)">✏️</button>
+                    <button class="icon-btn delete" (click)="eliminar(i)">🗑</button>
+                  </span>
+                </div>
+              } @empty { <div class="p-4 text-center">No hay inversiones registradas.</div> }
+            </div>
+          </div>
+        } @else {
+          <div class="form-card">
+            <h3>{{ editingId() ? 'Editar Inversión' : 'Registrar Inversión' }}</h3>
+
+            <div class="form-grid">
+              <div class="col">
+                <div class="form-row">
+                  <label class="form-label">Monto Total (*)</label>
+                  <input class="form-input" type="text" [(ngModel)]="inversionForm.montoTotal"
+                         placeholder="Ej: S/. 1,500,000.00" required />
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Fuente de Financiamiento (*)</label>
+                  <input class="form-input" type="text" [(ngModel)]="inversionForm.fuenteFinanciamiento"
+                         placeholder="Ej: Canon Minero / Tesoro Público" required />
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-row">
+                  <label class="form-label">Fecha de Aprobación (*)</label>
+                  <input class="form-input" type="date" [(ngModel)]="inversionForm.fechaAprobacion" required />
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Obra Pública Asociada (*)</label>
+                  <select class="form-input" [(ngModel)]="selectedObra">
+                    <option [ngValue]="null">Seleccione una obra</option>
+                    @for (o of obrasDisponibles(); track o.idObra) {
+                      <option [ngValue]="o">#{{ o.idObra }} - {{ o.nombreObra }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="form-btn-secondary" (click)="cancelarForm()">Cancelar</button>
+              <button class="form-btn-primary" (click)="guardar()">Guardar</button>
+            </div>
+          </div>
+        }
+
+        @if (detailOpen()) {
+          <div class="modal-backdrop" (click)="cerrarDetalle()">
+            <div class="modal-card pretty" (click)="$event.stopPropagation()">
+              <header class="modal-header pretty">
+                <h3 class="modal-title">Inversión #{{ detalleSeleccionado()?.idInversion }}</h3>
+                <button class="modal-close" (click)="cerrarDetalle()">✖</button>
+              </header>
+              <div class="modal-body">
+                <div class="meta-grid">
+                  <div class="meta full">
+                    <span class="meta-label">Monto Aprobado</span>
+                    <span class="meta-value big">{{ detalleSeleccionado()?.montoTotal }}</span>
+                  </div>
+                  <div class="meta full">
+                    <span class="meta-label">Obra Destino</span>
+                    <p class="meta-value">{{ detalleSeleccionado()?.obrapublica?.nombreObra }}</p>
+                  </div>
+                  <div class="meta">
+                    <span class="meta-label">Fuente</span>
+                    <span class="meta-value">{{ detalleSeleccionado()?.fuenteFinanciamiento }}</span>
+                  </div>
+                  <div class="meta">
+                    <span class="meta-label">Fecha Aprobación</span>
+                    <span class="meta-value">{{ detalleSeleccionado()?.fechaAprobacion }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+      </section>
+    </div>
+  </div>
+</div>

@@ -1,20 +1,14 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {Component, computed, HostListener, inject, OnInit, signal} from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common'; // Necesario para ngIf y ngFor
 import { FormsModule } from '@angular/forms';
-import {HeaderPanelComponent} from '../header-panel-component/header-panel-component'; // Necesario para ngModel
-
-/* ===== Interfaces ===== */
-interface ObraPublica {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  fechaInicio: string; // 'YYYY-MM-DD'
-  fechaFin: string; // 'YYYY-MM-DD'
-  estado: 'Pendiente' | 'En Ejecución' | 'Finalizada' | 'Cancelada';
-  idGobierno: number; // Referencia al Gobierno Regional
-  idExpediente: number; // Referencia al Expediente Técnico
-}
+import {HeaderPanelComponent} from '../header-panel-component/header-panel-component';
+import {ObraPublicaService} from '../../services/obraPublica-service';
+import {GobiernoRegionalService} from '../../services/gobiernoRegional-service';
+import {ExpedienteTecnicoService} from '../../services/expedienteTecnico-service';
+import {ObraPublica} from '../../model/obraPublica';
+import {GobiernoRegional} from '../../model/gobiernoRegional';
+import {ExpedienteTecnico} from '../../model/expedienteTecnico'; // Necesario para ngModel
 
 @Component({
   selector: 'app-panel-obra-publica-component',
@@ -24,225 +18,144 @@ interface ObraPublica {
   styleUrl: './panel-obra-publica-component.css',
 })
 export class PanelObraPublicaComponent implements OnInit {
-  showForm = false;
-  editingId: number | null = null; // null = creando, != null = editando
+  // Inyecciones
+  private obraService = inject(ObraPublicaService);
+  private gobiernoService = inject(GobiernoRegionalService);
+  private expedienteService = inject(ExpedienteTecnicoService);
 
-  obraForm: ObraPublica = this.crearFormVacio();
-  obras: ObraPublica[] = [];
-  obrasFiltradas: ObraPublica[] = [];
+  // Datos Principales
+  obras = signal<ObraPublica[]>([]);
+  gobiernosDisponibles = signal<GobiernoRegional[]>([]);
+  expedientesDisponibles = signal<ExpedienteTecnico[]>([]);
 
-  // 🔍 valor del buscador por ID
-  searchId: number | null = null;
+  // Estado Formulario
+  showForm = signal(false);
+  editingId = signal<number | null>(null);
+  obraForm: ObraPublica = new ObraPublica();
 
-  // 🧩 modal detalle
-  detailOpen = false;
-  detalleSeleccionado: ObraPublica | null = null;
+  // Selecciones temporales para el formulario
+  selectedGobierno: GobiernoRegional | null = null;
+  selectedExpediente: ExpedienteTecnico | null = null;
 
-  // Lista de estados disponibles para el formulario
-  estadosDisponibles: ObraPublica['estado'][] = [
-    'Pendiente',
-    'En Ejecución',
-    'Finalizada',
-    'Cancelada',
-  ];
+  // UI States
+  searchId = signal<number | null>(null);
+  detailOpen = signal(false);
+  detalleSeleccionado = signal<ObraPublica | null>(null);
 
-  constructor(private router: Router) {}
+  // Filtro (usando idObra)
+  obrasFiltradas = computed(() => {
+    const search = this.searchId();
+    const list = this.obras();
+    if (!search) return list;
+    return list.filter(o => o.idObra === search);
+  });
 
   ngOnInit(): void {
-    // Datos de ejemplo
-    this.obras = [
-      {
-        id: 1001,
-        nombre: 'Rehabilitación Vial Av. Sol',
-        descripcion: 'Mejora de la infraestructura vial de la avenida principal.',
-        fechaInicio: '2025-06-01',
-        fechaFin: '2026-01-30',
-        estado: 'En Ejecución',
-        idGobierno: 25,
-        idExpediente: 102,
-      },
-      {
-        id: 1002,
-        nombre: 'Construcción Hospital Nivel III',
-        descripcion: 'Nueva infraestructura hospitalaria para la región sur.',
-        fechaInicio: '2024-03-15',
-        fechaFin: '2025-08-30',
-        estado: 'Pendiente',
-        idGobierno: 10,
-        idExpediente: 101,
-      },
-      {
-        id: 1003,
-        nombre: 'Saneamiento Básico Rural',
-        descripcion: 'Instalación de agua potable y desagüe en 10 comunidades rurales.',
-        fechaInicio: '2023-11-20',
-        fechaFin: '2024-10-10',
-        estado: 'Finalizada',
-        idGobierno: 40,
-        idExpediente: 104,
-      },
-    ];
-    this.obrasFiltradas = [...this.obras];
+    // 1. Cargar Obras
+    this.obraService.list().subscribe(data => this.obras.set(data));
+    this.obraService.getListaCambio().subscribe(data => this.obras.set(data));
+
+    // 2. Cargar listas para los dropdowns
+    this.gobiernoService.list().subscribe(data => this.gobiernosDisponibles.set(data));
+    this.expedienteService.list().subscribe(data => this.expedientesDisponibles.set(data));
   }
 
-  private crearFormVacio(): ObraPublica {
-    return {
-      id: 0,
-      nombre: '',
-      descripcion: '',
-      fechaInicio: '',
-      fechaFin: '',
-      estado: 'Pendiente',
-      idGobierno: 0,
-      idExpediente: 0,
-    };
-  }
+  // --- CRUD ---
 
-  // Permite volver a la página anterior (funcionalidad consistente)
-  goBack(): void {
-    history.back();
-    console.log('Navegación: Volver al estado anterior del navegador.');
-  }
-
-  /* 🆕 REGISTRO */
   onRegistrarClick(): void {
-    this.showForm = true;
-    this.editingId = null;
-    this.obraForm = this.crearFormVacio();
+    this.showForm.set(true);
+    this.editingId.set(null);
+    this.obraForm = new ObraPublica();
+    this.selectedGobierno = null;
+    this.selectedExpediente = null;
   }
 
   cancelarForm(): void {
-    this.showForm = false;
-    this.editingId = null;
-    this.obraForm = this.crearFormVacio();
+    this.showForm.set(false);
+    this.editingId.set(null);
   }
 
-  guardarObra(): void {
-    if (!this.validarCampos()) {
+  guardar(): void {
+    if (!this.obraForm.nombreObra || !this.obraForm.fechaInicio || !this.selectedGobierno) {
+      alert('Nombre, Fecha Inicio y Gobierno Regional son obligatorios.');
       return;
     }
 
-    if (this.editingId === null) {
-      // 🆕 CREAR
-      const existe = this.obras.some((o) => o.id === this.obraForm.id);
-      if (existe) {
-        console.error('ERROR: Ya existe una Obra Pública con ese ID. Por favor, usa otro.');
-        return;
-      }
+    // Asignar relaciones
+    this.obraForm.gobiernoRegional = this.selectedGobierno;
+    if (this.selectedExpediente) {
+      this.obraForm.expedienteTecnico = this.selectedExpediente;
+    }
 
-      const nueva: ObraPublica = { ...this.obraForm };
-      this.obras.push(nueva);
+    if (this.editingId() === null) {
+      // CREAR
+      this.obraService.insert(this.obraForm).subscribe(() => {
+        this.obraService.actualizarLista();
+        this.showForm.set(false);
+        alert('Obra registrada correctamente');
+      });
     } else {
-      // ✏️ EDITAR
-      const idx = this.obras.findIndex((o) => o.id === this.editingId);
-      if (idx > -1) {
-        this.obras[idx] = { ...this.obraForm };
-      }
+      // EDITAR (Usando idObra)
+      this.obraService.update(this.obraForm, this.obraForm.idObra).subscribe(() => {
+        this.obraService.actualizarLista();
+        this.showForm.set(false);
+        alert('Obra actualizada');
+      });
     }
-
-    this.obrasFiltradas = [...this.obras];
-    this.showForm = false;
-    this.editingId = null;
-    this.obraForm = this.crearFormVacio();
-    this.searchId = null;
-    console.log('Obras Públicas actualizadas:', this.obras);
   }
 
-  private validarCampos(): boolean {
-    if (
-      !this.obraForm.id ||
-      !this.obraForm.nombre ||
-      !this.obraForm.fechaInicio ||
-      !this.obraForm.fechaFin ||
-      !this.obraForm.idGobierno ||
-      !this.obraForm.idExpediente
-    ) {
-      console.error('ERROR: Los campos ID, Nombre, Fechas, ID Gobierno e ID Expediente son obligatorios.');
-      return false;
-    }
+  editar(o: ObraPublica): void {
+    this.showForm.set(true);
+    this.editingId.set(o.idObra);
+    this.obraForm = { ...o }; // Clonar
 
-    if (this.obraForm.fechaInicio > this.obraForm.fechaFin) {
-      console.error('ERROR: La Fecha de Inicio no puede ser posterior a la Fecha de Fin.');
-      return false;
+    // Pre-seleccionar dropdowns
+    if (o.gobiernoRegional) {
+      this.selectedGobierno = this.gobiernosDisponibles().find(g => g.id === o.gobiernoRegional.id) || null;
     }
-
-    return true;
+    if (o.expedienteTecnico) {
+      this.selectedExpediente = this.expedientesDisponibles().find(e => e.id === o.expedienteTecnico.id) || null;
+    }
   }
 
-  /* 🔍 BÚSQUEDA */
+  eliminar(o: ObraPublica): void {
+    if (confirm(`¿Eliminar la obra "${o.nombreObra}"?`)) {
+      this.obraService.delete(o.idObra).subscribe(() => {
+        this.obraService.actualizarLista();
+      });
+    }
+  }
+
+  // --- BÚSQUEDA ---
   buscarPorId(): void {
-    this.showForm = false;
-
-    if (this.searchId === null || this.searchId === undefined) {
-      this.obrasFiltradas = [...this.obras];
-      return;
-    }
-
-    this.obrasFiltradas = this.obras.filter((o) => o.id === this.searchId);
-
-    if (this.obrasFiltradas.length === 0) {
-      console.error('No se encontró ninguna Obra Pública con ese ID.');
+    const id = this.searchId();
+    if (id) {
+      this.obraService.listId(id).subscribe({
+        next: (o) => this.obras.set([o]),
+        error: () => alert('Obra no encontrada')
+      });
+    } else {
+      this.obraService.actualizarLista();
     }
   }
 
   limpiarBusqueda(): void {
-    this.searchId = null;
-    this.obrasFiltradas = [...this.obras];
+    this.searchId.set(null);
+    this.obraService.actualizarLista();
   }
 
-  /* ✏️ EDICIÓN Y ELIMINACIÓN */
-  editarObra(obra: ObraPublica): void {
-    this.showForm = true;
-    this.editingId = obra.id;
-    this.obraForm = { ...obra };
+  // --- HELPERS ---
+  estadoClass(estado?: string): string {
+    const e = (estado || '').toLowerCase();
+    if (e.includes('ejecución')) return 'estado-azul';
+    if (e.includes('finalizada')) return 'estado-verde';
+    if (e.includes('paralizada')) return 'estado-rojo';
+    return 'estado-gris';
   }
 
-  eliminarObra(obra: ObraPublica): void {
-    const isConfirmed = window.confirm(
-      `¿Seguro que deseas eliminar la Obra Pública con ID ${obra.id}?`
-    );
+  verDetalle(o: ObraPublica) { this.detalleSeleccionado.set(o); this.detailOpen.set(true); }
+  cerrarDetalle() { this.detailOpen.set(false); }
 
-    if (!isConfirmed) return;
-
-    this.obras = this.obras.filter((o) => o.id !== obra.id);
-    this.obrasFiltradas = [...this.obras];
-    this.searchId = null;
-
-    if (this.detalleSeleccionado?.id === obra.id) {
-      this.cerrarDetalle();
-    }
-  }
-
-  /* 👁 MODAL DETALLE */
-  verDetalle(o: ObraPublica): void {
-    this.detalleSeleccionado = o;
-    this.detailOpen = true;
-  }
-
-  cerrarDetalle(): void {
-    this.detailOpen = false;
-    this.detalleSeleccionado = null;
-  }
-
-  // Función auxiliar para obtener la clase de color del estado
-  getEstadoClass(estado: ObraPublica['estado']): string {
-    switch (estado) {
-      case 'Finalizada':
-        return 'status-finalizada';
-      case 'En Ejecución':
-        return 'status-ejecucion';
-      case 'Pendiente':
-        return 'status-pendiente';
-      case 'Cancelada':
-        return 'status-cancelada';
-      default:
-        return 'status-pendiente';
-    }
-  }
-
-  // Cerrar modal con ESC
   @HostListener('document:keydown.escape')
-  onEsc() {
-    if (this.detailOpen) this.cerrarDetalle();
-  }
+  onEsc() { if (this.detailOpen()) this.cerrarDetalle(); }
 }
