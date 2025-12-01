@@ -1,64 +1,147 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, computed, HostListener, inject, OnInit, signal} from '@angular/core';
 
 import {RouterLink} from '@angular/router';
 import {HeaderPanelComponent} from '../header-panel-component/header-panel-component';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {EvidenciaService} from '../../services/evidencia-service';
+import {DenunciaService} from '../../services/denuncia-service';
+import {Evidencia} from '../../model/evidencia';
+import {Denuncia} from '../../model/denuncia';
 
 @Component({
   selector: 'app-panel-evidencia',
-  // Es importante usar 'standalone: true' en Angular moderno
-  standalone: true,
-  // Incluye CommonModule para directivas como *ngFor si tu entorno lo requiere,
-  // aunque para un componente simple en Angular 17+ puede no ser necesario si no se usa allí.
+  imports: [CommonModule, FormsModule, HeaderPanelComponent],
   templateUrl: './panel-evidencia-component.html',
-  styleUrls: ['./panel-evidencia-component.css'],
-  imports: [RouterLink, HeaderPanelComponent]
+  styleUrls: ['./panel-evidencia-component.css']
 })
 export class PanelEvidenciaComponent implements OnInit {
-  // Datos de ejemplo para la tabla
-  evidencias: Evidencia[] = [
-    { id: 1, nombre: 'Foto Fachada Obra', documentoUrl: 'url/a/doc1', tipo: 'Imagen', fechaEnvio: '2025-11-15' },
-    { id: 2, nombre: 'PDF Permisos Municipales', documentoUrl: 'url/a/doc2', tipo: 'PDF', fechaEnvio: '2025-11-16' },
-    { id: 3, nombre: 'Video Avance Construcción', documentoUrl: 'url/a/doc3', tipo: 'Video', fechaEnvio: '2025-11-17' },
-  ];
+  // Inyecciones
+  private evidenciaService = inject(EvidenciaService);
+  private denunciaService = inject(DenunciaService);
 
-  constructor() { }
+  // Datos
+  evidencias = signal<Evidencia[]>([]);
+  denunciasDisponibles = signal<Denuncia[]>([]); // Para el select
+
+  // Formulario
+  showForm = signal(false);
+  editingId = signal<number | null>(null);
+  evidenciaForm: Evidencia = new Evidencia();
+
+  // Selección temporal
+  selectedDenuncia: Denuncia | null = null;
+
+  // UI
+  searchId = signal<number | null>(null);
+  detailOpen = signal(false);
+  detalleSeleccionado = signal<Evidencia | null>(null);
+
+  // Filtro
+  evidenciasFiltradas = computed(() => {
+    const search = this.searchId();
+    const list = this.evidencias();
+    if (!search) return list;
+    return list.filter(e => e.id === search);
+  });
 
   ngOnInit(): void {
-    // Aquí puedes cargar los datos iniciales de las evidencias desde el servicio
-    console.log('Panel de Evidencias inicializado.');
+    // 1. Cargar Evidencias
+    this.evidenciaService.list().subscribe(data => this.evidencias.set(data));
+    this.evidenciaService.getListaCambio().subscribe(data => this.evidencias.set(data));
+
+    // 2. Cargar Denuncias (para asignar)
+    this.denunciaService.list().subscribe(data => this.denunciasDisponibles.set(data));
   }
 
-  // Métodos de acción
+  // --- CRUD ---
 
-  /**
-   * Muestra la evidencia o abre el enlace del documento.
-   * @param evidencia - El objeto de la evidencia a visualizar.
-   */
-  onVisualizar(evidencia: Evidencia): void {
-    console.log(`Visualizar evidencia ID: ${evidencia.id} - URL: ${evidencia.documentoUrl}`);
-    // Implementar lógica para abrir el documento en una nueva pestaña o un modal
-    window.open(evidencia.documentoUrl, '_blank');
+  onRegistrarClick(): void {
+    this.showForm.set(true);
+    this.editingId.set(null);
+    this.evidenciaForm = new Evidencia();
+    this.selectedDenuncia = null;
   }
 
-  /**
-   * Inicia el proceso de edición de la evidencia.
-   * @param evidencia - El objeto de la evidencia a editar.
-   */
-  onEditar(evidencia: Evidencia): void {
-    console.log(`Editar evidencia ID: ${evidencia.id}`);
-    // Implementar lógica para abrir un formulario de edición
+  cancelarForm(): void {
+    this.showForm.set(false);
+    this.editingId.set(null);
   }
 
-  /**
-   * Elimina la evidencia después de una confirmación.
-   * @param evidencia - El objeto de la evidencia a eliminar.
-   */
-  onEliminar(evidencia: Evidencia): void {
-    // Nota: Usamos confirm() solo por simplicidad, en un entorno real usarías un modal custom.
-    if (confirm(`¿Estás seguro de que quieres eliminar la evidencia ID ${evidencia.id}?`)) {
-      console.log(`Eliminando evidencia ID: ${evidencia.id}`);
-      // Implementar lógica del servicio para eliminar la evidencia
-      this.evidencias = this.evidencias.filter(e => e.id !== evidencia.id);
+  guardar(): void {
+    if (!this.evidenciaForm.tipo || !this.evidenciaForm.urlArchivo || !this.selectedDenuncia) {
+      alert('Complete Tipo, URL y seleccione una Denuncia.');
+      return;
+    }
+
+    // Asignar relación
+    this.evidenciaForm.denuncia = this.selectedDenuncia;
+
+    if (this.editingId() === null) {
+      // CREAR
+      this.evidenciaService.insert(this.evidenciaForm).subscribe(() => {
+        this.evidenciaService.actualizarLista();
+        this.showForm.set(false);
+        alert('Evidencia registrada');
+      });
+    } else {
+      // EDITAR
+      this.evidenciaService.update(this.evidenciaForm, this.evidenciaForm.id).subscribe(() => {
+        this.evidenciaService.actualizarLista();
+        this.showForm.set(false);
+        alert('Evidencia actualizada');
+      });
     }
   }
+
+  editar(e: Evidencia): void {
+    this.showForm.set(true);
+    this.editingId.set(e.id);
+    this.evidenciaForm = { ...e }; // Clonar
+
+    // Pre-seleccionar denuncia
+    if (e.denuncia) {
+      this.selectedDenuncia = this.denunciasDisponibles().find(d => d.idDenuncia === e.denuncia.idDenuncia) || null;
+    }
+  }
+
+  eliminar(e: Evidencia): void {
+    if (confirm(`¿Eliminar evidencia #${e.id}?`)) {
+      this.evidenciaService.delete(e.id).subscribe(() => {
+        this.evidenciaService.actualizarLista();
+      });
+    }
+  }
+
+  // --- BÚSQUEDA ---
+  buscarPorId(): void {
+    const id = this.searchId();
+    if (id) {
+      this.evidenciaService.listId(id).subscribe({
+        next: (e) => this.evidencias.set([e]),
+        error: () => alert('Evidencia no encontrada')
+      });
+    } else {
+      this.evidenciaService.actualizarLista();
+    }
+  }
+
+  limpiarBusqueda(): void {
+    this.searchId.set(null);
+    this.evidenciaService.actualizarLista();
+  }
+
+  // --- HELPERS ---
+  tipoClass(tipo?: string): string {
+    const t = (tipo || '').toLowerCase();
+    if (t.includes('foto')) return 'tipo-foto';
+    if (t.includes('video')) return 'tipo-video';
+    return 'tipo-doc';
+  }
+
+  verDetalle(e: Evidencia) { this.detalleSeleccionado.set(e); this.detailOpen.set(true); }
+  cerrarDetalle() { this.detailOpen.set(false); }
+
+  @HostListener('document:keydown.escape')
+  onEsc() { if (this.detailOpen()) this.cerrarDetalle(); }
 }

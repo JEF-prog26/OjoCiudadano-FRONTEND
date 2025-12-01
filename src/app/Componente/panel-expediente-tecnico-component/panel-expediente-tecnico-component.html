@@ -1,1 +1,114 @@
-<p>panel-expediente-tecnico-component works!</p>
+<app-header-panel-component/>
+<div class="page-wrapper">
+  <div class="panel-wrapper">
+    <div class="panel-card">
+
+      <div class="panel-header">
+        <h2 class="panel-title">Gestión de Expedientes Técnicos</h2>
+        <div class="header-actions">
+          <button class="action-btn action-primary" (click)="onRegistrarClick()">
+            Nuevo Expediente
+          </button>
+
+          <div class="search-box">
+            <input type="number" class="search-input" placeholder="Buscar por ID..."
+                   [ngModel]="searchId()" (ngModelChange)="searchId.set($event)" />
+            <button class="search-btn" (click)="buscarPorId()">Buscar</button>
+            <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="panel-main">
+
+        @if (!showForm()) {
+          <div class="table-card">
+            <div class="table-header exp-header">
+              <span>ID</span>
+              <span>Documento (Enlace/Ruta)</span>
+              <span>Fecha de Carga</span>
+              <span>Acciones</span>
+            </div>
+            <div class="table-body">
+              @for (e of expedientesFiltrados(); track e.id) {
+                <div class="table-row exp-row">
+                  <span>{{ e.id }}</span>
+
+                  <span class="text-truncate">
+                    <a [href]="e.documentoUR" target="_blank" class="doc-link">
+                      📄 {{ e.documentoUR }}
+                    </a>
+                  </span>
+
+                  <span>{{ e.fechaCarga }}</span>
+
+                  <span class="cell-actions">
+                    <button class="icon-btn view" (click)="verDetalle(e)">👁</button>
+                    <button class="icon-btn edit" (click)="editar(e)">✏️</button>
+                    <button class="icon-btn delete" (click)="eliminar(e)">🗑</button>
+                  </span>
+                </div>
+              } @empty { <div class="p-4 text-center">No hay expedientes registrados.</div> }
+            </div>
+          </div>
+        } @else {
+          <div class="form-card">
+            <h3>{{ editingId() ? 'Editar Expediente' : 'Nuevo Expediente' }}</h3>
+
+            <div class="form-row">
+              <label class="form-label">ID</label>
+              <input class="form-input" type="text"
+                     [value]="editingId() ? expedienteForm.id : 'Autogenerado'" readonly disabled>
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">URL del Documento (*)</label>
+              <input class="form-input" type="text" [(ngModel)]="expedienteForm.documentoUR"
+                     placeholder="Ej: https://docs.google.com/..." required />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Fecha de Carga (*)</label>
+              <input class="form-input" type="date" [(ngModel)]="expedienteForm.fechaCarga" required />
+            </div>
+
+            <div class="form-actions">
+              <button class="form-btn-secondary" (click)="cancelarForm()">Cancelar</button>
+              <button class="form-btn-primary" (click)="guardar()">Guardar</button>
+            </div>
+          </div>
+        }
+
+        @if (detailOpen()) {
+          <div class="modal-backdrop" (click)="cerrarDetalle()">
+            <div class="modal-card pretty" (click)="$event.stopPropagation()">
+              <header class="modal-header pretty">
+                <h3 class="modal-title">Expediente #{{ detalleSeleccionado()?.id }}</h3>
+                <button class="modal-close" (click)="cerrarDetalle()">✖</button>
+              </header>
+              <div class="modal-body">
+                <div class="meta-grid">
+                  <div class="meta">
+                    <span class="meta-label">ID</span>
+                    <span class="meta-value">#{{ detalleSeleccionado()?.id }}</span>
+                  </div>
+                  <div class="meta">
+                    <span class="meta-label">Fecha Carga</span>
+                    <span class="meta-value">{{ detalleSeleccionado()?.fechaCarga }}</span>
+                  </div>
+                  <div class="meta full">
+                    <span class="meta-label">Documento</span>
+                    <a [href]="detalleSeleccionado()?.documentoUR" target="_blank" class="meta-value doc-link big">
+                      {{ detalleSeleccionado()?.documentoUR }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+      </section>
+    </div>
+  </div>
+</div>
