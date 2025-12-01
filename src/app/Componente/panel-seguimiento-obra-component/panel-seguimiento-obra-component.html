@@ -8,13 +8,19 @@
       <div class="command-center">
 
         <div class="map-container">
-          <img src="https://img.freepik.com/vector-gratis/mapa-ciudad-alfileres-navegacion_23-2148708743.jpg"
-               alt="Mapa de la obra" class="map-image">
+          <iframe
+            width="100%"
+            height="100%"
+            frameborder="0"
+            style="border:0; filter: grayscale(20%);"
+            [src]="getMapUrl()"
+            allowfullscreen>
+          </iframe>
 
           <div class="map-overlay">
-            <span class="location-badge">
-              📍 {{ selectedObra ? selectedObra.nombreObra : 'Seleccione una Obra' }}
-            </span>
+              <span class="location-badge">
+               📍 {{ selectedObra ? selectedObra.nombreObra : 'Ubicación General' }}
+              </span>
           </div>
         </div>
 
