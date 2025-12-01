@@ -1,1 +1,119 @@
-<p>panel-gobierno-regional-component works!</p>
+<app-header-panel-component/>
+<div class="page-wrapper">
+  <div class="panel-wrapper">
+    <div class="panel-card">
+
+      <div class="panel-header">
+        <h2 class="panel-title">Gestión de Gobiernos Regionales</h2>
+        <div class="header-actions">
+          <button class="action-btn action-primary" (click)="onRegistrarClick()">
+            Nuevo Gobierno Reg.
+          </button>
+
+          <div class="search-box">
+            <input type="number" class="search-input" placeholder="Buscar por ID..."
+                   [ngModel]="searchId()" (ngModelChange)="searchId.set($event)" />
+            <button class="search-btn" (click)="buscarPorId()">Buscar</button>
+            <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="panel-main">
+
+        @if (!showForm()) {
+          <div class="table-card">
+            <div class="table-header gob-header">
+              <span>ID</span>
+              <span>Nombre</span>
+              <span>Ubicación</span>
+              <span>Contacto</span>
+              <span>Acciones</span>
+            </div>
+            <div class="table-body">
+              @for (g of gobiernosFiltrados(); track g.id) {
+                <div class="table-row gob-row">
+                  <span>{{ g.id }}</span>
+                  <span class="text-truncate fw-bold">{{ g.nombre }}</span>
+                  <span class="text-truncate">{{ g.ubicacion }}</span>
+                  <span>{{ g.contacto }}</span>
+
+                  <span class="cell-actions">
+                    <button class="icon-btn view" (click)="verDetalle(g)">👁</button>
+                    <button class="icon-btn edit" (click)="editar(g)">✏️</button>
+                    <button class="icon-btn delete" (click)="eliminar(g)">🗑</button>
+                  </span>
+                </div>
+              } @empty { <div class="p-4 text-center">No hay gobiernos regionales registrados.</div> }
+            </div>
+          </div>
+        } @else {
+          <div class="form-card">
+            <h3>{{ editingId() ? 'Editar Gobierno Regional' : 'Nuevo Gobierno Regional' }}</h3>
+
+            <div class="form-row">
+              <label class="form-label">ID</label>
+              <input class="form-input" type="text"
+                     [value]="editingId() ? gobiernoForm.id : 'Autogenerado'" readonly disabled>
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Nombre (*)</label>
+              <input class="form-input" type="text" [(ngModel)]="gobiernoForm.nombre"
+                     placeholder="Ej: Gobierno Regional de Lima" required />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Ubicación (*)</label>
+              <input class="form-input" type="text" [(ngModel)]="gobiernoForm.ubicacion"
+                     placeholder="Dirección exacta" required />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label">Contacto (*)</label>
+              <input class="form-input" type="text" [(ngModel)]="gobiernoForm.contacto"
+                     placeholder="Teléfono o Email" required />
+            </div>
+
+            <div class="form-actions">
+              <button class="form-btn-secondary" (click)="cancelarForm()">Cancelar</button>
+              <button class="form-btn-primary" (click)="guardar()">Guardar</button>
+            </div>
+          </div>
+        }
+
+        @if (detailOpen()) {
+          <div class="modal-backdrop" (click)="cerrarDetalle()">
+            <div class="modal-card pretty" (click)="$event.stopPropagation()">
+              <header class="modal-header pretty">
+                <h3 class="modal-title">Detalle Gobierno Reg. #{{ detalleSeleccionado()?.id }}</h3>
+                <button class="modal-close" (click)="cerrarDetalle()">✖</button>
+              </header>
+              <div class="modal-body">
+                <div class="meta-grid">
+                  <div class="meta full">
+                    <span class="meta-label">Nombre</span>
+                    <span class="meta-value big">{{ detalleSeleccionado()?.nombre }}</span>
+                  </div>
+                  <div class="meta full">
+                    <span class="meta-label">Ubicación</span>
+                    <span class="meta-value">{{ detalleSeleccionado()?.ubicacion }}</span>
+                  </div>
+                  <div class="meta">
+                    <span class="meta-label">Contacto</span>
+                    <span class="meta-value">{{ detalleSeleccionado()?.contacto }}</span>
+                  </div>
+                  <div class="meta">
+                    <span class="meta-label">ID Sistema</span>
+                    <span class="meta-value">#{{ detalleSeleccionado()?.id }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+      </section>
+    </div>
+  </div>
+</div>

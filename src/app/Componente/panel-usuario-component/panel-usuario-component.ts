@@ -1,43 +1,12 @@
-import { Component, HostListener, signal, computed } from '@angular/core';
+import {Component, HostListener, signal, computed, inject, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {HeaderPanelComponent} from '../header-panel-component/header-panel-component';
-
-/* ===== Estados tipados (Roles de Usuario) ===== */
-type Rol =
-  | 'Ciudadano'
-  | 'Moderador'
-  | 'Analista'
-  | 'Administrador';
-
-const ROLES_PREDEFINIDOS: Rol[] = [
-  'Ciudadano',
-  'Moderador',
-  'Analista',
-  'Administrador',
-];
-
-/* ===== Interfaces Compartidas ===== */
-
-/** Interfaz para los roles que gestiona el usuario */
-interface RolSistema {
-  id: number;
-  nombre: string; // Ej: ROLE_ADMINISTRADOR
-  descripcion?: string;
-  fechaCreacion: string; // YYYY-MM-DD
-}
-
-/** Interfaz para la gestión de Usuarios */
-interface Usuario {
-  id: number;
-  nombres: string;
-  apellidos: string;
-  correo: string;
-  contrasena: string;
-  rol: Rol;
-  fechaRegistro: string;
-}
+import { UserService } from '../../services/user-service';
+import {RoleService} from '../../services/role-service';
+import {User} from '../../model/user';
+import {Role} from '../../model/role';
 
 @Component({
   selector: 'app-panel-usuario-component',
@@ -47,340 +16,246 @@ interface Usuario {
   templateUrl: './panel-usuario-component.html',
   styleUrl: './panel-usuario-component.css',
 })
-export class PanelUsuarioComponent {
-  /* Exponer lista de roles al template de Usuario */
-  ROLES = ROLES_PREDEFINIDOS;
+export class PanelUsuarioComponent implements OnInit {
+  // Servicios
+  private userService = inject(UserService);
+  private roleService = inject(RoleService);
+  private router = inject(Router);
 
-  /* === ESTADO GENERAL DEL PANEL (Pestaña) === */
-  vistaActual = signal<'usuarios' | 'roles'>('usuarios'); // Nuevo: Controla la pestaña activa
+  // === ESTADO GENERAL DEL PANEL ===
+  vistaActual = signal<'usuarios' | 'roles'>('usuarios');
 
-  /* === ESTADO DE GESTIÓN DE USUARIOS === */
-  usuarios = signal<Usuario[]>([]);
+  // === ESTADO DE GESTIÓN DE USUARIOS ===
+  usuarios = signal<User[]>([]);
   showFormUsuario = signal(false);
   editingIdUsuario = signal<number | null>(null);
-  usuarioForm: Usuario = this.crearUsuarioFormVacio();
+  usuarioForm: User = new User(); // Usamos la clase del Modelo
   searchIdUsuario = signal<number | null>(null);
   detailOpenUsuario = signal(false);
-  detalleSeleccionadoUsuario = signal<Usuario | null>(null);
+  detalleSeleccionadoUsuario = signal<User | null>(null);
 
-  /* === ESTADO DE GESTIÓN DE ROLES (NUEVO) === */
-  roles = signal<RolSistema[]>([]);
+  // === ESTADO DE GESTIÓN DE ROLES ===
+  roles = signal<Role[]>([]); // Lista de roles traída de BD
   showFormRol = signal(false);
   editingIdRol = signal<number | null>(null);
-  rolForm: RolSistema = this.crearRolFormVacio();
+  rolForm: Role = new Role();
   searchIdRol = signal<number | null>(null);
   detailOpenRol = signal(false);
-  detalleSeleccionadoRol = signal<RolSistema | null>(null);
+  detalleSeleccionadoRol = signal<Role | null>(null);
+
+  // Rol seleccionado temporalmente en el formulario de usuario
+  selectedRoleForUser: Role | null = null;
 
   /* === Computed: Filtrado de usuarios === */
   usuariosFiltrados = computed(() => {
     const search = this.searchIdUsuario();
     const list = this.usuarios();
-
-    if (search === null || search === undefined) {
-      return list;
-    }
+    if (!search) return list;
     return list.filter((u) => u.id === search);
   });
 
-  /* === Computed: Filtrado de roles (NUEVO) === */
+  /* === Computed: Filtrado de roles === */
   rolesFiltrados = computed(() => {
     const search = this.searchIdRol();
     const list = this.roles();
-
-    if (search === null || search === undefined) {
-      return list;
-    }
+    if (!search) return list;
     return list.filter((r) => r.id === search);
   });
 
-  constructor(private router: Router) {
-    this.cargarDatosIniciales();
+  constructor() {}
+
+  ngOnInit(): void {
+    // 1. Cargar listas iniciales
+    this.userService.list().subscribe(data => this.usuarios.set(data));
+    this.roleService.list().subscribe(data => this.roles.set(data));
+
+    // 2. Suscribirse a cambios (Lógica del Profesor para actualizar tablas)
+    this.userService.getListaCambio().subscribe(data => this.usuarios.set(data));
+    this.roleService.getListaCambio().subscribe(data => this.roles.set(data));
   }
 
-  private cargarDatosIniciales(): void {
-    // Datos de ejemplo para Usuarios
-    const usuariosData: Usuario[] = [
-      { id: 1001, nombres: 'Juan', apellidos: 'Perez', correo: 'juan.p@oc.pe', contrasena: 'hashed', rol: 'Administrador', fechaRegistro: '2024-01-15' },
-      { id: 1002, nombres: 'Maria', apellidos: 'Gomez', correo: 'maria.g@oc.pe', contrasena: 'hashed', rol: 'Moderador', fechaRegistro: '2024-02-20' },
-      { id: 1003, nombres: 'Carlos', apellidos: 'Rojas', correo: 'carlos.r@ciudadano.pe', contrasena: 'hashed', rol: 'Ciudadano', fechaRegistro: '2024-03-01' },
-    ];
-    this.usuarios.set(usuariosData);
-
-    // Datos de ejemplo para Roles
-    const rolesData: RolSistema[] = [
-      { id: 1, nombre: 'ROLE_ADMINISTRADOR', fechaCreacion: '2023-11-01' },
-      { id: 2, nombre: 'ROLE_MODERADOR', fechaCreacion: '2023-11-01' },
-      { id: 3, nombre: 'ROLE_ANALISTA', fechaCreacion: '2023-11-01' },
-      { id: 4, nombre: 'ROLE_CIUDADANO', fechaCreacion: '2023-11-01' },
-    ];
-    this.roles.set(rolesData);
-  }
-
-  /* === Helpers para Formularios === */
-
-  private crearUsuarioFormVacio(): Usuario {
-    return { id: 0, nombres: '', apellidos: '', correo: '', contrasena: '', rol: 'Ciudadano', fechaRegistro: '', };
-  }
-
-  private crearRolFormVacio(): RolSistema {
-    return { id: 0, nombre: '', descripcion: '', fechaCreacion: '' };
-  }
-
-  // 🔄 Cambiar entre las pestañas
+  // 🔄 Cambiar entre pestañas
   cambiarVista(vista: 'usuarios' | 'roles'): void {
     this.vistaActual.set(vista);
-    // Limpiar estados de formulario al cambiar de pestaña
-    this.showFormUsuario.set(false);
-    this.showFormRol.set(false);
-    this.detailOpenUsuario.set(false);
-    this.detailOpenRol.set(false);
+    this.cancelarFormUsuario();
+    this.cancelarFormRol();
   }
 
-
   /* ======================================= */
-  /* === CONTROL DE GESTIÓN DE USUARIOS === */
+  /* === GESTIÓN DE USUARIOS (BACKEND) === */
   /* ======================================= */
 
-  goBack(): void {
-    this.router.navigateByUrl('/');
-  }
-
-  // Control del Formulario
   onRegistrarUsuarioClick(): void {
     this.showFormUsuario.set(true);
     this.editingIdUsuario.set(null);
-    this.usuarioForm = this.crearUsuarioFormVacio();
+    this.usuarioForm = new User();
+    this.selectedRoleForUser = null;
   }
 
   cancelarFormUsuario(): void {
     this.showFormUsuario.set(false);
     this.editingIdUsuario.set(null);
-    this.usuarioForm = this.crearUsuarioFormVacio();
+    this.usuarioForm = new User();
   }
 
   guardarUsuario(): void {
-    if (!this.usuarioForm.nombres || !this.usuarioForm.apellidos || !this.usuarioForm.correo || (!this.editingIdUsuario() && !this.usuarioForm.contrasena)) {
-      console.error('ERROR: Completa todos los campos obligatorios (*).');
+    // Validaciones básicas
+    if (!this.usuarioForm.nombre || !this.usuarioForm.apellido || !this.usuarioForm.username) {
+      alert('Complete los campos obligatorios');
       return;
     }
 
-    const now = new Date().toISOString().slice(0, 10);
+    // Asignar el rol seleccionado al usuario (User tiene roles[])
+    if (this.selectedRoleForUser) {
+      this.usuarioForm.roles = [this.selectedRoleForUser];
+    }
 
     if (this.editingIdUsuario() === null) {
-      // 🆕 CREAR
-      const newId = Math.max(...this.usuarios().map(u => u.id), 1000) + 1;
-      const nuevoUsuario: Usuario = {
-        ... this.usuarioForm,
-        id: newId,
-        fechaRegistro: now,
-        contrasena: 'hashed-' + newId,
-      };
-      this.usuarios.update(list => [...list, nuevoUsuario]);
-      console.log('Usuario registrado:', nuevoUsuario);
-
-    } else {
-      // ✏️ EDITAR
-      this.usuarios.update(list => {
-        const idx = list.findIndex(u => u.id === this.editingIdUsuario());
-        if (idx > -1) {
-          const usuarioAnterior = list[idx];
-          const usuarioActualizado: Usuario = {
-            ...usuarioAnterior,
-            ...this.usuarioForm,
-            id: usuarioAnterior.id,
-            fechaRegistro: usuarioAnterior.fechaRegistro,
-            contrasena: this.usuarioForm.contrasena ? ('hashed-updated-' + usuarioAnterior.id) : usuarioAnterior.contrasena,
-          };
-          list[idx] = usuarioActualizado;
-        }
-        return list;
+      // CREAR (POST)
+      this.userService.insert(this.usuarioForm).subscribe(() => {
+        this.userService.actualizarLista(); // Pide la lista nueva al backend
+        this.showFormUsuario.set(false);
+        alert('Usuario registrado correctamente');
       });
-      console.log('Usuario actualizado:', this.usuarioForm);
+    } else {
+      // EDITAR (PUT)
+      // Ojo: pasamos el usuario y su ID
+      this.userService.update(this.usuarioForm, this.usuarioForm.id).subscribe(() => {
+        this.userService.actualizarLista();
+        this.showFormUsuario.set(false);
+        alert('Usuario actualizado correctamente');
+      });
     }
-
-    this.showFormUsuario.set(false);
-    this.editingIdUsuario.set(null);
-    this.usuarioForm = this.crearUsuarioFormVacio();
-    this.searchIdUsuario.set(null);
   }
 
-  // Acciones de la Tabla
-  buscarPorIdUsuario(): void {
-    this.showFormUsuario.set(false);
-    if (this.searchIdUsuario() === null || this.searchIdUsuario() === undefined) {
-      return;
+  editarUsuario(usuario: User): void {
+    this.showFormUsuario.set(true);
+    this.editingIdUsuario.set(usuario.id);
+    this.usuarioForm = { ...usuario }; // Clonamos para no editar directo en tabla
+    // Pre-seleccionar el rol en el combo (si tiene uno)
+    if (usuario.roles && usuario.roles.length > 0) {
+      // Buscamos el objeto rol completo en la lista de roles que coincida con el ID
+      this.selectedRoleForUser = this.roles().find(r => r.id === usuario.roles[0].id) || null;
     }
-    if (this.usuariosFiltrados().length === 0) {
-      console.warn(`No se encontró ningún usuario con ID ${this.searchIdUsuario()}`);
+  }
+
+  eliminarUsuario(usuario: User): void {
+    if (confirm(`¿Eliminar usuario ${usuario.username}?`)) {
+      this.userService.delete(usuario.id).subscribe(() => {
+        this.userService.actualizarLista();
+      });
+    }
+  }
+
+  buscarPorIdUsuario(): void {
+    const id = this.searchIdUsuario();
+    if (id) {
+      this.userService.listId(id).subscribe({
+        next: (u) => {
+          // Si el backend devuelve un solo objeto, lo metemos en un array para mostrarlo
+          this.usuarios.set([u]);
+        },
+        error: () => alert('Usuario no encontrado')
+      });
+    } else {
+      this.userService.actualizarLista(); // Si está vacío, recarga todos
     }
   }
 
   limpiarBusquedaUsuario(): void {
     this.searchIdUsuario.set(null);
+    this.userService.actualizarLista();
   }
 
-  editarUsuario(usuario: Usuario): void {
-    this.showFormUsuario.set(true);
-    this.editingIdUsuario.set(usuario.id);
-    this.usuarioForm = { ...usuario, contrasena: '' };
-  }
+  // Modales Usuario
+  verDetalleUsuario(u: User) { this.detalleSeleccionadoUsuario.set(u); this.detailOpenUsuario.set(true); }
+  cerrarDetalleUsuario() { this.detailOpenUsuario.set(false); }
 
-  eliminarUsuario(usuario: Usuario): void {
-    // Reemplazar con modal de confirmación
-    const ok = window.confirm(
-      `¿Seguro que deseas eliminar al usuario con ID ${usuario.id}?`
-    );
-    if (!ok) return;
-
-    this.usuarios.update(list => list.filter((u) => u.id !== usuario.id));
-    this.searchIdUsuario.set(null);
-
-    if (this.detalleSeleccionadoUsuario()?.id === usuario.id) {
-      this.cerrarDetalleUsuario();
-    }
-  }
-
-  verDetalleUsuario(u: Usuario): void {
-    this.detalleSeleccionadoUsuario.set(u);
-    this.detailOpenUsuario.set(true);
-  }
-
-  cerrarDetalleUsuario(): void {
-    this.detailOpenUsuario.set(false);
-    this.detalleSeleccionadoUsuario.set(null);
-  }
-
-  // Clase CSS por rol (Usuarios)
-  rolClass(rol?: Rol): string {
-    const r = (rol || '').toLowerCase();
-
-    if (r === 'administrador') return 'rol-administrador';
-    if (r === 'moderador') return 'rol-moderador';
-    if (r === 'analista') return 'rol-analista';
-    if (r === 'ciudadano') return 'rol-ciudadano';
-
-    return 'rol-ciudadano';
-  }
 
   /* ==================================== */
-  /* === CONTROL DE GESTIÓN DE ROLES === */
+  /* === GESTIÓN DE ROLES (BACKEND) === */
   /* ==================================== */
 
-  // Control del Formulario de Roles (NUEVO)
   onRegistrarRolClick(): void {
     this.showFormRol.set(true);
     this.editingIdRol.set(null);
-    this.rolForm = this.crearRolFormVacio();
+    this.rolForm = new Role();
   }
 
   cancelarFormRol(): void {
     this.showFormRol.set(false);
     this.editingIdRol.set(null);
-    this.rolForm = this.crearRolFormVacio();
   }
 
   guardarRol(): void {
-    if (!this.rolForm.nombre) {
-      console.error('ERROR: El nombre del rol es obligatorio.');
+    if (!this.rolForm.name) {
+      alert('El nombre del rol es obligatorio');
       return;
     }
-
-    // 🔒 Validación de Formato: Debe empezar con ROLE_ y debe estar en mayúsculas
-    const nombreNormalizado = this.rolForm.nombre.toUpperCase();
-    if (!nombreNormalizado.startsWith('ROLE_')) {
-      console.error('ERROR: El nombre del rol debe seguir el formato ROLE_<NOMBRE>.');
-      return;
-    }
-
-    const now = new Date().toISOString().slice(0, 10);
+    // Forzamos mayúsculas si quieres
+    this.rolForm.name = this.rolForm.name.toUpperCase();
 
     if (this.editingIdRol() === null) {
-      // 🆕 CREAR
-      const newId = Math.max(...this.roles().map(r => r.id), 0) + 1;
-      const nuevoRol: RolSistema = {
-        ...this.rolForm,
-        id: newId,
-        nombre: nombreNormalizado,
-        fechaCreacion: now,
-      };
-      this.roles.update(list => [...list, nuevoRol]);
-      console.log('Rol registrado:', nuevoRol);
-    } else {
-      // ✏️ EDITAR
-      this.roles.update(list => {
-        const idx = list.findIndex(r => r.id === this.editingIdRol());
-        if (idx > -1) {
-          const rolAnterior = list[idx];
-          const rolActualizado: RolSistema = {
-            ...rolAnterior,
-            ...this.rolForm,
-            nombre: nombreNormalizado,
-            id: rolAnterior.id, // Aseguramos no cambiar ID
-            fechaCreacion: rolAnterior.fechaCreacion, // Aseguramos no cambiar Fecha
-          };
-          list[idx] = rolActualizado;
-        }
-        return list;
+      // CREAR
+      this.roleService.insert(this.rolForm).subscribe(() => {
+        this.roleService.actualizarLista();
+        this.showFormRol.set(false);
       });
-      console.log('Rol actualizado:', this.rolForm);
-    }
-
-    this.showFormRol.set(false);
-    this.editingIdRol.set(null);
-    this.rolForm = this.crearRolFormVacio();
-    this.searchIdRol.set(null);
-  }
-
-  // Acciones de la Tabla de Roles (NUEVO)
-  buscarPorIdRol(): void {
-    this.showFormRol.set(false);
-    if (this.searchIdRol() === null || this.searchIdRol() === undefined) {
-      return;
-    }
-    if (this.rolesFiltrados().length === 0) {
-      console.warn(`No se encontró ningún rol con ID ${this.searchIdRol()}`);
+    } else {
+      // EDITAR
+      this.roleService.update(this.rolForm).subscribe(() => {
+        this.roleService.actualizarLista();
+        this.showFormRol.set(false);
+      });
     }
   }
 
-  limpiarBusquedaRol(): void {
-    this.searchIdRol.set(null);
-  }
-
-  editarRol(rol: RolSistema): void {
+  editarRol(rol: Role): void {
     this.showFormRol.set(true);
     this.editingIdRol.set(rol.id);
     this.rolForm = { ...rol };
   }
 
-  eliminarRol(rol: RolSistema): void {
-    // Reemplazar con modal de confirmación
-    const ok = window.confirm(
-      `¿Seguro que deseas eliminar el Rol con ID ${rol.id} (${rol.nombre})?`
-    );
-    if (!ok) return;
-
-    // TODO: En una app real, se debe verificar si este rol está asignado a algún usuario
-    this.roles.update(list => list.filter((r) => r.id !== rol.id));
-    this.searchIdRol.set(null);
-
-    if (this.detalleSeleccionadoRol()?.id === rol.id) {
-      this.cerrarDetalleRol();
+  eliminarRol(rol: Role): void {
+    if (confirm(`¿Eliminar rol ${rol.name}?`)) {
+      this.roleService.delete(rol.id).subscribe(() => {
+        this.roleService.actualizarLista();
+      });
     }
   }
 
-  verDetalleRol(r: RolSistema): void {
-    this.detalleSeleccionadoRol.set(r);
-    this.detailOpenRol.set(true);
+  buscarPorIdRol(): void {
+    const id = this.searchIdRol();
+    if (id) {
+      this.roleService.listId(id).subscribe({
+        next: (r) => this.roles.set([r]),
+        error: () => alert('Rol no encontrado')
+      });
+    } else {
+      this.roleService.actualizarLista();
+    }
   }
 
-  cerrarDetalleRol(): void {
-    this.detailOpenRol.set(false);
-    this.detalleSeleccionadoRol.set(null);
+  limpiarBusquedaRol(): void { this.searchIdRol.set(null); this.roleService.actualizarLista(); }
+
+  // Modales Rol
+  verDetalleRol(r: Role) { this.detalleSeleccionadoRol.set(r); this.detailOpenRol.set(true); }
+  cerrarDetalleRol() { this.detailOpenRol.set(false); }
+
+  // Helpers visuales
+  rolClass(rolNombre?: string): string {
+    const r = (rolNombre || '').toLowerCase();
+    if (r.includes('admin')) return 'rol-administrador';
+    if (r.includes('ciudadano')) return 'rol-ciudadano';
+    if (r.includes('desarrollador')) return 'rol-analista';
+    return 'rol-moderador';
   }
 
+  // Obtenemos el nombre del primer rol para mostrar en tabla
+  getRoleName(u: User): string {
+    return u.roles && u.roles.length > 0 ? u.roles[0].name : 'Sin Rol';
+  }
 
-  // Cerrar modal con ESC (General)
   @HostListener('document:keydown.escape')
   onEsc() {
     if (this.detailOpenUsuario()) this.cerrarDetalleUsuario();

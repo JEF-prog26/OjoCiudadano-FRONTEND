@@ -1,160 +1,147 @@
-import { Component, OnInit } from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {Component, computed, HostListener, inject, OnInit, signal} from '@angular/core';
+
 import {RouterLink} from '@angular/router';
 import {HeaderPanelComponent} from '../header-panel-component/header-panel-component';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {EvidenciaService} from '../../services/evidencia-service';
+import {DenunciaService} from '../../services/denuncia-service';
+import {Evidencia} from '../../model/evidencia';
+import {Denuncia} from '../../model/denuncia';
 
 @Component({
-  selector: 'app-panel-evidencia', // Nombre del selector
+  selector: 'app-panel-evidencia',
+  imports: [CommonModule, FormsModule, HeaderPanelComponent],
   templateUrl: './panel-evidencia-component.html',
-  styleUrls: ['./panel-evidencia-component.css'],
-  imports: [CommonModule, RouterLink,HeaderPanelComponent]
+  styleUrls: ['./panel-evidencia-component.css']
 })
-export class PanelEvidenciaComponent implements OnInit { // <-- CLASE EXPORTADA Y CONFIGURADA
+export class PanelEvidenciaComponent implements OnInit {
+  // Inyecciones
+  private evidenciaService = inject(EvidenciaService);
+  private denunciaService = inject(DenunciaService);
 
-  // --- Propiedades para controlar la visibilidad ---
-  // Estas propiedades controlarán las clases CSS en el HTML usando [ngClass] o *ngIf
-  showInputs: boolean = false;
-  showId: boolean = false;
-  showTable: boolean = true; // Mostrar la tabla por defecto
+  // Datos
+  evidencias = signal<Evidencia[]>([]);
+  denunciasDisponibles = signal<Denuncia[]>([]); // Para el select
 
-  // AÑADIR: Propiedad para simular los datos de la tabla
-  evidenciasData: any[] = [
-    { id: 1, nombre: 'Foto Incidente', documentoUr: 'ABC1234', tipo: 'Imagen' },
-    { id: 2, nombre: 'Video Prueba', documentoUr: 'DEF5678', tipo: 'Video' },
-    { id: 3, nombre: 'Audio Testigo', documentoUr: 'GHI9012', tipo: 'Audio' },
-  ];
+  // Formulario
+  showForm = signal(false);
+  editingId = signal<number | null>(null);
+  evidenciaForm: Evidencia = new Evidencia();
 
-  constructor() { }
+  // Selección temporal
+  selectedDenuncia: Denuncia | null = null;
+
+  // UI
+  searchId = signal<number | null>(null);
+  detailOpen = signal(false);
+  detalleSeleccionado = signal<Evidencia | null>(null);
+
+  // Filtro
+  evidenciasFiltradas = computed(() => {
+    const search = this.searchId();
+    const list = this.evidencias();
+    if (!search) return list;
+    return list.filter(e => e.id === search);
+  });
 
   ngOnInit(): void {
-    // Aquí iría la lógica de inicialización si fuera necesaria.
-    // El estado inicial ya se maneja en la declaración de las propiedades de arriba.
-    console.log('Componente de Panel de Evidencias inicializado.');
+    // 1. Cargar Evidencias
+    this.evidenciaService.list().subscribe(data => this.evidencias.set(data));
+    this.evidenciaService.getListaCambio().subscribe(data => this.evidencias.set(data));
+
+    // 2. Cargar Denuncias (para asignar)
+    this.denunciaService.list().subscribe(data => this.denunciasDisponibles.set(data));
   }
 
-  // --- Funciones de Utilidad (Adaptadas de tu JS) ---
+  // --- CRUD ---
 
-  /**
-   * Actualiza las propiedades de visibilidad basadas en el modo.
-   */
-  updateVisibility(showInputs: boolean, showId: boolean, showTable: boolean): void {
-    this.showInputs = showInputs;
-    this.showId = showId;
-    this.showTable = showTable;
+  onRegistrarClick(): void {
+    this.showForm.set(true);
+    this.editingId.set(null);
+    this.evidenciaForm = new Evidencia();
+    this.selectedDenuncia = null;
   }
 
-  // --- Manejadores de Eventos de los Botones (Adaptados de tu JS) ---
-
-  onRegisterClick(): void {
-    console.log('Modo: Registrar Evidencia');
-    this.updateVisibility(true, false, false);
+  cancelarForm(): void {
+    this.showForm.set(false);
+    this.editingId.set(null);
   }
 
-  onListClick(): void {
-    console.log('Modo: Listar Evidencia');
-    this.updateVisibility(false, false, true);
-    // Aquí iría la llamada a la API para cargar la lista de evidencias
-    // this.loadAllEvidences();
+  guardar(): void {
+    if (!this.evidenciaForm.tipo || !this.evidenciaForm.urlArchivo || !this.selectedDenuncia) {
+      alert('Complete Tipo, URL y seleccione una Denuncia.');
+      return;
+    }
+
+    // Asignar relación
+    this.evidenciaForm.denuncia = this.selectedDenuncia;
+
+    if (this.editingId() === null) {
+      // CREAR
+      this.evidenciaService.insert(this.evidenciaForm).subscribe(() => {
+        this.evidenciaService.actualizarLista();
+        this.showForm.set(false);
+        alert('Evidencia registrada');
+      });
+    } else {
+      // EDITAR
+      this.evidenciaService.update(this.evidenciaForm, this.evidenciaForm.id).subscribe(() => {
+        this.evidenciaService.actualizarLista();
+        this.showForm.set(false);
+        alert('Evidencia actualizada');
+      });
+    }
   }
 
-  onSearchClick(): void {
-    console.log('Modo: Buscar Evidencia por ID');
-    this.updateVisibility(false, true, true);
+  editar(e: Evidencia): void {
+    this.showForm.set(true);
+    this.editingId.set(e.id);
+    this.evidenciaForm = { ...e }; // Clonar
+
+    // Pre-seleccionar denuncia
+    if (e.denuncia) {
+      this.selectedDenuncia = this.denunciasDisponibles().find(d => d.idDenuncia === e.denuncia.idDenuncia) || null;
+    }
   }
 
-  onUpdateClick(): void {
-    console.log('Modo: Actualizar datos evidencia');
-    this.updateVisibility(true, true, true);
+  eliminar(e: Evidencia): void {
+    if (confirm(`¿Eliminar evidencia #${e.id}?`)) {
+      this.evidenciaService.delete(e.id).subscribe(() => {
+        this.evidenciaService.actualizarLista();
+      });
+    }
   }
 
-  onDeleteClick(): void {
-    console.log('Modo: Eliminar evidencia');
-    this.updateVisibility(false, true, true);
+  // --- BÚSQUEDA ---
+  buscarPorId(): void {
+    const id = this.searchId();
+    if (id) {
+      this.evidenciaService.listId(id).subscribe({
+        next: (e) => this.evidencias.set([e]),
+        error: () => alert('Evidencia no encontrada')
+      });
+    } else {
+      this.evidenciaService.actualizarLista();
+    }
   }
 
-  // Si tenías más métodos como loadAllEvidences, deben ser métodos de clase aquí.
+  limpiarBusqueda(): void {
+    this.searchId.set(null);
+    this.evidenciaService.actualizarLista();
+  }
+
+  // --- HELPERS ---
+  tipoClass(tipo?: string): string {
+    const t = (tipo || '').toLowerCase();
+    if (t.includes('foto')) return 'tipo-foto';
+    if (t.includes('video')) return 'tipo-video';
+    return 'tipo-doc';
+  }
+
+  verDetalle(e: Evidencia) { this.detalleSeleccionado.set(e); this.detailOpen.set(true); }
+  cerrarDetalle() { this.detailOpen.set(false); }
+
+  @HostListener('document:keydown.escape')
+  onEsc() { if (this.detailOpen()) this.cerrarDetalle(); }
 }
-
-
-/*document.addEventListener('DOMContentLoaded', () => {
-  // --- Referencias a los elementos del DOM ---
-  const registerBtn = document.getElementById('register-btn');
-  const listBtn = document.getElementById('list-btn');
-  const searchBtn = document.getElementById('search-btn');
-  const updateBtn = document.getElementById('update-btn');
-  const deleteBtn = document.getElementById('delete-btn');
-
-  const inputRow = document.querySelector('.input-row') as HTMLElement;
-  const idInputGroup = document.querySelector('.id-input-group') as HTMLElement;
-  const evidenceTableContainer = document.querySelector('.evidence-table-container') as HTMLElement;
-
-  // --- Funciones de Utilidad ---
-
-  /**
-   * Oculta o muestra elementos usando clases CSS.
-   * @param showInputs Muestra los inputs de Nombre, Documento, Tipo.
-   * @param showId Muestra el input de IdEvidencia.
-   * @param showTable Muestra la tabla.
-
-  const updateVisibility = (showInputs: boolean, showId: boolean, showTable: boolean) => {
-    // Manejar la fila de inputs (Nombre, Documento UR, Tipo)
-    if (showInputs) {
-      inputRow.classList.remove('hidden');
-      inputRow.classList.add('visible');
-    } else {
-      inputRow.classList.add('hidden');
-      inputRow.classList.remove('visible');
-    }
-
-    // Manejar el input de ID (IdEvidencia)
-    if (showId) {
-      idInputGroup.classList.remove('hidden');
-      idInputGroup.classList.add('visible');
-    } else {
-      idInputGroup.classList.add('hidden');
-      idInputGroup.classList.remove('visible');
-    }
-
-    // Manejar el contenedor de la tabla
-    if (showTable) {
-      evidenceTableContainer.classList.remove('hidden');
-      evidenceTableContainer.classList.add('visible-block'); // Usamos visible-block para display: block
-    } else {
-      evidenceTableContainer.classList.add('hidden');
-      evidenceTableContainer.classList.remove('visible-block');
-    }
-  };
-
-  // --- Manejadores de Eventos de los Botones ---
-
-  registerBtn?.addEventListener('click', () => {
-    console.log('Modo: Registrar Evidencia');
-    updateVisibility(true, false, false);
-  });
-
-  listBtn?.addEventListener('click', () => {
-    console.log('Modo: Listar Evidencia');
-    updateVisibility(false, false, true);
-    // Aquí iría la llamada a la API para cargar la lista de evidencias
-    // loadAllEvidences();
-  });
-
-  searchBtn?.addEventListener('click', () => {
-    console.log('Modo: Buscar Evidencia por ID');
-    updateVisibility(false, true, true);
-  });
-
-  updateBtn?.addEventListener('click', () => {
-    console.log('Modo: Actualizar datos evidencia');
-    updateVisibility(true, true, true);
-  });
-
-  deleteBtn?.addEventListener('click', () => {
-    console.log('Modo: Eliminar evidencia');
-    updateVisibility(false, true, true);
-  });
-
-  // --- Estado Inicial ---
-  // Según el nuevo mockup, inicialmente solo se ve la tabla de listado.
-  updateVisibility(false, false, true); // Oculta inputs e ID, muestra la tabla por defecto
-});*/

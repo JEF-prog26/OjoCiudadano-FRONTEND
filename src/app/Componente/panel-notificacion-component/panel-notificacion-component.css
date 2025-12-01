@@ -1,222 +1,206 @@
-:root {
-  --color-primary-dark: #003399; /* Azul oscuro para botones */
-  --color-primary-light: #007bff; /* Azul más claro */
-  --color-accent: #ff0000; /* Rojo para el banner */
-  --color-background: #f0f0f0;
-  --color-panel-bg: #ffffff; /* Fondo blanco del panel */
-  --color-text-dark: #333;
-  --color-table-header: #999; /* Gris oscuro para el encabezado de tabla */
-  --color-table-cell: #ccc; /* Gris claro para las celdas de tabla */
-  --border-radius: 15px;
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Estilos Globales y Fondo */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: var(--color-background);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Encabezado Rojo Superior */
-.header-banner {
-  background-color: var(--color-accent);
-  color: white;
-  padding: 10px 20px;
-  height: 60px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  border-bottom: 5px solid #a00;
-}
-
-.back-link {
-  background-color: var(--color-primary-dark);
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  padding: 10px 15px;
-  border: 2px solid white;
-  border-radius: 8px;
-  transition: background-color 0.2s;
-}
-
-.back-link:hover {
-  background-color: var(--color-primary-light);
-}
-
-/* Contenedor Principal del Panel - (Fondo patrón) */
-.notification-panel-container {
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
-  flex-grow: 1;
-
-  /* === CAMBIOS AQUÍ (Usando la URL externa) === */
-  background-image: url('https://us.123rf.com/450wm/trompinex/trompinex1606/trompinex160600030/58398485-decorative-checkered-pattern-vector-black-white-seamless-patterns-abstract-stylish-background.jpg');
-  background-repeat: repeat;
-  background-size: 200px; /* Ajusta según el tamaño de la imagen */
-  /* === FIN CAMBIOS === */
-}
-
-/* Panel de Notificaciones */
-.notification-panel {
-  background-color: var(--color-panel-bg);
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  width: 90%;
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-}
-
-.notification-panel h1 {
-  color: var(--color-text-dark);
-  margin-top: 0;
-  margin-bottom: 30px;
-}
-
-.controls-layout {
-  display: flex;
-  gap: 40px;
-  align-items: flex-start;
-  flex-grow: 1;
-}
-
-/* Columna de Botones */
-.button-column {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.action-button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: left;
-  width: 220px;
-  transition: background-color 0.2s;
-}
-
-.primary-button {
-  background-color: var(--color-primary-dark);
-  color: white;
-}
-
-.primary-button:hover {
-  background-color: var(--color-primary-light);
-}
-
-/* Área de Datos (Inputs y Tabla) */
-.data-area {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0;
-}
-
-/* Fila de Inputs (Nombre, Documento UR, Fecha de envío) */
-.input-row {
-  display: flex; /* Se usa para mostrar/ocultar */
-  gap: 10px;
-}
-
-.data-input {
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  flex-grow: 1;
-  font-size: 14px;
-  background-color: #e0e0e0;
-  color: #666;
-  height: 20px;
-}
-
-/* Grupo de Input ID (IdNotificacion) */
-.id-notificacion-input-group {
-  display: flex; /* Se usa para mostrar/ocultar */
-  width: 220px;
-  align-self: flex-start;
-  margin-left: 0; /* Lo alineamos con el resto de inputs */
-}
-
-.id-input {
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  background-color: #e0e0e0;
+/* FONDO GENERAL */
+.page-wrapper {
+  background: url("../../../assets/images/Imagen-Fondo.png") no-repeat;
+  background-position: center;
+  background-size: cover;
   width: 100%;
-  color: #666;
-  height: 20px;
+  min-height: 100vh; /* Ocupa toda la pantalla */
+
+  display: flex;
+  flex-direction: column;
+  border-bottom: 14px solid #e40000;
+
+  /* --- CORRECCIÓN CLAVE: BAJAMOS EL CONTENIDO --- */
+  padding-top: 140px; /* 100px del Header + 40px de aire */
 }
 
-/* Contenedor de la Tabla */
-.notification-table-container {
-  background-color: var(--color-panel-bg);
+/* CONTENEDOR CENTRAL */
+.panel-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* Centrado Horizontal */
+  align-items: flex-start; /* Alineado arriba (para que crezca hacia abajo) */
+  padding: 0 20px 40px; /* Espacio a los lados y abajo */
+}
+
+/* LA TARJETA BLANCA */
+.panel-card {
+  width: 100%;
+  max-width: 1100px; /* Ancho máximo igual al de Usuarios */
+  background-color: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  padding: 30px 40px;
+
+  /* Altura controlada */
+  min-height: 400px; /* Altura mínima para que no se vea aplastado */
+  height: fit-content; /* Se adapta al contenido, no se estira infinito */
+}
+
+/* --- ESTILOS INTERNOS DEL PANEL (Igual que antes) --- */
+
+/* Header y Acciones */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Botones y Inputs */
+.action-btn {
+  background: #0046b8;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background 0.2s;
+}
+.action-btn:hover { background: #003380; }
+
+.search-box {
+  display: flex;
+  gap: 8px;
+}
+
+.search-input {
+  padding: 8px 16px;
+  border-radius: 999px;
   border: 1px solid #ccc;
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  max-height: 400px;
-  overflow-y: auto;
-  overflow-x: auto;
-  flex-grow: 1;
+  outline: none;
+}
+
+.search-btn {
+  background: #0046b8;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.search-btn-secondary {
+  background: #e0e0e0;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* --- TABLA --- */
+.table-card {
+  background: #f0f0f0;
+  border-radius: 18px;
+  padding-bottom: 10px;
+  overflow: hidden; /* Para recortar bordes */
   margin-top: 10px;
 }
 
-.table-header {
-  display: flex;
-  background-color: var(--color-table-header);
-  color: white;
-  font-weight: bold;
-  padding: 15px 10px;
-  position: sticky;
-  top: 0;
-  min-width: 600px;
+/* Cabecera Negra */
+.table-header.notif-header {
+  display: grid;
+  /* ID | Mensaje | Fecha | Destinatario | Estado | Acciones */
+  grid-template-columns: 60px 3fr 1fr 1.5fr 100px 120px;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 20px;
+  background: #000; /* Negro como en usuarios */
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
-.table-header > div {
-  flex: 1;
-  text-align: center;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 5px 0;
-}
-.table-header > div:last-child {
-  border-right: none;
-}
-
+/* Filas */
 .table-row {
-  display: flex;
-  padding: 10px;
-  border-bottom: 1px solid #b0b0b0;
-  background-color: var(--color-table-cell);
-  min-width: 600px;
+  display: grid;
+  grid-template-columns: 60px 3fr 1fr 1.5fr 100px 120px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  margin: 4px 8px; /* Separación tipo tarjeta */
+  border-radius: 6px;
 }
 
-.table-row:nth-child(even) {
-  background-color: #ddd;
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.table-row > div {
-  flex: 1;
+/* Badges (Etiquetas de estado) */
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-align: center;
-  color: var(--color-text-dark);
-  padding: 5px 0;
 }
+.badge.read { background: #d1fae5; color: #065f46; }
+.badge.unread { background: #fee2e2; color: #991b1b; }
 
-/* Utilitarios para JS */
-.hidden {
-  display: none !important;
-}
+/* Botones de Iconos */
+.cell-actions { display: flex; gap: 5px; }
+.icon-btn { border: none; padding: 6px; border-radius: 4px; cursor: pointer; }
+.view { background: #e0f2fe; color: #0284c7; }
+.edit { background: #f3f4f6; border: 1px solid #ccc; }
+.delete { background: #fee2e2; color: #ef4444; }
 
-.visible-block {
-  display: block !important;
+/* --- FORMULARIO --- */
+.form-card {
+  background: #f9fafb;
+  padding: 30px;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
 }
+.form-card h3 { margin-top: 0; color: #0033A0; }
+
+.form-row { margin-bottom: 15px; display: flex; flex-direction: column; }
+.form-label { font-weight: 600; font-size: 0.9rem; margin-bottom: 5px; }
+.form-input { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
+.checkbox-row { flex-direction: row; align-items: center; gap: 10px; margin-top: 10px; }
+
+.form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.form-btn-primary { background: #0046b8; color: #fff; padding: 10px 24px; border-radius: 999px; border: none; cursor: pointer; font-weight: 600; }
+.form-btn-secondary { background: #e5e7eb; padding: 10px 24px; border-radius: 999px; border: none; cursor: pointer; font-weight: 600; }
+
+/* Modal */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: grid; place-items: center; z-index: 1200;
+  backdrop-filter: blur(2px);
+}
+.modal-card.pretty {
+  background: #fff; padding: 0; border-radius: 18px; width: 500px;
+  overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+.modal-header.pretty {
+  background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+  padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #dee2e6;
+}
+.modal-body { padding: 20px; }
+.modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; }

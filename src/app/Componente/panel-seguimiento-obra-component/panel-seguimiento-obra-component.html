@@ -1,1 +1,136 @@
-<p>panel-seguimiento-obra-component works!</p>
+<app-header-panel-component/>
+<div class="page-wrapper">
+  <div class="panel-wrapper">
+    <div class="panel-card dashboard-layout">
+
+      <h2 class="panel-title">Panel de Seguimiento de la Obra</h2>
+
+      <div class="command-center">
+
+        <div class="map-container">
+          <iframe
+            width="100%"
+            height="100%"
+            frameborder="0"
+            style="border:0; filter: grayscale(20%);"
+            [src]="getMapUrl()"
+            allowfullscreen>
+          </iframe>
+
+          <div class="map-overlay">
+              <span class="location-badge">
+               📍 {{ selectedObra ? selectedObra.nombreObra : 'Ubicación General' }}
+              </span>
+          </div>
+        </div>
+
+        <div class="info-panel">
+          <div class="info-header">
+            <h3>Información del Seguimiento</h3>
+          </div>
+
+          <div class="info-body">
+
+            <div class="info-row">
+              <label>Fecha de Inicio:</label>
+              <input type="date" [(ngModel)]="seguimientoForm.fechaInicio" class="info-input">
+            </div>
+
+            <div class="info-row">
+              <label>Obra Pública:</label>
+              <select [(ngModel)]="selectedObra" class="info-input">
+                <option [ngValue]="null">-- Seleccionar --</option>
+                @for (o of obrasDisponibles(); track o.idObra) {
+                  <option [ngValue]="o">#{{ o.idObra }} - {{ o.nombreObra }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="info-row">
+              <label>Responsable:</label>
+              <select [(ngModel)]="selectedUser" class="info-input">
+                <option [ngValue]="null">-- Asignar --</option>
+                @for (u of usuariosDisponibles(); track u.id) {
+                  <option [ngValue]="u">{{ u.username }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="info-row">
+              <label>Estado Activo:</label>
+              <div class="toggle-switch">
+                <input type="checkbox" id="activoSwitch" [(ngModel)]="seguimientoForm.activo">
+                <label for="activoSwitch" class="switch-label">
+                  {{ seguimientoForm.activo ? 'TRUE (Activo)' : 'FALSE (Inactivo)' }}
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="action-grid">
+            <button class="btn-action btn-register" (click)="guardar()">
+              {{ editingId() ? 'Guardar Cambios' : 'Registrar' }}
+            </button>
+
+            <button class="btn-action btn-delete" (click)="eliminar()" [disabled]="!editingId()">
+              Eliminar
+            </button>
+
+            <button class="btn-action btn-update" (click)="cancelar()">
+              Limpiar / Nuevo
+            </button>
+
+            <div class="search-group">
+              <label>Buscar ID:</label>
+              <div class="search-inputs">
+                <input type="number" [(ngModel)]="searchId" placeholder="#">
+                <button class="btn-search" (click)="buscar()">🔍</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="list-section">
+        <h3>Historial de Seguimientos</h3>
+        <div class="table-container">
+          <table class="custom-table">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Fecha Inicio</th>
+              <th>Obra</th>
+              <th>Responsable</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (s of seguimientosFiltrados(); track s.id) {
+                <tr [class.selected-row]="editingId() === s.id">
+                  <td>{{ s.id }}</td>
+                  <td>{{ s.fechaInicio }}</td>
+                  <td>{{ s.obraPublica ? s.obraPublica.nombreObra : '---' }}</td>
+                  <td>{{ s.usuario ? s.usuario.nombre : '---' }}</td>
+                  <td>
+                    <span class="status-badge" [class.active]="s.activo" [class.inactive]="!s.activo">
+                      {{ s.activo ? 'ACTIVO' : 'INACTIVO' }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn-edit-row" (click)="editar(s)">Seleccionar</button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr><td colspan="6" class="text-center">No hay datos</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

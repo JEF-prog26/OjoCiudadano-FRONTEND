@@ -1,1 +1,133 @@
-<p>panel-avance-obra-component works!</p>
+<app-header-panel-component/>
+<div class="page-wrapper">
+  <div class="panel-wrapper">
+    <div class="panel-card">
+
+      <div class="panel-header">
+        <h2 class="panel-title">Gestión de Avances de Obra</h2>
+        <div class="header-actions">
+          <button class="action-btn action-primary" (click)="onRegistrarClick()">
+            Nuevo Avance
+          </button>
+
+          <div class="search-box">
+            <input type="number" class="search-input" placeholder="Buscar por ID..."
+                   [ngModel]="searchId()" (ngModelChange)="searchId.set($event)" />
+            <button class="search-btn" (click)="buscarPorId()">Buscar</button>
+            <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="panel-main">
+
+        @if (!showForm()) {
+          <div class="table-card">
+            <div class="table-header ava-header">
+              <span>ID</span>
+              <span>Porcentaje</span>
+              <span>Fecha Reporte</span>
+              <span>Obra Asociada</span>
+              <span>Acciones</span>
+            </div>
+            <div class="table-body">
+              @for (a of avancesFiltrados(); track a.idAvanceObra) {
+                <div class="table-row ava-row">
+                  <span>{{ a.idAvanceObra }}</span>
+
+                  <span class="fw-bold text-blue">{{ a.porcentajeDeAvance }}</span>
+
+                  <span>{{ a.fechaReporte }}</span>
+
+                  <span class="text-truncate">
+                    {{ a.obrapublica ? a.obrapublica.nombreObra : 'Sin Asignar' }}
+                  </span>
+
+                  <span class="cell-actions">
+                    <button class="icon-btn view" (click)="verDetalle(a)">👁</button>
+                    <button class="icon-btn edit" (click)="editar(a)">✏️</button>
+                    <button class="icon-btn delete" (click)="eliminar(a)">🗑</button>
+                  </span>
+                </div>
+              } @empty { <div class="p-4 text-center">No hay avances registrados.</div> }
+            </div>
+          </div>
+        } @else {
+          <div class="form-card">
+            <h3>{{ editingId() ? 'Editar Avance' : 'Registrar Nuevo Avance' }}</h3>
+
+            <div class="form-grid">
+              <div class="col">
+                <div class="form-row">
+                  <label class="form-label">Porcentaje de Avance (*)</label>
+                  <input class="form-input" type="text" [(ngModel)]="avanceForm.porcentajeDeAvance"
+                         placeholder="Ej: 45%" required />
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Fecha del Reporte (*)</label>
+                  <input class="form-input" type="date" [(ngModel)]="avanceForm.fechaReporte" required />
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-row">
+                  <label class="form-label">Obra Pública (*)</label>
+                  <select class="form-input" [(ngModel)]="selectedObra">
+                    <option [ngValue]="null">Seleccione una obra</option>
+                    @for (o of obrasDisponibles(); track o.idObra) {
+                      <option [ngValue]="o">#{{ o.idObra }} - {{ o.nombreObra }}</option>
+                    }
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Descripción Detallada</label>
+                  <textarea class="form-input" rows="3" [(ngModel)]="avanceForm.descripcion"
+                            placeholder="Detalles del progreso..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="form-btn-secondary" (click)="cancelarForm()">Cancelar</button>
+              <button class="form-btn-primary" (click)="guardar()">Guardar Avance</button>
+            </div>
+          </div>
+        }
+
+        @if (detailOpen()) {
+          <div class="modal-backdrop" (click)="cerrarDetalle()">
+            <div class="modal-card pretty" (click)="$event.stopPropagation()">
+              <header class="modal-header pretty">
+                <h3 class="modal-title">Avance #{{ detalleSeleccionado()?.idAvanceObra }}</h3>
+                <button class="modal-close" (click)="cerrarDetalle()">✖</button>
+              </header>
+              <div class="modal-body">
+                <div class="meta-grid">
+                  <div class="meta">
+                    <span class="meta-label">Porcentaje</span>
+                    <span class="meta-value big text-blue">{{ detalleSeleccionado()?.porcentajeDeAvance }}</span>
+                  </div>
+                  <div class="meta">
+                    <span class="meta-label">Fecha Reporte</span>
+                    <span class="meta-value">{{ detalleSeleccionado()?.fechaReporte }}</span>
+                  </div>
+                  <div class="meta full">
+                    <span class="meta-label">Obra Asociada</span>
+                    <p class="meta-value fw-bold">{{ detalleSeleccionado()?.obrapublica?.nombreObra }}</p>
+                  </div>
+                  <div class="meta full">
+                    <span class="meta-label">Descripción</span>
+                    <p class="meta-value">{{ detalleSeleccionado()?.descripcion || 'Sin descripción' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+      </section>
+    </div>
+  </div>
+</div>

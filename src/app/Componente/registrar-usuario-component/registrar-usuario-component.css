@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-body {
+.page-wrapper {
   background: url("../../../assets/images/Imagen-Fondo.png") no-repeat;
   background-position: center;
   background-size: cover;
@@ -15,8 +15,10 @@ body {
   align-items: center; /* Centrar Verticalmente*/
   /* Padding para separación del header fijo*/
   display: flex;
-  padding: 40px 20px;
+  /*padding: 40px 20px;*/
   flex-grow: 1;
+  padding-top: 150px;
+  padding-bottom: 50px;
 }
 
 .topheader {

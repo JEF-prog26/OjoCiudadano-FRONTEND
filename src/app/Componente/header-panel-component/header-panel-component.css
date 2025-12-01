@@ -1,132 +1,97 @@
+/* Sobrescribimos mat-toolbar */
 .topheader {
-  background-color:#FF0000;
-  width: 100%;     /* Asegura que ocupe todo el ancho */
-  height: 100px;   /* Altura del header */
-  position: fixed; /* Mantiene el header fijo en la parte superior */
-  top: 0; /* Posiciona el header en la parte superior */
-  justify-content: space-around;
-  align-items: center;
-  display: flex;
+  background-color: #FF0000 !important; /* Rojo OjoCiudadano */
+  width: 100%;
+  height: 100px !important; /* Forzamos tu altura */
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  padding: 0; /* Quitamos padding por defecto de material */
+  /* display: flex; <- mat-toolbar ya es flex */
 }
 
 .topheader-container {
-  margin-left: 6.5%;
-  margin-right: 6.5%;
-  width: 100%;
-  justify-content: space-around;
+  margin-left: 2%;
+  margin-right: 2%;
+  width: 96%;
+  height: 100%;
+  justify-content: space-between; /* Mejor distribución */
   align-items: center;
   display: flex;
 }
 
+/* MENÚ (Se mantiene casi igual) */
 .menu-horizontal {
   list-style: none;
-  width: 100%;
-  font-size: 18px;
-  margin: 0%;
-  justify-content: end;
   display: flex;
+  margin: 0;
+  padding: 0;
+  gap: 5px; /* Espacio entre items */
 }
 
 .Contenedor-menu-horizontal {
-  width: 100%;
   display: flex;
+  justify-content: flex-end;
+  flex-grow: 1; /* Ocupa el espacio disponible */
+  margin-right: 10px;
 }
 
 .menu-horizontal li a {
   display: block;
   border-radius: 10px;
-  padding: 10px 20px;
+  padding: 8px 10px;
   text-decoration: none;
-  list-style: none;
   font-family: "Lexend", sans-serif;
-  font-size: 22px;
+  font-size: 19px; /* Ajuste leve para que quepan todos */
   color: #ffffff;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.menu-vertical {
-  position: absolute;
-  background-color: #cacaca;
-  box-shadow: 0 10px 10px #00000080;
-  border: none;
-  border-radius: 10px;
-  padding: 0px;
-  margin-top: 0px;
-  list-style: none;
-  display: none;
+/* Efecto Hover simple */
+.menu-horizontal li a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-.menu-horizontal .menu-vertical {
-  margin-left: 20px;
+/* Clase que agrega Angular automáticamente a la ruta activa */
+.active-link {
+  font-weight: bold;
+  text-decoration: underline !important;
 }
 
-.menu-horizontal .menu-vertical li a {
-  font-family: "Lexend", sans-serif;
-  font-size: 22px;
-  color: #000000;
-  text-decoration: none;
+/* BOTÓN CERRAR SESIÓN */
+.Btn-CerrarSesion {
+  /* margin-left eliminado, controlamos con flex */
 }
 
-.menu-horizontal li:hover .menu-vertical {
-  display: block;
-}
-
-.menu-vertical li a:hover {
-  background-color: #0033A0;
-  color:#ffffff;
-}
-
-.Btn-CerrarSesion{
-  margin-left: 80px;
-  justify-content: end;
-}
-
+/* Adaptación del botón para Material */
 .Btn-IconoMensaje {
-  background-color: #0033A0;
-  height: 54px;
-  width: 255px;
-  border: none;
-  border-radius: 75.5px;
+  background-color: #0033A0 !important; /* Azul Original */
+  height: 45px;
+  width: 180px;
+  border-radius: 75.5px !important;
+  display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
-  cursor: pointer;
-}
-
-.Btn-IconoMensaje span{
   font-family: "Lexend", sans-serif;
-  font-size: 22px;
-  color: #ffffff;
-  margin-right: 20px;
-  margin-left: 15px;
+  font-size: 16px;
+  color: #ffffff !important;
+  box-shadow: none; /* Quitamos sombra default de material si quieres */
 }
 
-.Btn-IconoMensaje i{
-  font-family: "Font Awesome 5 Free";
-  font-size: 30px;
-  font-weight: 2;
-  color: #ffffff;
-  color: none;
-  font-style: none;
+/* Opcional: Cambiar a rojo al pasar el mouse para indicar "Salir" */
+.Btn-IconoMensaje:hover {
+  background-color: #d32f2f !important;
 }
 
-.Btn-CerrarSesion  li a {
-  display: block;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-family: "Lexend", sans-serif;
-  font-size: 22px;
-  color: #000000;
-  padding-right: 95px;
-  text-decoration: none;
-  list-style: none;
-  cursor: pointer;
+.Btn-IconoMensaje span {
+  margin-right: 10px;
+  margin-left: 0;
 }
 
-.Btn-CerrarSesion:hover .menu-vertical {
-  display: block;
-}
-
-.topheader-container img {
-  cursor: pointer;
+/* Ajuste del ícono de Material */
+.Btn-IconoMensaje mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
 }

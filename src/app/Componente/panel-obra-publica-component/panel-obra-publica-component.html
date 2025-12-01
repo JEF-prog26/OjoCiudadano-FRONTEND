@@ -2,196 +2,174 @@
 <div class="page-wrapper">
   <div class="panel-wrapper">
     <div class="panel-card">
-      <!-- 🔹 CABECERA CON TÍTULO, BOTÓN Y BUSCADOR -->
-      <div class="panel-header">
-        <h2 class="panel-title">Panel de Gestión de Obras Públicas</h2>
 
+      <div class="panel-header">
+        <h2 class="panel-title">Gestión de Obras Públicas</h2>
         <div class="header-actions">
           <button class="action-btn action-primary" (click)="onRegistrarClick()">
-            Registrar Obra Pública
+            Nueva Obra
           </button>
 
           <div class="search-box">
-            <input
-              type="number"
-              class="search-input"
-              placeholder="Buscar por ID..."
-              [(ngModel)]="searchId"
-            />
+            <input type="number" class="search-input" placeholder="Buscar por ID..."
+                   [ngModel]="searchId()" (ngModelChange)="searchId.set($event)" />
             <button class="search-btn" (click)="buscarPorId()">Buscar</button>
             <button class="search-btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
           </div>
         </div>
       </div>
 
-      <!-- 🔹 CONTENIDO PRINCIPAL -->
       <section class="panel-main">
-        <!-- LISTA / TABLA -->
-        <ng-container *ngIf="!showForm; else formularioRegistro">
+
+        @if (!showForm()) {
           <div class="table-card">
-            <!-- TABLA HEADER -->
-            <div class="table-header">
+            <div class="table-header obra-header">
               <span>ID</span>
-              <span>Nombre</span>
-              <span>Fechas</span>
+              <span>Nombre de la Obra</span>
+              <span>Región</span>
               <span>Estado</span>
-              <span>ID Gob.</span>
-              <span>ID Exp.</span>
+              <span>Inicio</span>
               <span>Acciones</span>
             </div>
-
             <div class="table-body">
-              <div class="table-row-obra" *ngFor="let o of obrasFiltradas">
-                <span class="mono">{{ o.id }}</span>
-                <span class="truncate-text" title="{{ o.nombre }}">{{ o.nombre }}</span>
-                <!-- Fechas combinadas -->
-                <span class="date-range">
-                    <span class="date-start">{{ o.fechaInicio }}</span>
-                    <span class="date-end">{{ o.fechaFin }}</span>
-                </span>
-                <!-- Estado con estilo -->
-                <span>
-                    <span class="status-badge" [ngClass]="getEstadoClass(o.estado)">
-                        {{ o.estado }}
-                    </span>
-                </span>
-                <span class="mono">{{ o.idGobierno }}</span>
-                <span class="mono">{{ o.idExpediente }}</span>
-                <span class="cell-actions">
-                  <button class="icon-btn view" (click)="verDetalle(o)" title="Ver Detalle">👁</button>
-                  <button class="icon-btn edit" (click)="editarObra(o)" title="Editar">✏️</button>
-                  <button class="icon-btn delete" (click)="eliminarObra(o)" title="Eliminar">🗑</button>
-                </span>
-              </div>
+              @for (o of obrasFiltradas(); track o.idObra) {
+                <div class="table-row obra-row">
+                  <span>{{ o.idObra }}</span>
+                  <span class="text-truncate fw-bold">{{ o.nombreObra }}</span>
+
+                  <span class="text-truncate">{{ o.gobiernoRegional ? o.gobiernoRegional.nombre : '—' }}</span>
+
+                  <span class="badge" [ngClass]="estadoClass(o.estado)">{{ o.estado }}</span>
+
+                  <span>{{ o.fechaInicio }}</span>
+
+                  <span class="cell-actions">
+                    <button class="icon-btn view" (click)="verDetalle(o)">👁</button>
+                    <button class="icon-btn edit" (click)="editar(o)">✏️</button>
+                    <button class="icon-btn delete" (click)="eliminar(o)">🗑</button>
+                  </span>
+                </div>
+              } @empty { <div class="p-4 text-center">No hay obras registradas.</div> }
             </div>
-
-            <!-- Scrollbars decorativos (ocultos en CSS) -->
-            <div class="scrollbar-horizontal"></div>
-            <div class="scrollbar-vertical"></div>
           </div>
-        </ng-container>
-
-        <!-- FORMULARIO (CREAR / EDITAR) -->
-        <ng-template #formularioRegistro>
+        } @else {
           <div class="form-card">
-            <h3>{{ editingId ? 'Editar Obra Pública' : 'Registrar nueva Obra Pública' }}</h3>
+            <h3>{{ editingId() ? 'Editar Obra' : 'Nueva Obra Pública' }}</h3>
 
             <div class="form-grid">
-              <div class="form-row">
-                <label class="form-label">ID</label>
-                <input class="form-input" type="number" [(ngModel)]="obraForm.id" [readonly]="editingId !== null" />
+              <div class="col">
+                <div class="form-row">
+                  <label class="form-label">Nombre de la Obra (*)</label>
+                  <input class="form-input" type="text" [(ngModel)]="obraForm.nombreObra" required />
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Descripción</label>
+                  <textarea class="form-input" rows="3" [(ngModel)]="obraForm.descripcion"></textarea>
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Estado (*)</label>
+                  <select class="form-input" [(ngModel)]="obraForm.estado">
+                    <option value="En Planificación">En Planificación</option>
+                    <option value="En Ejecución">En Ejecución</option>
+                    <option value="Paralizada">Paralizada</option>
+                    <option value="Finalizada">Finalizada</option>
+                  </select>
+                </div>
               </div>
-              <div class="form-row">
-                <label class="form-label">Nombre</label>
-                <input class="form-input" type="text" [(ngModel)]="obraForm.nombre" />
-              </div>
-              <div class="form-row">
-                <label class="form-label">Fecha de Inicio</label>
-                <input class="form-input" type="date" [(ngModel)]="obraForm.fechaInicio" />
-              </div>
-              <div class="form-row">
-                <label class="form-label">Fecha de Fin</label>
-                <input class="form-input" type="date" [(ngModel)]="obraForm.fechaFin" />
-              </div>
-              <div class="form-row">
-                <label class="form-label">Estado</label>
-                <select class="form-input" [(ngModel)]="obraForm.estado">
-                  <option *ngFor="let estado of estadosDisponibles" [ngValue]="estado">{{ estado }}</option>
-                </select>
-              </div>
-              <div class="form-row">
-                <label class="form-label">ID Gobierno Regional</label>
-                <input class="form-input" type="number" [(ngModel)]="obraForm.idGobierno" />
-              </div>
-              <div class="form-row">
-                <label class="form-label">ID Expediente Técnico</label>
-                <input class="form-input" type="number" [(ngModel)]="obraForm.idExpediente" />
-              </div>
-              <!-- Campo de Descripción ocupa todo el ancho -->
-              <div class="form-row full-width">
-                <label class="form-label">Descripción</label>
-                <textarea class="form-input" [(ngModel)]="obraForm.descripcion" rows="3"></textarea>
+
+              <div class="col">
+                <div class="form-row">
+                  <label class="form-label">Fecha Inicio (*)</label>
+                  <input class="form-input" type="date" [(ngModel)]="obraForm.fechaInicio" required />
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Fecha Fin (Estimada)</label>
+                  <input class="form-input" type="date" [(ngModel)]="obraForm.fechaFin" />
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Gobierno Regional (*)</label>
+                  <select class="form-input" [(ngModel)]="selectedGobierno">
+                    <option [ngValue]="null">Seleccione región</option>
+                    @for (g of gobiernosDisponibles(); track g.id) {
+                      <option [ngValue]="g">{{ g.nombre }}</option>
+                    }
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Expediente Técnico Asociado</label>
+                  <select class="form-input" [(ngModel)]="selectedExpediente">
+                    <option [ngValue]="null">Ninguno</option>
+                    @for (e of expedientesDisponibles(); track e.id) {
+                      <option [ngValue]="e">#{{ e.id }} ({{ e.fechaCarga }})</option>
+                    }
+                  </select>
+                </div>
               </div>
             </div>
-
 
             <div class="form-actions">
               <button class="form-btn-secondary" (click)="cancelarForm()">Cancelar</button>
-              <button class="form-btn-primary" (click)="guardarObra()">
-                {{ editingId ? 'Guardar cambios' : 'Registrar' }}
-              </button>
+              <button class="form-btn-primary" (click)="guardar()">Guardar Obra</button>
             </div>
           </div>
-        </ng-template>
+        }
 
-        <!-- 🧩 MODAL DETALLE -->
-        <div class="modal-backdrop" *ngIf="detailOpen" (click)="cerrarDetalle()">
-          <section
-            class="modal-card pretty"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="detalleTitle"
-            (click)="$event.stopPropagation()"
-          >
-            <header class="modal-header pretty">
-              <div class="title-wrap">
-                <div class="title-icon">🏗️</div>
-                <div>
-                  <h3 id="detalleTitle" class="modal-title">Obra Pública #{{ detalleSeleccionado?.id }}</h3>
-                  <p class="modal-subtitle">{{ detalleSeleccionado?.nombre || '—' }}</p>
-                </div>
-              </div>
-              <button class="modal-close" (click)="cerrarDetalle()" aria-label="Cerrar">✖</button>
-            </header>
-
-            <div class="modal-body">
-              <!-- Detalles -->
-              <div class="detail-section card">
-                <h4 class="section-title">Detalles y Referencias</h4>
-
+        @if (detailOpen()) {
+          <div class="modal-backdrop" (click)="cerrarDetalle()">
+            <div class="modal-card pretty wide" (click)="$event.stopPropagation()">
+              <header class="modal-header pretty">
+                <h3 class="modal-title">Obra #{{ detalleSeleccionado()?.idObra }}</h3>
+                <button class="modal-close" (click)="cerrarDetalle()">✖</button>
+              </header>
+              <div class="modal-body">
                 <div class="meta-grid">
-                  <div class="meta">
-                    <span class="meta-label">ID Obra</span>
-                    <span class="meta-value mono">#{{ detalleSeleccionado?.id }}</span>
-                  </div>
-
-                  <div class="meta">
-                    <span class="meta-label">Estado</span>
-                    <span class="meta-value">
-                        <span class="status-badge" [ngClass]="getEstadoClass(detalleSeleccionado?.estado || 'Pendiente')">
-                            {{ detalleSeleccionado?.estado || '—' }}
-                        </span>
-                    </span>
-                  </div>
-
-                  <div class="meta">
-                    <span class="meta-label">ID Gobierno Regional</span>
-                    <span class="meta-value mono">{{ detalleSeleccionado?.idGobierno || '—' }}</span>
-                  </div>
-
-                  <div class="meta">
-                    <span class="meta-label">ID Expediente Técnico</span>
-                    <span class="meta-value mono">{{ detalleSeleccionado?.idExpediente || '—' }}</span>
-                  </div>
-
                   <div class="meta full">
-                    <span class="meta-label">Período de Ejecución</span>
-                    <span class="meta-value mono">{{ detalleSeleccionado?.fechaInicio || '—' }} — {{ detalleSeleccionado?.fechaFin || '—' }}</span>
+                    <span class="meta-label">Nombre Obra</span>
+                    <span class="meta-value big">{{ detalleSeleccionado()?.nombreObra }}</span>
                   </div>
-
                   <div class="meta full">
                     <span class="meta-label">Descripción</span>
-                    <p class="meta-value multiline">{{ detalleSeleccionado?.descripcion || 'No proporcionada' }}</p>
+                    <p class="meta-value">{{ detalleSeleccionado()?.descripcion }}</p>
+                  </div>
+                  <div class="meta">
+                    <span class="meta-label">Estado</span>
+                    <span class="badge" [ngClass]="estadoClass(detalleSeleccionado()?.estado)">
+                      {{ detalleSeleccionado()?.estado }}
+                    </span>
+                  </div>
+                  <div class="meta">
+                    <span class="meta-label">Región</span>
+                    <span class="meta-value">{{ detalleSeleccionado()?.gobiernoRegional?.nombre || 'No asignada' }}</span>
+                  </div>
+                  <div class="meta">
+                    <span class="meta-label">Fecha Inicio</span>
+                    <span class="meta-value">{{ detalleSeleccionado()?.fechaInicio }}</span>
+                  </div>
+                  <div class="meta">
+                    <span class="meta-label">Fecha Fin</span>
+                    <span class="meta-value">{{ detalleSeleccionado()?.fechaFin || 'Pendiente' }}</span>
+                  </div>
+                  <div class="meta full">
+                    <span class="meta-label">Expediente Técnico</span>
+                    <a *ngIf="detalleSeleccionado()?.expedienteTecnico"
+                       [href]="detalleSeleccionado()?.expedienteTecnico?.documentoUR"
+                       target="_blank" class="doc-link">
+                      Ver Documento
+                    </a>
+                    <span *ngIf="!detalleSeleccionado()?.expedienteTecnico">Sin expediente</span>
                   </div>
                 </div>
               </div>
-
             </div>
-          </section>
-        </div>
+          </div>
+        }
+
       </section>
     </div>
   </div>
-
-  <footer class="bottom-bar"></footer>
 </div>

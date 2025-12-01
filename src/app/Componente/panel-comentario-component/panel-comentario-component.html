@@ -1,1 +1,116 @@
-<p>panel-comentario-component works!</p>
+<app-header-panel-component/>
+<div class="page-wrapper">
+  <div class="panel-wrapper">
+    <div class="panel-card main-layout">
+
+      <section class="feed-section">
+        <div class="feed-header">
+          <h2>💬 Comentarios Ciudadanos</h2>
+
+          <div class="filter-box">
+            <label>Filtrar por Obra:</label>
+            <select [(ngModel)]="filterObra" (change)="filtrarComentarios()">
+              <option [ngValue]="null">-- Ver Todas las Obras --</option>
+              @for (o of obras(); track o.idObra) {
+                <option [ngValue]="o">{{ o.nombreObra }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="comments-list">
+          @if (comentariosFiltrados().length > 0) {
+            @for (c of comentariosFiltrados(); track c.id) {
+              <div class="comment-item"
+                   [class.active]="editingId() === c.id"
+                   (click)="seleccionarComentario(c)">
+
+                <div class="avatar-circle" [style.background-color]="getColorAvatar(c.usuario?.nombre)">
+                  {{ c.usuario?.nombre?.charAt(0) || '?' }}
+                </div>
+
+                <div class="comment-content">
+                  <div class="comment-meta">
+                    <span class="username">{{ c.usuario?.nombre }} {{ c.usuario?.apellido }}</span>
+                    <span class="date">{{ c.fechaComentario }}</span>
+                  </div>
+
+                  <p class="comment-text">"{{ c.contenido }}"</p>
+
+                  <div class="comment-context">
+                    <small>📍 En: {{ c.obraPublica?.nombreObra }}</small>
+                  </div>
+                </div>
+              </div>
+            }
+          } @else {
+            <div class="empty-state">
+              <p>No hay comentarios para mostrar en esta selección.</p>
+            </div>
+          }
+        </div>
+      </section>
+
+      <aside class="control-panel">
+
+        <div class="control-header">
+          <h3>{{ editingId() ? '✏️ Editar Comentario' : '📢 Publicar Nuevo' }}</h3>
+          @if (editingId()) {
+            <button class="btn-cancel" (click)="resetForm()">Cancelar Edición</button>
+          }
+        </div>
+
+        <div class="form-container">
+
+          <div class="form-group">
+            <label>Autor del Comentario (*)</label>
+            <select [(ngModel)]="selectedUser" class="form-input">
+              <option [ngValue]="null">Seleccione Usuario</option>
+              @for (u of usuarios(); track u.id) {
+                <option [ngValue]="u">{{ u.username }} ({{ u.nombre }})</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Obra a comentar (*)</label>
+            <select [(ngModel)]="selectedObraForm" class="form-input">
+              <option [ngValue]="null">Seleccione Obra</option>
+              @for (o of obras(); track o.idObra) {
+                <option [ngValue]="o">{{ o.nombreObra }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Fecha (*)</label>
+            <input type="date" [(ngModel)]="comentarioForm.fechaComentario" class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label>Mensaje (*)</label>
+            <textarea
+              [(ngModel)]="comentarioForm.contenido"
+              rows="5"
+              class="form-input text-area"
+              placeholder="Escribe aquí el comentario..."></textarea>
+          </div>
+
+          <div class="action-buttons">
+            <button class="btn-submit" (click)="guardar()">
+              {{ editingId() ? 'Actualizar' : 'Publicar' }}
+            </button>
+
+            @if (editingId()) {
+              <button class="btn-delete" (click)="eliminar()">
+                Borrar Comentario
+              </button>
+            }
+          </div>
+
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</div>
