@@ -14,7 +14,7 @@ import {ExpedienteTecnico} from '../../model/expedienteTecnico';
 export class PanelExpedienteTecnicoComponent implements OnInit {
   // Inyección del servicio
   private expedienteService = inject(ExpedienteTecnicoService);
-
+  rolActualUsuario: string | null = null;
   // Estados
   expedientes = signal<ExpedienteTecnico[]>([]);
 
@@ -35,11 +35,16 @@ export class PanelExpedienteTecnicoComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.rolActualUsuario = localStorage.getItem('rol');
     // 1. Cargar lista inicial
     this.expedienteService.list().subscribe(data => this.expedientes.set(data));
 
     // 2. Suscribirse a cambios (Lógica del Profesor)
     this.expedienteService.getListaCambio().subscribe(data => this.expedientes.set(data));
+  }
+
+  esAdminODev(): boolean{
+    return this.rolActualUsuario === 'ROLE_ADMIN'|| this.rolActualUsuario === 'ROLE_DESARROLLADOR';
   }
 
   // --- CRUD ---

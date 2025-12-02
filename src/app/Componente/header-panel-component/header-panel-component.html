@@ -7,9 +7,11 @@
 
     <nav class="Contenedor-menu-horizontal">
       <ul class="menu-horizontal">
-
-        @if (esAdminODev) {
+        @if(esAdminODev){
           <li><a routerLink="/panel-usuarios" class="opcion" routerLinkActive="active-link">Usuarios</a></li>
+        }
+
+        @if (esAdminODevOCiud) {
           <li><a routerLink="/panel-notificaciones" class="opcion" routerLinkActive="active-link">Notificaciones</a></li>
           <li><a routerLink="/panel-expedientes-tecnicos" class="opcion" routerLinkActive="active-link">Expedientes</a></li>
           <li><a routerLink="/panel-gobiernos-regionales" class="opcion" routerLinkActive="active-link">GobRegional</a></li>
@@ -21,7 +23,6 @@
           <li><a routerLink="/panel-comentarios" class="opcion" routerLinkActive="active-link">Comentarios</a></li>
           <li><a routerLink="/panel-seguimiento-obras" class="opcion" routerLinkActive="active-link">Seguimiento Obras</a></li>
         }
-
       </ul>
     </nav>
 

@@ -7,7 +7,7 @@
         <h2 class="panel-title">Panel de Gestión de {{ vistaActual() === 'usuarios' ? 'Usuarios' : 'Roles' }}</h2>
         <div class="header-actions">
           <button class="action-btn action-primary"
-                  (click)="vistaActual() === 'usuarios' ? onRegistrarUsuarioClick() : onRegistrarRolClick()">
+                  (click)="vistaActual() === 'usuarios' ? onRegistrarUsuarioClick(): onRegistrarRolClick()">
             Registrar Nuevo {{ vistaActual() === 'usuarios' ? 'Usuario' : 'Rol' }}
           </button>
 
@@ -49,8 +49,10 @@
                     <span>{{ u.fechaRegistro }}</span>
                     <span class="cell-actions">
                       <button class="icon-btn view" (click)="verDetalleUsuario(u)">👁</button>
-                      <button class="icon-btn edit" (click)="editarUsuario(u)">✏️</button>
-                      <button class="icon-btn delete" (click)="eliminarUsuario(u)">🗑</button>
+                      @if(esAdmin()){
+                        <button class="icon-btn edit" (click)="editarUsuario(u)">✏️</button>
+                        <button class="icon-btn delete" (click)="eliminarUsuario(u)">🗑</button>
+                      }
                     </span>
                   </div>
                 } @empty { <div class="p-4 text-center">No hay usuarios.</div> }
@@ -108,14 +110,17 @@
                   <div class="table-row role-row">
                     <span>{{ r.id }}</span>
                     <span>{{ r.name }}</span> <span class="cell-actions">
+                    @if(esAdmin()){
                       <button class="icon-btn edit" (click)="editarRol(r)">✏️</button>
                       <button class="icon-btn delete" (click)="eliminarRol(r)">🗑</button>
+                    }
                     </span>
                   </div>
                 }
               </div>
             </div>
           } @else {
+            <!--@if(esAdmin)}-->
             <div class="form-card">
               <h3>{{ editingIdRol() ? 'Editar Rol' : 'Registrar Nuevo Rol' }}</h3>
               <div class="form-row">
@@ -123,10 +128,11 @@
                 <input class="form-input" type="text" [(ngModel)]="rolForm.name" placeholder="Ej: ROLE_EDITOR" required />
               </div>
               <div class="form-actions">
-                <button class="form-btn-secondary" (click)="cancelarFormRol()">Cancelar</button>
-                <button class="form-btn-primary" (click)="guardarRol()">Guardar</button>
+                  <button class="form-btn-secondary" (click)="cancelarFormRol()">Cancelar</button>
+                  <button class="form-btn-primary" (click)="guardarRol()">Guardar</button>
               </div>
             </div>
+            <!--}-->
           }
         }
 

@@ -17,7 +17,7 @@ export class PanelInversionComponent implements OnInit {
   // Inyecciones
   private inversionService = inject(InversionService);
   private obraService = inject(ObraPublicaService);
-
+  rolActualUsuario: string | null = null;
   // Datos
   inversiones = signal<Inversion[]>([]);
   obrasDisponibles = signal<ObraPublica[]>([]);
@@ -44,6 +44,7 @@ export class PanelInversionComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.rolActualUsuario = localStorage.getItem('rol');
     // 1. Cargar Inversiones
     this.inversionService.list().subscribe(data => this.inversiones.set(data));
     this.inversionService.getListaCambio().subscribe(data => this.inversiones.set(data));
@@ -51,7 +52,9 @@ export class PanelInversionComponent implements OnInit {
     // 2. Cargar Obras (para el select)
     this.obraService.list().subscribe(data => this.obrasDisponibles.set(data));
   }
-
+  esAdminODev(): boolean{
+    return this.rolActualUsuario === 'ROLE_ADMIN'|| this.rolActualUsuario === 'ROLE_DESARROLLADOR';
+  }
   // --- CRUD ---
 
   onRegistrarClick(): void {

@@ -20,6 +20,7 @@ export class PanelEvidenciaComponent implements OnInit {
   private evidenciaService = inject(EvidenciaService);
   private denunciaService = inject(DenunciaService);
 
+  rolActualUsuario: string | null = null;
   // Datos
   evidencias = signal<Evidencia[]>([]);
   denunciasDisponibles = signal<Denuncia[]>([]); // Para el select
@@ -46,12 +47,17 @@ export class PanelEvidenciaComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.rolActualUsuario = localStorage.getItem('rol');
     // 1. Cargar Evidencias
     this.evidenciaService.list().subscribe(data => this.evidencias.set(data));
     this.evidenciaService.getListaCambio().subscribe(data => this.evidencias.set(data));
 
     // 2. Cargar Denuncias (para asignar)
     this.denunciaService.list().subscribe(data => this.denunciasDisponibles.set(data));
+  }
+
+  esAdminODev(): boolean{
+    return this.rolActualUsuario === 'ROLE_ADMIN'|| this.rolActualUsuario === 'ROLE_DESARROLLADOR';
   }
 
   // --- CRUD ---

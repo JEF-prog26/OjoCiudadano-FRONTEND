@@ -21,6 +21,7 @@ export class PanelDenunciaComponent implements OnInit{
   private denunciaService = inject(DenunciaService);
   private userService = inject(UserService);
   private obraService = inject(ObraPublicaService);
+  rolActualUsuario: string | null = null;
 
   // Estados de datos
   denuncias = signal<Denuncia[]>([]);
@@ -50,6 +51,7 @@ export class PanelDenunciaComponent implements OnInit{
   });
 
   ngOnInit(): void {
+    this.rolActualUsuario = localStorage.getItem('rol');
     // 1. Cargar Denuncias
     this.denunciaService.list().subscribe(data => this.denuncias.set(data));
     this.denunciaService.getListaCambio().subscribe(data => this.denuncias.set(data));
@@ -57,6 +59,10 @@ export class PanelDenunciaComponent implements OnInit{
     // 2. Cargar listas para dropdowns
     this.userService.list().subscribe(data => this.usuariosDisponibles.set(data));
     this.obraService.list().subscribe(data => this.obrasDisponibles.set(data));
+  }
+
+  esAdminODev(): boolean{
+    return this.rolActualUsuario === 'ROLE_ADMIN'|| this.rolActualUsuario === 'ROLE_DESARROLLADOR';
   }
 
   // --- CRUD ---

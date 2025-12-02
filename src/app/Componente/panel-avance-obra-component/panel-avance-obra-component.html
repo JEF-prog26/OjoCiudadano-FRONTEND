@@ -6,10 +6,11 @@
       <div class="panel-header">
         <h2 class="panel-title">Gestión de Avances de Obra</h2>
         <div class="header-actions">
-          <button class="action-btn action-primary" (click)="onRegistrarClick()">
-            Nuevo Avance
-          </button>
-
+          @if(esAdminODev()){
+            <button class="action-btn action-primary" (click)="onRegistrarClick()">
+              Nuevo Avance
+            </button>
+          }
           <div class="search-box">
             <input type="number" class="search-input" placeholder="Buscar por ID..."
                    [ngModel]="searchId()" (ngModelChange)="searchId.set($event)" />
@@ -45,8 +46,10 @@
 
                   <span class="cell-actions">
                     <button class="icon-btn view" (click)="verDetalle(a)">👁</button>
-                    <button class="icon-btn edit" (click)="editar(a)">✏️</button>
-                    <button class="icon-btn delete" (click)="eliminar(a)">🗑</button>
+                    @if(esAdminODev()){
+                      <button class="icon-btn edit" (click)="editar(a)">✏️</button>
+                      <button class="icon-btn delete" (click)="eliminar(a)">🗑</button>
+                    }
                   </span>
                 </div>
               } @empty { <div class="p-4 text-center">No hay avances registrados.</div> }

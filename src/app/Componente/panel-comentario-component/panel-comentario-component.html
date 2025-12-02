@@ -23,6 +23,7 @@
             @for (c of comentariosFiltrados(); track c.id) {
               <div class="comment-item"
                    [class.active]="editingId() === c.id"
+                   [class.read-only]="esCiudadano()"
                    (click)="seleccionarComentario(c)">
 
                 <div class="avatar-circle" [style.background-color]="getColorAvatar(c.usuario?.nombre)">
@@ -32,6 +33,7 @@
                 <div class="comment-content">
                   <div class="comment-meta">
                     <span class="username">{{ c.usuario?.nombre }} {{ c.usuario?.apellido }}</span>
+                    <span class="role-badge">{{ c.usuario?.roles?.[0]?.name || 'Usuario' }}</span>
                     <span class="date">{{ c.fechaComentario }}</span>
                   </div>
 
@@ -54,7 +56,8 @@
       <aside class="control-panel">
 
         <div class="control-header">
-          <h3>{{ editingId() ? '✏️ Editar Comentario' : '📢 Publicar Nuevo' }}</h3>
+          <!-- Si es ciudadano, siempre dirá 'Publicar Nuevo' porque no puede editar -->
+          <h3>{{ editingId() && !esCiudadano() ? '✏️ Editar Comentario' : '📢 Publicar Nuevo' }}</h3>
           @if (editingId()) {
             <button class="btn-cancel" (click)="resetForm()">Cancelar Edición</button>
           }
@@ -64,7 +67,7 @@
 
           <div class="form-group">
             <label>Autor del Comentario (*)</label>
-            <select [(ngModel)]="selectedUser" class="form-input">
+            <select [(ngModel)]="selectedUser" class="form-input" [disabled]="esCiudadano()">
               <option [ngValue]="null">Seleccione Usuario</option>
               @for (u of usuarios(); track u.id) {
                 <option [ngValue]="u">{{ u.username }} ({{ u.nombre }})</option>
@@ -98,10 +101,10 @@
 
           <div class="action-buttons">
             <button class="btn-submit" (click)="guardar()">
-              {{ editingId() ? 'Actualizar' : 'Publicar' }}
+              {{ editingId() && !esCiudadano()? 'Actualizar' : 'Publicar' }}
             </button>
 
-            @if (editingId()) {
+            @if (editingId() && !esCiudadano() ) {
               <button class="btn-delete" (click)="eliminar()">
                 Borrar Comentario
               </button>

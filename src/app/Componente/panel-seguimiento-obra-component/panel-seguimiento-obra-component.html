@@ -48,7 +48,7 @@
 
             <div class="info-row">
               <label>Responsable:</label>
-              <select [(ngModel)]="selectedUser" class="info-input">
+              <select [(ngModel)]="selectedUser" class="info-input" [disabled]="!esAdmin()">
                 <option [ngValue]="null">-- Asignar --</option>
                 @for (u of usuariosDisponibles(); track u.id) {
                   <option [ngValue]="u">{{ u.username }}</option>
@@ -72,11 +72,11 @@
             <button class="btn-action btn-register" (click)="guardar()">
               {{ editingId() ? 'Guardar Cambios' : 'Registrar' }}
             </button>
-
-            <button class="btn-action btn-delete" (click)="eliminar()" [disabled]="!editingId()">
-              Eliminar
-            </button>
-
+            @if(esAdminODev()){
+              <button class="btn-action btn-delete" (click)="eliminar()" [disabled]="!editingId()">
+                Eliminar
+              </button>
+            }
             <button class="btn-action btn-update" (click)="cancelar()">
               Limpiar / Nuevo
             </button>
@@ -120,7 +120,9 @@
                     </span>
                   </td>
                   <td>
+                    @if(esAdminODev()){
                     <button class="btn-edit-row" (click)="editar(s)">Seleccionar</button>
+                    }
                   </td>
                 </tr>
               } @empty {
