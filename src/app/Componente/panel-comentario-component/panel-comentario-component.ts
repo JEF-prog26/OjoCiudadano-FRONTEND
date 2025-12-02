@@ -38,22 +38,53 @@ export class PanelComentarioComponent implements OnInit {
   selectedUser: User | null = null;
   selectedObraForm: ObraPublica | null = null;
 
+  // --- VARIABLES DE SESIÓN ---
+  rolActual: string | null = null;
+  usuarioActualCorreo: string | null = null;
+
   ngOnInit(): void {
+    // 1. Obtener datos de sesión
+    this.rolActual = localStorage.getItem('rol');
+    // Asumimos que guardaste el correo en el Login. Si no, esto será null.
+    // Sugerencia: En tu LoginComponent, agrega localStorage.setItem('username', data.username);
+    this.usuarioActualCorreo = localStorage.getItem('username');
+
     this.cargarDatos();
   }
 
+  esCiudadano(): boolean {
+    return this.rolActual === 'ROLE_CIUDADANO';
+  }
+
   cargarDatos() {
-    // 1. Cargar Usuarios y Obras para los desplegables
-    this.userService.list().subscribe(data => this.usuarios.set(data));
+    // 1. Cargar Obras
     this.obraService.list().subscribe(data => this.obras.set(data));
 
-    // 2. Cargar Comentarios y suscribirse a cambios
-    this.comentarioService.list().subscribe(data => {
-      this.todosLosComentarios.set(data);
-      this.filtrarComentarios(); // Aplicar filtro inicial
+    // 2. Cargar Usuarios (CON FILTRO DE SEGURIDAD)
+    this.userService.list().subscribe(data => {
+      if (this.esCiudadano() && this.usuarioActualCorreo) {
+        // Si es ciudadano, solo le mostramos SU propio usuario en la lista
+        const miUsuario = data.find((u: User) => u.username === this.usuarioActualCorreo);
+        if (miUsuario) {
+          this.usuarios.set([miUsuario]);
+          this.selectedUser = miUsuario; // Auto-seleccionar
+        } else {
+          // Fallback por si no coincide el correo
+          this.usuarios.set([]);
+        }
+      } else {
+        // Admin/Dev ven a todos
+        this.usuarios.set(data);
+      }
     });
 
-    this.comentarioService.getListaCambio().subscribe(data => {
+    // 3. Cargar Comentarios
+    this.cargarComentarios();
+    this.comentarioService.getListaCambio().subscribe(() => this.cargarComentarios());
+  }
+
+  cargarComentarios() {
+    this.comentarioService.list().subscribe(data => {
       this.todosLosComentarios.set(data);
       this.filtrarComentarios();
     });
@@ -67,8 +98,10 @@ export class PanelComentarioComponent implements OnInit {
       const filtrados = this.todosLosComentarios().filter(c => c.obraPublica?.idObra === obra.idObra);
       this.comentariosFiltrados.set(filtrados);
 
-      // Auto-seleccionar la obra en el formulario para comodidad
-      this.selectedObraForm = this.obras().find(o => o.idObra === obra.idObra) || null;
+      // Auto-seleccionar obra en formulario si no es edición
+      if (!this.editingId()) {
+        this.selectedObraForm = this.obras().find(o => o.idObra === obra.idObra) || null;
+      }
     } else {
       // Mostrar todos
       this.comentariosFiltrados.set(this.todosLosComentarios());
@@ -78,6 +111,15 @@ export class PanelComentarioComponent implements OnInit {
   // --- CRUD ---
 
   seleccionarComentario(c: Comentario) {
+    // RESTRICCIÓN: Si es ciudadano, NO puede seleccionar para editar (solo ver en la lista)
+    // Opcional: Podrías permitirle seleccionar solo para ver, pero ocultar el botón de editar.
+    // Aquí bloqueamos la edición completa si es ciudadano.
+    if (this.esCiudadano()) {
+      // Solo clonamos para ver datos, pero NO activamos editingId para que no salgan botones
+      // O simplemente no hacemos nada:
+      return;
+    }
+
     this.editingId.set(c.id);
     this.comentarioForm = { ...c }; // Clonar datos
 
@@ -94,8 +136,15 @@ export class PanelComentarioComponent implements OnInit {
     this.editingId.set(null);
     this.comentarioForm = new Comentario();
     this.comentarioForm.fechaComentario = new Date().toISOString().slice(0, 10); // Fecha hoy
-    this.selectedUser = null;
-    // No reseteamos la obra si hay un filtro activo, por comodidad
+
+    // Si es ciudadano, mantenemos su usuario seleccionado siempre
+    if (!this.esCiudadano()) {
+      this.selectedUser = null;
+    } else {
+      // Re-asignar al usuario actual si se perdió
+      if (this.usuarios().length > 0) this.selectedUser = this.usuarios()[0];
+    }
+
     if (!this.filterObra()) {
       this.selectedObraForm = null;
     }
@@ -116,8 +165,13 @@ export class PanelComentarioComponent implements OnInit {
       this.comentarioService.insert(this.comentarioForm).subscribe(() => {
         this.comentarioService.actualizarLista();
         this.resetForm();
+        alert('Comentario publicado!');
       });
     } else {
+      if (this.esCiudadano()) {
+        alert('No tienes permisos para editar comentarios.');
+        return;
+      }
       // EDITAR
       this.comentarioService.update(this.comentarioForm, this.comentarioForm.id).subscribe(() => {
         this.comentarioService.actualizarLista();
@@ -128,6 +182,8 @@ export class PanelComentarioComponent implements OnInit {
 
   eliminar() {
     if (!this.editingId()) return;
+
+    if (this.esCiudadano()) return; // Seguridad extra
 
     if (confirm('¿Seguro que desea eliminar este comentario?')) {
       this.comentarioService.delete(this.editingId()!).subscribe(() => {
