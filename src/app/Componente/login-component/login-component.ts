@@ -50,6 +50,8 @@ export class LoginComponent implements OnInit{
           // Guardamos el token y el rol (asumiendo que tu servicio guarda el token internamente o lo agregas aquí)
           // localStorage.setItem('token', data.token); // Descomentar si tu servicio no lo hace
           localStorage.setItem('rol', data.roles[0]);
+          // Guarda el correo que escribió en el formulario para usarlo después
+          localStorage.setItem('username', this.loginForm.value.username);
 
           alert("Login correcto!");
           this.router.navigate(['/dashboard']); // O '/dashboard' según tu ruta real

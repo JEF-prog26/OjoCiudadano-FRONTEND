@@ -17,7 +17,7 @@ export class PanelAvanceObraComponent implements OnInit {
   // Inyecciones
   private avanceService = inject(AvanceObraService);
   private obraService = inject(ObraPublicaService);
-
+  rolActualUsuario: string | null = null;
   // Datos
   avances = signal<AvanceObra[]>([]);
   obrasDisponibles = signal<ObraPublica[]>([]);
@@ -44,12 +44,17 @@ export class PanelAvanceObraComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.rolActualUsuario = localStorage.getItem('rol');
     // 1. Cargar Avances
     this.avanceService.list().subscribe(data => this.avances.set(data));
     this.avanceService.getListaCambio().subscribe(data => this.avances.set(data));
 
     // 2. Cargar Obras (para el select)
     this.obraService.list().subscribe(data => this.obrasDisponibles.set(data));
+  }
+
+  esAdminODev(): boolean{
+    return this.rolActualUsuario === 'ROLE_ADMIN'|| this.rolActualUsuario === 'ROLE_DESARROLLADOR';
   }
 
   // --- CRUD ---

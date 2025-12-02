@@ -14,6 +14,7 @@ import {GobiernoRegional} from '../../model/gobiernoRegional';
 export class PanelGobiernoRegionalComponent implements OnInit{
   // Inyección del servicio
   private gobiernoService = inject(GobiernoRegionalService);
+  rolActualUsuario: string | null = null;
 
   // Estados reactivos (Signals)
   gobiernos = signal<GobiernoRegional[]>([]);
@@ -35,11 +36,16 @@ export class PanelGobiernoRegionalComponent implements OnInit{
   });
 
   ngOnInit(): void {
+    this.rolActualUsuario = localStorage.getItem('rol');
     // 1. Cargar lista inicial
     this.gobiernoService.list().subscribe(data => this.gobiernos.set(data));
 
     // 2. Suscribirse a cambios reactivos
     this.gobiernoService.getListaCambio().subscribe(data => this.gobiernos.set(data));
+  }
+
+  esAdminODev(): boolean{
+    return this.rolActualUsuario === 'ROLE_ADMIN'|| this.rolActualUsuario === 'ROLE_DESARROLLADOR';
   }
 
   // --- CRUD ---

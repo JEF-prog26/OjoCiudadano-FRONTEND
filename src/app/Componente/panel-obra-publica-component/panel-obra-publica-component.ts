@@ -22,6 +22,7 @@ export class PanelObraPublicaComponent implements OnInit {
   private obraService = inject(ObraPublicaService);
   private gobiernoService = inject(GobiernoRegionalService);
   private expedienteService = inject(ExpedienteTecnicoService);
+  rolActualUsuario: string | null = null;
 
   // Datos Principales
   obras = signal<ObraPublica[]>([]);
@@ -51,6 +52,7 @@ export class PanelObraPublicaComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.rolActualUsuario = localStorage.getItem('rol');
     // 1. Cargar Obras
     this.obraService.list().subscribe(data => this.obras.set(data));
     this.obraService.getListaCambio().subscribe(data => this.obras.set(data));
@@ -60,6 +62,9 @@ export class PanelObraPublicaComponent implements OnInit {
     this.expedienteService.list().subscribe(data => this.expedientesDisponibles.set(data));
   }
 
+  esAdminODev(): boolean{
+    return this.rolActualUsuario === 'ROLE_ADMIN'|| this.rolActualUsuario === 'ROLE_DESARROLLADOR';
+  }
   // --- CRUD ---
 
   onRegistrarClick(): void {

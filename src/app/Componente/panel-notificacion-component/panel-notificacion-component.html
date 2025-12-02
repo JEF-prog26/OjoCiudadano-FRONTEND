@@ -6,10 +6,11 @@
       <div class="panel-header">
         <h2 class="panel-title">Panel de Notificaciones</h2>
         <div class="header-actions">
-          <button class="action-btn action-primary" (click)="onRegistrarClick()">
-            Nueva Notificación
-          </button>
-
+          @if(esAdminODev()){
+            <button class="action-btn action-primary" (click)="onRegistrarClick()">
+              Nueva Notificación
+            </button>
+          }
           <div class="search-box">
             <input type="number" class="search-input" placeholder="Buscar por ID..."
                    [ngModel]="searchId()" (ngModelChange)="searchId.set($event)" />
@@ -46,7 +47,9 @@
                   <span class="cell-actions">
                     <button class="icon-btn view" (click)="verDetalle(n)">👁</button>
                     <button class="icon-btn edit" (click)="editar(n)">✏️</button>
-                    <button class="icon-btn delete" (click)="eliminar(n)">🗑</button>
+                    @if(esAdminODev()){
+                      <button class="icon-btn delete" (click)="eliminar(n)">🗑</button>
+                    }
                   </span>
                 </div>
               } @empty { <div class="p-4 text-center">No hay notificaciones registradas.</div> }

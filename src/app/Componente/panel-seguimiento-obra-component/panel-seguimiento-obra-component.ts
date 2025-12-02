@@ -24,6 +24,9 @@ export class PanelSeguimientoObraComponent implements OnInit {
   // Inyecta el Sanitizer en el constructor o como inject()
   private sanitizer = inject(DomSanitizer);
 
+  rolActualUsuario: string | null = null;
+  usuarioActualCorreo: string | null = null;
+
   // Data Base
   seguimientos = signal<SeguimientoObra[]>([]);
   obrasDisponibles = signal<ObraPublica[]>([]);
@@ -49,17 +52,37 @@ export class PanelSeguimientoObraComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.rolActualUsuario = localStorage.getItem('rol');
+    this.usuarioActualCorreo = localStorage.getItem('username');
+    if (!this.esAdmin()) {
+      // Buscar mi usuario en la lista y seleccionarlo
+      this.selectedUser = this.usuariosDisponibles().find(u => u.username === this.usuarioActualCorreo) || null;
+    }
     // 1. Cargar Seguimientos
     this.seguimientoService.list().subscribe(data => this.seguimientos.set(data));
-    this.seguimientoService.getListaCambio().subscribe(data => this.seguimientos.set(data));
-
-    // 2. Cargar Obras y Usuarios para los selects
     this.obraService.list().subscribe(data => this.obrasDisponibles.set(data));
-    this.userService.list().subscribe(data => this.usuariosDisponibles.set(data));
+
+
+    this.seguimientoService.getListaCambio().subscribe(data => this.seguimientos.set(data));
+    this.userService.list().subscribe(data => {
+      this.usuariosDisponibles.set(data);
+
+      // Lógica de auto-selección
+      if (!this.esAdmin() && this.usuarioActualCorreo) {
+        this.selectedUser = this.usuariosDisponibles().find(u => u.username === this.usuarioActualCorreo) || null;
+      }
+    });
 
     // Inicializar fecha hoy
     this.seguimientoForm.fechaInicio = new Date().toISOString().slice(0, 10);
     this.seguimientoForm.activo = true;
+  }
+
+  esAdminODev(): boolean{
+    return this.rolActualUsuario === 'ROLE_ADMIN'|| this.rolActualUsuario === 'ROLE_DESARROLLADOR';
+  }
+  esAdmin(): boolean{
+    return this.rolActualUsuario === 'ROLE_ADMIN';
   }
 
   // --- CRUD ---

@@ -22,6 +22,7 @@ export class PanelUsuarioComponent implements OnInit {
   private roleService = inject(RoleService);
   private router = inject(Router);
 
+  rolActualUsuario: string | null = null;
   // === ESTADO GENERAL DEL PANEL ===
   vistaActual = signal<'usuarios' | 'roles'>('usuarios');
 
@@ -65,6 +66,7 @@ export class PanelUsuarioComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    this.rolActualUsuario = localStorage.getItem('rol');
     // 1. Cargar listas iniciales
     this.userService.list().subscribe(data => this.usuarios.set(data));
     this.roleService.list().subscribe(data => this.roles.set(data));
@@ -72,6 +74,10 @@ export class PanelUsuarioComponent implements OnInit {
     // 2. Suscribirse a cambios (Lógica del Profesor para actualizar tablas)
     this.userService.getListaCambio().subscribe(data => this.usuarios.set(data));
     this.roleService.getListaCambio().subscribe(data => this.roles.set(data));
+  }
+
+  esAdmin(): boolean {
+    return this.rolActualUsuario === 'ROLE_ADMIN';
   }
 
   // 🔄 Cambiar entre pestañas
@@ -177,9 +183,14 @@ export class PanelUsuarioComponent implements OnInit {
   /* ==================================== */
 
   onRegistrarRolClick(): void {
-    this.showFormRol.set(true);
-    this.editingIdRol.set(null);
-    this.rolForm = new Role();
+    if (!this.esAdmin()) {
+      alert('Acceso denegado: Solo administradores pueden crear roles.');
+      return;
+    }else{
+      this.showFormRol.set(true);
+      this.editingIdRol.set(null);
+      this.rolForm = new Role();
+    }
   }
 
   cancelarFormRol(): void {
@@ -211,16 +222,26 @@ export class PanelUsuarioComponent implements OnInit {
   }
 
   editarRol(rol: Role): void {
-    this.showFormRol.set(true);
-    this.editingIdRol.set(rol.id);
-    this.rolForm = { ...rol };
+    if(!this.esAdmin){
+      alert('Acceso denegado: Solo administradores pueden editar roles.');
+      return;
+    }else{
+      this.showFormRol.set(true);
+      this.editingIdRol.set(rol.id);
+      this.rolForm = { ...rol };
+    }
   }
 
   eliminarRol(rol: Role): void {
-    if (confirm(`¿Eliminar rol ${rol.name}?`)) {
-      this.roleService.delete(rol.id).subscribe(() => {
-        this.roleService.actualizarLista();
-      });
+    if(!this.esAdmin){
+      alert('Acceso denegado: Solo administradores pueden eliminar roles.');
+      return;
+    }else{
+      if (confirm(`¿Eliminar rol ${rol.name}?`)) {
+        this.roleService.delete(rol.id).subscribe(() => {
+          this.roleService.actualizarLista();
+        });
+      }
     }
   }
 

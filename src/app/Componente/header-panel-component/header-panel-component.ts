@@ -35,12 +35,12 @@ export class HeaderPanelComponent implements OnInit {
   }
 
   // Helpers específicos (Opcionales, pero hacen el HTML más limpio)
-  get esAdminODev(): boolean {
-    return this.tieneRol(['ROLE_ADMIN', 'ROLE_DESARROLLADOR']);
+  get esAdminODevOCiud(): boolean {
+    return this.tieneRol(['ROLE_ADMIN', 'ROLE_DESARROLLADOR','ROLE_CIUDADANO']);
   }
 
-  get esCiudadano(): boolean {
-    return this.tieneRol(['ROLE_CIUDADANO']);
+  get esAdminODev(): boolean {
+    return this.tieneRol(['ROLE_ADMIN', 'ROLE_DESARROLLADOR']);
   }
 
   // --- LOGOUT ---

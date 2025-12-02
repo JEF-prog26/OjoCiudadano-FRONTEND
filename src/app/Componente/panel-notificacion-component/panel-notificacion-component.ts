@@ -21,6 +21,7 @@ export class PanelNotificacionComponent implements OnInit { // <-- CLAVE: Compon
   private notifService = inject(NotificacionService);
   private userService = inject(UserService);
 
+  rolActualUsuario: string | null = null;
   // Estados
   notificaciones = signal<Notificacion[]>([]);
   usuariosDisponibles = signal<User[]>([]); // Para el <select> del formulario
@@ -45,12 +46,17 @@ export class PanelNotificacionComponent implements OnInit { // <-- CLAVE: Compon
   });
 
   ngOnInit(): void {
+    this.rolActualUsuario = localStorage.getItem('rol');
     // 1. Cargar notificaciones
     this.notifService.list().subscribe(data => this.notificaciones.set(data));
     this.notifService.getListaCambio().subscribe(data => this.notificaciones.set(data));
 
     // 2. Cargar usuarios (para poder seleccionarlos en el formulario)
     this.userService.list().subscribe(data => this.usuariosDisponibles.set(data));
+  }
+
+  esAdminODev(): boolean{
+    return this.rolActualUsuario === 'ROLE_ADMIN'|| this.rolActualUsuario === 'ROLE_DESARROLLADOR';
   }
 
   // --- GESTIÓN CRUD ---
